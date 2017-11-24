@@ -11,6 +11,7 @@ target
 .project
 .classpath
 bin
+out
 
 /doc
 *.xml

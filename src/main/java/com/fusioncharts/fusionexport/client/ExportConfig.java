@@ -73,8 +73,7 @@ public class ExportConfig implements Cloneable {
             String keyValuePair = String.format("\"%s\": %s, ", config.getKey(), formattedConfigValue);
             configsAsJSON.append(keyValuePair);
         }
-        if(configsAsJSON.length() >= 2)
-        {
+        if(configsAsJSON.length() >= 2) {
             configsAsJSON.delete(configsAsJSON.length() - 2, configsAsJSON.length());
         }
         configsAsJSON.insert(0,"{ ");
@@ -83,10 +82,11 @@ public class ExportConfig implements Cloneable {
     }
 
     private String getFormattedConfigValue(String configName, String configValue) {
-        if(configName.equals("chartConfig"))
+        if(configName.equals("chartConfig")) {
             return configValue;
-        else
+        } else {
             return String.format("\"%s\"", configValue);
+        }
     }
 
     @Override
