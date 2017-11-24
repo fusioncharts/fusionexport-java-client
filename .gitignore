@@ -19,3 +19,5 @@ out
 *.jks
 lib/junit-4.7.jar
 *.jar
+
+.DS_Store
