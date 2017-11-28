@@ -84,10 +84,12 @@ public class ExportConfig implements Cloneable {
     private String getFormattedConfigValue(String configName, String configValue) {
         if(configName.equals("chartConfig")) {
             return configValue;
+        } else if(configName.equals("maxWaitForCaptureExit")) {
+            return configValue;
         } else if(configName.equals("asyncCapture")) {
-            return configValue;
+            return configValue.toLowerCase();
         } else if(configName.equals("exportAsZip")) {
-            return configValue;
+            return configValue.toLowerCase();
         } else {
             return String.format("\"%s\"", configValue);
         }

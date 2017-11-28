@@ -151,11 +151,15 @@ public class Exporter {
     }
 
     private void onExportSateChanged(String state) {
-        this.exportStateChangedListener.exportStateChanged(state);
+        if (this.exportStateChangedListener != null) {
+            this.exportStateChangedListener.exportStateChanged(state);
+        }
     }
 
     private void onExportDone(String result, ExportException error) {
-        this.exportDoneListener.exportDone(result, error);
+        if (this.exportDoneListener != null) {
+            this.exportDoneListener.exportDone(result, error);
+        }
     }
 
     private String getFormattedExportConfigs() {

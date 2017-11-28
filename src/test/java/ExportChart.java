@@ -16,6 +16,8 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
         // The export configurations used by export server
         ExportConfig config = new ExportConfig();
         config.set("chartConfig", ExportChart.readResourceFile("chart-config.json"));
+        config.set("exportAsZip", "false");
+        System.out.println(config.getFormattedConfigs());
 
         ExportManager em = new ExportManager(exportServerIP, exportServerPort);
         Exporter exporter = em.export(config, ec, ec);

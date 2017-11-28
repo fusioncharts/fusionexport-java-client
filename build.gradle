@@ -6,7 +6,6 @@ repositories {
     mavenCentral()
 }
 
-
 group 'com.fusioncharts.fusionexport.client'
 version '1.0.0'
 sourceCompatibility = 1.6
