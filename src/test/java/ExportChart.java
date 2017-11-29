@@ -2,28 +2,24 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import com.fusioncharts.fusionexport.client.*;
+import com.fusioncharts.fusionexport.client.*; // import sdk
 
 public class ExportChart implements ExportDoneListener, ExportStateChangedListener {
 
     public static void main(String[] args) {
-        ExportChart ec = new ExportChart();
 
-        String chartConfigFile = "fullpath/of/scrollchart.json";
-        String exportServerIP = "127.0.0.1"; // The IP address of export server
-        int exportServerPort = 1337; // The Port of export server
-
-        // The export configurations used by export server
+        // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", ExportChart.readResourceFile("chart-config.json"));
+        config.set("chartConfig", readResourceFile("chart-config.json"));
         config.set("exportAsZip", "false");
-        System.out.println(config.getFormattedConfigs());
 
-        ExportManager em = new ExportManager(exportServerIP, exportServerPort);
-        Exporter exporter = em.export(config, ec, ec);
+        // Instantiate the ExportManager class
+        ExportManager em = new ExportManager();
+        // Call the export() method with the export config and the respective callbacks
+        Exporter exporter = em.export(config, new ExportChart(), new ExportChart());
     }
 
-    @Override
+    @Override // Called when export is done
     public void exportDone(String result, ExportException error) {
         if (error != null) {
             System.out.println(error.getMessage());
@@ -32,7 +28,7 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
         }
     }
 
-    @Override
+    @Override // Called on each export state change
     public void exportStateChanged(String state) {
         System.out.println("STATE: " + state);
     }
@@ -52,19 +48,5 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
             exp.printStackTrace();
             return null;
         }
-    }
-
-    private static String readFile(String file) {
-        String fileContent = "";
-        try {
-            File f = new File(file);
-            FileInputStream inp = new FileInputStream(f);
-            byte[] bf = new byte[(int) f.length()];
-            inp.read(bf);
-            fileContent = new String(bf, "UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return fileContent;
     }
 }
