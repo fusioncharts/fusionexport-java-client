@@ -10,7 +10,7 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
 
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", readFile("fullpath/of/scrollchart.json));
+        config.set("chartConfig", readFile("fullpath/of/scrollchart.json"));
         config.set("callbackFilePath", "fullpath/of/expand_scroll.js");
         config.set("asyncCapture", "true");
 
