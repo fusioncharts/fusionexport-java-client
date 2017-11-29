@@ -19,7 +19,7 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
         // Instantiate the ExportManager class
         ExportManager em = new ExportManager();
         // Call the export() method with the export config and the respective callbacks
-        Exporter exporter = em.export(config, new ExportChart(), new ExportChart());
+        em.export(config, new ExportChart(), new ExportChart());
     }
 
     @Override // Called when export is done
