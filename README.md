@@ -1,28 +1,12 @@
-# FusionExport Java Client SDK
+# FusionExport Java Client
 
-FusionExport client SDK for Java applications to export charts provided by FusionCharts Javascript library.
-
-## Minimum Required JDK
-
-FusionExport Java SDK requires Java 1.6 and higher.
+Language SDK for FusionExport which enables exporting of charts & dashboards through Java.
 
 ## Installation
 
-### Maven
-
-To use this SDK in your maven project add this dependency to your `pom.xml`:
-
-```xml
-<dependency>
-  <groupId>com.fusioncharts.fusionexport.client</groupId>
-  <artifactId>fusionexport-java-client</artifactId>
-  <version>1.0.0</version>
-</dependency>
-```
-
 ### Gradle
 
-To use in Gradle project add the maven central repository to your repositories list:
+To use in a Gradle project, first add the maven central repository to your repositories list:
 
 ```groovy
 repositories {
@@ -30,21 +14,33 @@ repositories {
 }
 ```
 
-Then, just add this SDK as dependency to your `build.gradle` file:
+Then, just add this SDK as a dependency to your `build.gradle` file:
 
 ```groovy
 dependencies {
-    compile "com.fusioncharts.fusionexport.client:fusionexport-java-client:1.0.0"
+    compile "com.fusioncharts.fusionexport:fusionexport:1.0.0-beta"
 }
+```
+
+### Maven
+
+To use this SDK with your maven project, add this dependency to your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>com.fusioncharts.fusionexport</groupId>
+  <artifactId>fusionexport</artifactId>
+  <version>1.0.0-beta</version>
+</dependency>
 ```
 
 ## Getting Started
 
-After adding the dependency, create a new file named `chart-config.json` which contains
-the chart configurations to be exported. Before exporting your chart, make sure
+After adding the dependency, create a new file named `chart-config.json` containing all 
+the chart configurations that are to be exported. Before exporting your chart, make sure
 the export server is running.
 
-The `chart-config.json` file:
+The `chart-config.json` file looks as shown below:
 
 ```json
 [
@@ -78,33 +74,30 @@ The `chart-config.json` file:
 ]
 ```
 
-Now import the SDK library into your project and write export logic as follows:
+Now, import the SDK library into your project and write the export logic as follows:
 
 ```java
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import com.fusioncharts.fusionexport.client.*;
+import com.fusioncharts.fusionexport.client.*; // import sdk
 
 public class ExportChart implements ExportDoneListener, ExportStateChangedListener {
 
     public static void main(String[] args) {
-        ExportChart ec = new ExportChart();
 
-        String chartConfigFile = "fullpath/of/chart-config.json";
-        String exportServerIP = "127.0.0.1"; // The IP address of export server
-        String exportServerPort = 1337; // The Port of export server
-
-        // The export configurations used by export server
+        // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", readFile(chartConfigFile));
+        config.set("chartConfig", readFile("fullpath/of/chart-config-file.json"));
 
-        ExportManager em = new ExportManager(exportServerIP, exportServerPort);
-        Exporter exporter = em.export(config, ec, ec);
+        // Instantiate the ExportManager class
+        ExportManager em = new ExportManager();
+        // Call the export() method with the export config and the respective callbacks
+        em.export(config, new ExportChart(), new ExportChart());
     }
 
-    @Override
+    @Override // Called when export is done
     public void exportDone(String result, ExportException error) {
         if (error != null) {
             System.out.println(error.getMessage());
@@ -113,7 +106,7 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
         }
     }
 
-    @Override
+    @Override // Called on each export state change
     public void exportStateChanged(String state) {
         System.out.println("STATE: " + state);
     }
@@ -133,5 +126,8 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
     }
 }
 ```
+Finally, run your Java app, and the exported chart is received via the `ExportDone` event.
 
-Now run your Java app, the exported chart will be received on `ExportDone` event.
+## API Reference
+
+You can find the full reference [here](https://www.fusioncharts.com/dev/exporting-charts/using-fusionexport/sdk-api-reference/java.html)

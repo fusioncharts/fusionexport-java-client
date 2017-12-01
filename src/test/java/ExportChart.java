@@ -1,6 +1,4 @@
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import com.fusioncharts.fusionexport.client.*; // import sdk
 
@@ -11,7 +9,6 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
         config.set("chartConfig", readResourceFile("chart-config.json"));
-        config.set("exportAsZip", "false");
 
         // Instantiate the ExportManager class
         ExportManager em = new ExportManager();

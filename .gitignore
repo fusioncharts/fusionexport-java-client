@@ -14,7 +14,6 @@ bin
 out
 
 /doc
-*.xml
 .idea/.name
 *.jks
 lib/junit-4.7.jar
