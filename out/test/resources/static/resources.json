@@ -1,0 +1,8 @@
+﻿{
+  "include": [
+    "*/**"
+  ],
+  "exclude": [
+    "random2.json"
+  ]
+}

@@ -1,31 +1,58 @@
+import com.fusioncharts.fusionexport.client.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import com.fusioncharts.fusionexport.client.*; // import sdk
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExportChart implements ExportDoneListener, ExportStateChangedListener {
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
         // Instantiate the ExportConfig class and add the required configurations
-        ExportConfig config = new ExportConfig();
+        //ConfigValidator.readMetadata();
+        /*ExportConfig config = new ExportConfig();
         config.set("chartConfig", readResourceFile("chart-config.json"));
 
         // Instantiate the ExportManager class
         ExportManager em = new ExportManager();
         // Call the export() method with the export config and the respective callbacks
-        em.export(config, new ExportChart(), new ExportChart());
+        em.export(config, new ExportDoneListener() {
+            public void exportDone(String result, ExportException error) {
+                if (error != null) {
+                    System.out.println(error.getMessage());
+                } else {
+                    System.out.println("DONE: " + result);
+                }
+            }
+        }, new ExportChart());
+
+
+        ExportManagerr err = new ExportManagerr.Config(config).addExportDoneListener(new ExportDoneListener() {
+            @Override
+            public void exportDone(String result, ExportException error) {
+
+            }
+        }).addExportStateChangedListener(new ExportStateChangedListener() {
+            @Override
+            public void exportStateChanged(String state) {
+
+            }
+        }).export();*/
+
+        String path = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/resources.json";
+//        Utils.resolvePath(Utils.resolvePath(path),"../script/script1.js");
+
+        new ResourceReader(path).parseResourceJSON();
+
+
     }
 
-    @Override // Called when export is done
+    // Called when export is done
     public void exportDone(String result, ExportException error) {
-        if (error != null) {
-            System.out.println(error.getMessage());
-        } else {
-            System.out.println("DONE: " + result);
-        }
+
     }
 
-    @Override // Called on each export state change
+    // Called on each export state change
     public void exportStateChanged(String state) {
         System.out.println("STATE: " + state);
     }
@@ -46,4 +73,7 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
             return null;
         }
     }
+
+
 }
+

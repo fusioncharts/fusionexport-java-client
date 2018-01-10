@@ -2,10 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="fusionexport-java-client_main" target="1.6" />
-      <module name="fusionexport-java-client_test" target="1.6" />
-      <module name="fusionexport_main" target="1.6" />
-      <module name="fusionexport_test" target="1.6" />
+      <module name="client_main" target="1.8" />
+      <module name="client_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
