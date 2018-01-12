@@ -1,6 +1,7 @@
 package com.fusioncharts.fusionexport.client;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.scene.shape.SVGPath;
 import org.jsoup.Jsoup;
@@ -8,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import java.util.Map;
 public class ExportConfigg {
 
     //TODO Read Config
+    private JsonObject requestJSON = null;
 
     public static class ConfigBuilder{
 
@@ -28,18 +31,25 @@ public class ExportConfigg {
         private final String DASHBOARDLOGO = "dashboardlogo";
         private final String OUTPUTFILEDEFINITION = "outputFileDefinition";
         private final String CLIENTNAME = "clientName";
-        private final String TEMPLATE = "template";
-        private final String RESOURCES = "resources";
+        private final String TEMPLATE = "templateFilePath";
+        private final String RESOURCES = "resourceFilePath";
         private final String CLIENTNAME_VALUE = "JAVA";
 
-        public ConfigBuilder(){
+        public ConfigBuilder() throws Exception {
             configAttributes = new HashMap<>();
             requestJSON = new JsonObject();
+            ConfigValidator.readMetadata();
         }
 
         public ConfigBuilder addConfig(String configName,String value) throws ExportException {
             if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("string")){
                 configAttributes.put(configName,new DataValue<String>(value));
+            }
+            else if(ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("BooleanConverter")){
+                addConfig(configName,Boolean.parseBoolean(value));
+            }
+            else if(ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("NumberConverter")){
+                addConfig(configName,Integer.parseInt(value));
             }
             else{
                 throw new ExportException("Type of"+configName+" is not valid");
@@ -83,11 +93,12 @@ public class ExportConfigg {
             }
         }
 
-        public ExportConfig build(){
-            return new ExportConfig(); //TODO return this
+        public ExportConfigg build() throws Exception {
+            createRequest();
+            return new ExportConfigg(this);
         }
 
-        public void createRequest() throws IOException{
+        public void createRequest() throws Exception {
 
             //set Client Name
             requestJSON.addProperty(CLIENTNAME,CLIENTNAME_VALUE);
@@ -96,7 +107,7 @@ public class ExportConfigg {
             if(configAttributes.containsKey(CHARTCONFIG)){
                 String chartConfig = (String) configAttributes.get(CHARTCONFIG).getData();
                 if(!chartConfig.isEmpty() && chartConfig.contains(".json")){
-                    chartConfig = Utils.getFileContentAsString(Utils.getResourcePath(chartConfig));
+                    chartConfig = new JsonParser().parse(Utils.getFileContentAsString(Utils.getResourcePath(chartConfig))).toString();
                 }
                 requestJSON.addProperty(CHARTCONFIG,chartConfig);
             }
@@ -132,22 +143,31 @@ public class ExportConfigg {
             if(configAttributes.containsKey(TEMPLATE)){
                 String templateFile = (String) configAttributes.get(TEMPLATE).getData();
                 String resourceFile =null;
+                ArrayList<String> templateFileRef = null;
                 if(configAttributes.containsKey(RESOURCES) && !configAttributes.get(RESOURCES).toString().isEmpty()){
                     resourceFile = (String) configAttributes.get(RESOURCES).getData();
                 }
+                templateFileRef = getTemplate(templateFile);
+                ResourceReader resourceReader = new ResourceReader(resourceFile,templateFileRef);
+                String base64Zip = resourceReader.processForZip();
+                String relativeTempPath = resourceReader.getRelativeTemplatePath(Utils.resolvePath(templateFile));
 
-                templateFile = Utils.getFileContentAsString(Utils.getResourcePath(templateFile));
-                resourceFile = Utils.getFileContentAsString(Utils.getResourcePath(resourceFile));
+                requestJSON.addProperty(TEMPLATE,relativeTempPath);
+                if(!resourceFile.isEmpty())
+                    requestJSON.addProperty(RESOURCES,base64Zip);
+
             }
         }
 
-        public void getTemplate(String path){
-            List<String> extratedPaths = new ArrayList<>();
-            List<String>extractedResourcePath = new ArrayList<>();
+        public ArrayList<String> getTemplate(String path) throws Exception {
+            ArrayList<String> extractedPaths = new ArrayList<>();
             String templateAbsolutePath = Utils.resolvePath(path);
+            extractedPaths.add(templateAbsolutePath);
             Document doc = null;
             try{
-                doc = Jsoup.parse(Utils.getFile(templateAbsolutePath), "UTF-8");
+                File file =Utils.getFile(templateAbsolutePath);
+                doc = Jsoup.parse(file, "UTF-8");
+                //Utils.writeTempFile(file);
             }catch (IOException e){
                 //TODO generate ExportException
             }
@@ -159,24 +179,29 @@ public class ExportConfigg {
             for(Element elm : links){
                 String attrPath = elm.attr("href");
                 if(Utils.isValidPath(attrPath)) {
-                    extratedPaths.add(Utils.resolvePath(attrPath,templateAbsolutePath) );
+                    extractedPaths.add(Utils.resolvePath(attrPath,templateAbsolutePath) );
                 }
             }
 
             for(Element elm : media){
                 String attrPath = elm.attr("src");
                 if(Utils.isValidPath(attrPath)) {
-                    extratedPaths.add(Utils.resolvePath(attrPath,templateAbsolutePath) );
+                    extractedPaths.add(Utils.resolvePath(attrPath,templateAbsolutePath) );
                 }
             }
-
-
+            return extractedPaths;
 
         }
 
     }
 
-    //TODO Create Request
+    private ExportConfigg(ConfigBuilder configBuilder){
+        this.requestJSON = configBuilder.requestJSON;
+    }
+
+    public String getFormattedExportConfigs(){
+        return requestJSON.toString();
+    }
 
 
 

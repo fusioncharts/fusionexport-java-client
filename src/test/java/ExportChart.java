@@ -8,6 +8,37 @@ import java.util.Map;
 public class ExportChart implements ExportDoneListener, ExportStateChangedListener {
     public static void main(String[] args) throws Exception{
 
+
+
+        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/chart-config.json";
+        String svgFile = "static/sample.svg";
+        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/resources.json";
+        String templateFile =
+                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/html/template.html";
+
+        ExportConfigg exportConfigg = new ExportConfigg.ConfigBuilder()
+                                        .addConfig("templateFilePath",templateFile)
+                                        .addConfig("resourceFilePath",resourcesFile)
+                                        .build();
+
+
+
+        ExportManagerr err = new ExportManagerr.Config(exportConfigg).addExportDoneListener(new ExportDoneListener() {
+            @Override
+            public void exportDone(String result, ExportException error) {
+                if (error != null) {
+                    System.out.println(error.getMessage());
+                } else {
+                    System.out.println("DONE: " + result);
+                }
+            }
+        }).addExportStateChangedListener(new ExportStateChangedListener() {
+            @Override
+            public void exportStateChanged(String state) {
+                System.out.println("STATE: " + state);
+            }
+        }).export();
+
         // Instantiate the ExportConfig class and add the required configurations
         //ConfigValidator.readMetadata();
         /*ExportConfig config = new ExportConfig();
@@ -39,10 +70,8 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
             }
         }).export();*/
 
-        String path = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/resources.json";
-//        Utils.resolvePath(Utils.resolvePath(path),"../script/script1.js");
-
-        new ResourceReader(path).parseResourceJSON();
+        String path = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/html/template.html";
+        new ExportConfigg.ConfigBuilder().getTemplate(path);
 
 
     }

@@ -8,27 +8,27 @@ public class Exporter implements ExportDataProcessor{
 
     private ExportDoneListener exportDoneListener;
     private ExportStateChangedListener exportStateChangedListener;
-    private ExportConfig exportConfig;
+    private ExportConfigg exportConfig;
     private String exportServerHost = Constants.DEFAULT_HOST;
     private int exportServerPort = Constants.DEFAULT_PORT;
     private Socket socket;
     private WebSocketManager socketManager;
 
-    public Exporter(ExportConfig exportConfig) {
+    public Exporter(ExportConfigg exportConfig) {
         this.exportConfig = exportConfig;
     }
 
-    public Exporter(ExportConfig exportConfig, ExportDoneListener exportDoneListener) {
+    public Exporter(ExportConfigg exportConfig, ExportDoneListener exportDoneListener) {
         this.exportConfig = exportConfig;
         this.exportDoneListener = exportDoneListener;
     }
 
-    public Exporter(ExportConfig exportConfig, ExportStateChangedListener exportStateChangedListener) {
+    public Exporter(ExportConfigg exportConfig, ExportStateChangedListener exportStateChangedListener) {
         this.exportConfig = exportConfig;
         this.exportStateChangedListener = exportStateChangedListener;
     }
 
-    public Exporter(ExportConfig exportConfig, ExportDoneListener exportDoneListener, ExportStateChangedListener exportStateChangedListener) {
+    public Exporter(ExportConfigg exportConfig, ExportDoneListener exportDoneListener, ExportStateChangedListener exportStateChangedListener) {
         this.exportConfig = exportConfig;
         this.exportDoneListener = exportDoneListener;
         this.exportStateChangedListener = exportStateChangedListener;
@@ -39,7 +39,7 @@ public class Exporter implements ExportDataProcessor{
         this.exportServerPort = exportServerPort;
     }
 
-    public ExportConfig getExportConfig() {
+    public ExportConfigg getExportConfig() {
         return this.exportConfig;
     }
 
@@ -132,7 +132,7 @@ public class Exporter implements ExportDataProcessor{
     }
 
     private String getFormattedExportConfigs() {
-        return String.format("%s.%s<=:=>%s", "ExportManager", "export", this.exportConfig.getFormattedConfigs());
+        return String.format("%s.%s<=:=>%s", "ExportManager", "export", this.exportConfig.getFormattedExportConfigs());
     }
 
 }

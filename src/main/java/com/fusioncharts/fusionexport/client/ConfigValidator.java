@@ -16,7 +16,7 @@ public class ConfigValidator {
     private static final String META_DATA_TYPE ="type";
     private static final String META_DATA_CONVERTOR ="converter";
 
-    private static void readMetadata() throws Exception {
+    public static void readMetadata() throws Exception {
         JsonParser jsonParser = new JsonParser();
         JsonElement jsontree = null;
         try {
