@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExportChart implements ExportDoneListener, ExportStateChangedListener {
+public class ExportChart {
     public static void main(String[] args) throws Exception{
 
 
@@ -19,72 +19,29 @@ public class ExportChart implements ExportDoneListener, ExportStateChangedListen
         ExportConfigg exportConfigg = new ExportConfigg.ConfigBuilder()
                                         .addConfig("templateFilePath",templateFile)
                                         .addConfig("resourceFilePath",resourcesFile)
+                .addConfig("type","jpg")
                                         .build();
 
 
 
         ExportManagerr err = new ExportManagerr.Config(exportConfigg).addExportDoneListener(new ExportDoneListener() {
             @Override
-            public void exportDone(String result, ExportException error) {
+            public void exportDone(ExportDoneData result, ExportException error) {
                 if (error != null) {
                     System.out.println(error.getMessage());
                 } else {
-                    System.out.println("DONE: " + result);
+                    System.out.println("DONE: " + result.data[0].realName);
                 }
             }
         }).addExportStateChangedListener(new ExportStateChangedListener() {
             @Override
-            public void exportStateChanged(String state) {
-                System.out.println("STATE: " + state);
+            public void exportStateChanged(ExportState state) {
+                System.out.println("STATE: " + state.reporter);
             }
         }).export();
-
-        // Instantiate the ExportConfig class and add the required configurations
-        //ConfigValidator.readMetadata();
-        /*ExportConfig config = new ExportConfig();
-        config.set("chartConfig", readResourceFile("chart-config.json"));
-
-        // Instantiate the ExportManager class
-        ExportManager em = new ExportManager();
-        // Call the export() method with the export config and the respective callbacks
-        em.export(config, new ExportDoneListener() {
-            public void exportDone(String result, ExportException error) {
-                if (error != null) {
-                    System.out.println(error.getMessage());
-                } else {
-                    System.out.println("DONE: " + result);
-                }
-            }
-        }, new ExportChart());
-
-
-        ExportManagerr err = new ExportManagerr.Config(config).addExportDoneListener(new ExportDoneListener() {
-            @Override
-            public void exportDone(String result, ExportException error) {
-
-            }
-        }).addExportStateChangedListener(new ExportStateChangedListener() {
-            @Override
-            public void exportStateChanged(String state) {
-
-            }
-        }).export();*/
-
-        String path = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/html/template.html";
-        new ExportConfigg.ConfigBuilder().getTemplate(path);
-
-
     }
 
     // Called when export is done
-    public void exportDone(String result, ExportException error) {
-
-    }
-
-    // Called on each export state change
-    public void exportStateChanged(String state) {
-        System.out.println("STATE: " + state);
-    }
 
     private static String readResourceFile(String resourceName) {
         try {

@@ -139,6 +139,15 @@ public class ExportConfigg {
                 requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64EncodedString(dashboardlogo));
             }
 
+            //set OUTPUTFILEDEFINITION
+            if(configAttributes.containsKey(OUTPUTFILEDEFINITION)){
+                String filedef= (String) configAttributes.get(OUTPUTFILEDEFINITION).getData();
+                if(!filedef.isEmpty()){
+                    filedef = (Utils.resolvePath(filedef));
+                }
+                requestJSON.addProperty(OUTPUTFILEDEFINITION,Utils.getBase64ForZip(filedef));
+            }
+
             //set template
             if(configAttributes.containsKey(TEMPLATE)){
                 String templateFile = (String) configAttributes.get(TEMPLATE).getData();
@@ -156,6 +165,12 @@ public class ExportConfigg {
                 if(!resourceFile.isEmpty())
                     requestJSON.addProperty(RESOURCES,base64Zip);
 
+            }
+
+            for(String configName : configAttributes.keySet()){
+                if(!requestJSON.has(configName)){
+                    requestJSON.addProperty(configName,(String) configAttributes.get(configName).getData());
+                }
             }
         }
 
