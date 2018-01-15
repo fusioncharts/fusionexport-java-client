@@ -54,6 +54,8 @@ public class Utils {
     }
 
     public static File getFile(String absolutePath) {
+
+
         File file = new File(absolutePath);
         return file;
     }
@@ -76,5 +78,13 @@ public class Utils {
     }
     public static boolean isAbsolutePath(String path){
         return Paths.get(path).isAbsolute();
+    }
+
+    public static void getAndSaveDecodedFile(String path,String base64string) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(Utils.resolvePath(path));
+        byte[] result = Base64.getDecoder().decode(base64string);
+        fileOutputStream.write(result);
+        fileOutputStream.close();
+
     }
 }

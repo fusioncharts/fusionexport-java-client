@@ -1,105 +1,205 @@
-/*
+
 package com.fusioncharts.fusionexport.client;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class ExportConfig implements Cloneable {
+public class ExportConfig{
 
-    private ConcurrentHashMap<String, String> configs;
+    private Map<String,DataValue> configAttributes = null;
+    private JsonObject requestJSON = null;
+    private final String CHARTCONFIG = "chartConfig";
+    private final String INPUTSVG = "inputSVG";
+    private final String CALLBACKS = "callbacks";
+    private final String DASHBOARDLOGO = "dashboardlogo";
+    private final String OUTPUTFILEDEFINITION = "outputFileDefinition";
+    private final String CLIENTNAME = "clientName";
+    private final String TEMPLATE = "templateFilePath";
+    private final String RESOURCES = "resourceFilePath";
+    private final String CLIENTNAME_VALUE = "JAVA";
 
-    public ExportConfig() {
-        this.configs = new ConcurrentHashMap<String, String>();
+    public ExportConfig() throws Exception {
+        configAttributes = new HashMap<>();
+        requestJSON = new JsonObject();
+        ConfigValidator.readMetadata();
     }
 
-    public void set(String configName, String configValue) {
-        this.configs.put(configName, configValue);
-    }
-
-    public String get(String configName) {
-        return this.configs.get(configName);
-    }
-
-    public boolean remove(String configName) {
-        return this.configs.remove(configName, this.configs.get(configName));
-    }
-
-    public boolean has(String configName) {
-        return this.configs.containsKey(configName);
-    }
-
-    public void clear() {
-        this.configs.clear();
-    }
-
-    public int count() {
-        return this.configs.size();
-    }
-
-    public String[] configNames() {
-        List<String> configNames = new ArrayList<String>();
-        Enumeration<String> iterator = this.configs.keys();
-        while (iterator.hasMoreElements()) configNames.add(iterator.nextElement());
-        return configNames.toArray(new String[configNames.size()]);
-    }
-
-    public String[] configValues() {
-        List<String> configValues = new ArrayList<String>();
-        Enumeration<String> iterator = this.configs.elements();
-        while (iterator.hasMoreElements()) configValues.add(iterator.nextElement());
-        return configValues.toArray(new String[configValues.size()]);
-    }
-
-    @Override
-    public ExportConfig clone() {
-        ExportConfig newExportConfig = null;
-        try {
-            newExportConfig = (ExportConfig) super.clone();
-            newExportConfig.configs = new ConcurrentHashMap<String, String>();
-        } catch (CloneNotSupportedException exp){
-            newExportConfig = new ExportConfig();
+    public ExportConfig set(String configName, String value) throws ExportException {
+        if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("string")){
+            configAttributes.put(configName,new DataValue<String>(value));
         }
-        Set<Map.Entry<String, String>> configs = this.configs.entrySet();
-        for (Map.Entry<String, String> config : configs) {
-            newExportConfig.set(config.getKey(), config.getValue());
+        else if(ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("BooleanConverter")){
+            set(configName,Boolean.parseBoolean(value));
         }
-        return newExportConfig;
+        else if(ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("NumberConverter")){
+            set(configName,Integer.parseInt(value));
+        }
+        else{
+            throw new ExportException("Type of"+configName+" is not valid");
+        }
+        return this;
     }
 
-    public String getFormattedConfigs() {
-        StringBuilder configsAsJSON = new StringBuilder();
-        Set<Map.Entry<String, String>> configs = this.configs.entrySet();
-        for (Map.Entry<String, String> config : configs) {
-            String formattedConfigValue = this.getFormattedConfigValue(config.getKey(), config.getValue());
-            String keyValuePair = String.format("\"%s\": %s, ", config.getKey(), formattedConfigValue);
-            configsAsJSON.append(keyValuePair);
+    public ExportConfig set(String configName, boolean value) throws ExportException {
+        if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("boolean")){
+            configAttributes.put(configName,new ExportConfig.DataValue<Boolean>(value));
         }
-        if(configsAsJSON.length() >= 2) {
-            configsAsJSON.delete(configsAsJSON.length() - 2, configsAsJSON.length());
+        else{
+            throw new ExportException("Type of"+configName+" is not valid");
         }
-        configsAsJSON.insert(0,"{ ");
-        configsAsJSON.append(" }");
-        return configsAsJSON.toString();
+        return this;
     }
 
-    private String getFormattedConfigValue(String configName, String configValue) {
-        if(configName.equals("chartConfig")) {
-            return configValue;
-        } else if(configName.equals("maxWaitForCaptureExit")) {
-            return configValue;
-        } else if(configName.equals("asyncCapture")) {
-            return configValue.toLowerCase();
-        } else if(configName.equals("exportAsZip")) {
-            return configValue.toLowerCase();
-        } else {
-            return String.format("\"%s\"", configValue);
+    public ExportConfig set(String configName, Integer value) throws ExportException {
+        if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("integer")){
+            configAttributes.put(configName,new DataValue<Integer>(value));
+        }
+        else{
+            throw new ExportException("Type of"+configName+" is not valid");
+        }
+        return this;
+    }
+
+    class DataValue<T>{
+        T data;
+
+        DataValue(T data){
+            this.data = data;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public T getData() {
+            return data;
         }
     }
 
-    @Override
-    public String toString() {
-        return this.getFormattedConfigs();
+    public void createRequest() throws Exception {
+
+        //set Client Name
+        requestJSON.addProperty(CLIENTNAME,CLIENTNAME_VALUE);
+
+        //set Chart Config
+        if(configAttributes.containsKey(CHARTCONFIG)){
+            String chartConfig = (String) configAttributes.get(CHARTCONFIG).getData();
+            if(!chartConfig.isEmpty() && chartConfig.contains(".json")){
+                chartConfig = new JsonParser().parse(Utils.getFileContentAsString(Utils.resolvePath(chartConfig))).toString();
+            }
+            requestJSON.addProperty(CHARTCONFIG,chartConfig);
+        }
+
+        //set SVG Config
+        if(configAttributes.containsKey(INPUTSVG)){
+            String svg= (String) configAttributes.get(INPUTSVG).getData();
+            if(!svg.isEmpty()){
+                svg = Utils.getFileContentAsString(Utils.resolvePath(svg));
+                requestJSON.addProperty(INPUTSVG,Utils.getBase64EncodedString(svg));
+            }
+
+        }
+
+        //set callback
+        if(configAttributes.containsKey(CALLBACKS)){
+            String callbacks= (String) configAttributes.get(CALLBACKS).getData();
+            if(!callbacks.isEmpty()){
+                callbacks = Utils.getFileContentAsString(Utils.resolvePath(callbacks));
+                requestJSON.addProperty(CALLBACKS,Utils.getBase64EncodedString(callbacks));
+            }
+
+        }
+
+        //set DASHBOARDLOGO
+        if(configAttributes.containsKey(DASHBOARDLOGO)){
+            String dashboardlogo= (String) configAttributes.get(DASHBOARDLOGO).getData();
+            if(!dashboardlogo.isEmpty()){
+                dashboardlogo = Utils.getFileContentAsString(Utils.getResourcePath(dashboardlogo));
+                requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64EncodedString(dashboardlogo));
+            }
+        }
+
+        //set OUTPUTFILEDEFINITION
+        if(configAttributes.containsKey(OUTPUTFILEDEFINITION)){
+            String filedef= (String) configAttributes.get(OUTPUTFILEDEFINITION).getData();
+            if(!filedef.isEmpty()){
+                filedef = (Utils.resolvePath(filedef));
+                requestJSON.addProperty(OUTPUTFILEDEFINITION,Utils.getBase64ForZip(filedef));
+            }
+
+        }
+
+        //set template
+        if(configAttributes.containsKey(TEMPLATE)){
+            String templateFile = (String) configAttributes.get(TEMPLATE).getData();
+            String resourceFile =null;
+            ArrayList<String> templateFileRef = null;
+            if(configAttributes.containsKey(RESOURCES) && !configAttributes.get(RESOURCES).toString().isEmpty()){
+                resourceFile = (String) configAttributes.get(RESOURCES).getData();
+            }
+            templateFileRef = getTemplate(templateFile);
+            ResourceReader resourceReader = new ResourceReader(resourceFile,templateFileRef);
+            String base64Zip = resourceReader.processForZip();
+            String relativeTempPath = resourceReader.getRelativeTemplatePath(Utils.resolvePath(templateFile));
+
+            requestJSON.addProperty(TEMPLATE,relativeTempPath);
+            if(!resourceFile.isEmpty())
+                requestJSON.addProperty(RESOURCES,base64Zip);
+
+        }
+
+        for(String configName : configAttributes.keySet()){
+            if(!requestJSON.has(configName)){
+                requestJSON.addProperty(configName,(String) configAttributes.get(configName).getData());
+            }
+        }
     }
+
+    private ArrayList<String> getTemplate(String path) throws Exception {
+        ArrayList<String> extractedPaths = new ArrayList<>();
+        String templateAbsolutePath = Utils.resolvePath(path);
+        extractedPaths.add(templateAbsolutePath);
+        Document doc = null;
+        try{
+            File file =Utils.getFile(templateAbsolutePath);
+            doc = Jsoup.parse(file, "UTF-8");
+            //Utils.writeTempFile(file);
+        }catch (IOException e){
+            //TODO generate ExportException
+        }
+
+        Elements links = doc.select("link[href]");
+        Elements media = doc.select("[src]");
+
+
+        for(Element elm : links){
+            String attrPath = elm.attr("href");
+            if(Utils.isValidPath(attrPath)) {
+                extractedPaths.add(Utils.resolvePath(attrPath,templateAbsolutePath) );
+            }
+        }
+
+        for(Element elm : media){
+            String attrPath = elm.attr("src");
+            if(Utils.isValidPath(attrPath)) {
+                extractedPaths.add(Utils.resolvePath(attrPath,templateAbsolutePath) );
+            }
+        }
+        return extractedPaths;
+
+    }
+
+    public String getFormattedExportConfigs(){ return requestJSON.toString();
+    }
+
 }
 
 
@@ -115,4 +215,4 @@ public class ExportConfig implements Cloneable {
 
 
 
-*/
+

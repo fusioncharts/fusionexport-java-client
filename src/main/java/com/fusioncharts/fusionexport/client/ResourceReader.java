@@ -1,6 +1,7 @@
 package com.fusioncharts.fusionexport.client;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,9 +119,8 @@ public class ResourceReader {
         {
             File f = Utils.getFile(allpath.get(i));
             if(!processedPaths.containsKey(allpath.get(i))) {
-                ZipEntry ze = new ZipEntry(allpath2.get(i).substring(0,allpath2.get(i).length() - f.getName().length())+f.getName());
-                zout.putNextEntry(ze);
-                zout.closeEntry();
+                String relativePath = allpath2.get(i).substring(0,allpath2.get(i).length() - f.getName().length())+f.getName();
+                addToZipFile(f.toPath(),relativePath,zout);
                 processedPaths.put(allpath.get(i), true);
             }
             //Utils.writeTempFile(f);
@@ -143,6 +143,25 @@ public class ResourceReader {
         }
         return prepareDataForZip();
 
+    }
+
+    private void addToZipFile(Path file, String relativePath,ZipOutputStream zipStream) {
+        String inputFileName = file.toFile().getPath();
+        try (FileInputStream inputStream = new FileInputStream(inputFileName)) {
+            ZipEntry entry = new ZipEntry(relativePath);
+            zipStream.putNextEntry(entry);
+            byte[] readBuffer = new byte[2048];
+            int amountRead;
+            int written = 0;
+
+            while ((amountRead = inputStream.read(readBuffer)) > 0) {
+                zipStream.write(readBuffer, 0, amountRead);
+                written += amountRead;
+            }
+        }
+        catch(IOException e) {
+
+        }
     }
 
 

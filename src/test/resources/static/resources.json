@@ -1,7 +1,4 @@
 ﻿{
-  "include": [
-    "*.json"
-  ],
   "exclude": [
     "random2.json"
   ]

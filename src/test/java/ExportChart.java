@@ -1,6 +1,7 @@
 import com.fusioncharts.fusionexport.client.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,16 +11,47 @@ public class ExportChart {
 
 
 
-        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/chart-config.json";
+        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/chart-config.json";
         String svgFile = "static/sample.svg";
         String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/resources.json";
         String templateFile =
                 "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/html/template.html";
 
-        ExportConfigg exportConfigg = new ExportConfigg.ConfigBuilder()
-                                        .addConfig("templateFilePath",templateFile)
+
+        ExportConfig config = new ExportConfig();
+        config.set("chartConfig",chartConfigFile)
+                .set("templateFilePath",templateFile)
+                .set("resourceFilePath",resourcesFile)
+                .createRequest();
+
+
+        ExportManager manager = new ExportManager(config,new ExportDoneListener() {
+            @Override
+            public void exportDone(ExportDoneData result, ExportException error) {
+                if (error != null) {
+                    System.out.println(error.getMessage());
+                } else {
+                    try {
+                        ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK", result);
+                    }catch (IOException e){
+                        System.out.print("Path not valid");
+                    }
+                }
+            }
+        },new ExportStateChangedListener() {
+            @Override
+            public void exportStateChanged(ExportState state) {
+                System.out.println("STATE: " + state.reporter);
+            }
+        });
+        manager.export();
+
+
+        /*ExportConfigg exportConfigg = new ExportConfigg.ConfigBuilder()
+                .addConfig("chartConfig",chartConfigFile)
+                                       .addConfig("templateFilePath",templateFile)
                                         .addConfig("resourceFilePath",resourcesFile)
-                .addConfig("type","jpg")
+                //.addConfig("type","jpg")
                                         .build();
 
 
@@ -30,7 +62,11 @@ public class ExportChart {
                 if (error != null) {
                     System.out.println(error.getMessage());
                 } else {
-                    System.out.println("DONE: " + result.data[0].realName);
+                    try {
+                        ExportManagerr.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK", result);
+                    }catch (IOException e){
+                        System.out.print("Path not valid");
+                    }
                 }
             }
         }).addExportStateChangedListener(new ExportStateChangedListener() {
@@ -39,7 +75,7 @@ public class ExportChart {
                 System.out.println("STATE: " + state.reporter);
             }
         }).export();
-    }
+
 
     // Called when export is done
 
@@ -57,7 +93,7 @@ public class ExportChart {
         } catch (Exception exp) {
             exp.printStackTrace();
             return null;
-        }
+        }*/
     }
 
 

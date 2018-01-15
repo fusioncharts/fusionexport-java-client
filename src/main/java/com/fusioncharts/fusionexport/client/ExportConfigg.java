@@ -1,3 +1,4 @@
+/*
 package com.fusioncharts.fusionexport.client;
 
 import com.google.gson.JsonObject;
@@ -107,7 +108,7 @@ public class ExportConfigg {
             if(configAttributes.containsKey(CHARTCONFIG)){
                 String chartConfig = (String) configAttributes.get(CHARTCONFIG).getData();
                 if(!chartConfig.isEmpty() && chartConfig.contains(".json")){
-                    chartConfig = new JsonParser().parse(Utils.getFileContentAsString(Utils.getResourcePath(chartConfig))).toString();
+                    chartConfig = new JsonParser().parse(Utils.getFileContentAsString(Utils.resolvePath(chartConfig))).toString();
                 }
                 requestJSON.addProperty(CHARTCONFIG,chartConfig);
             }
@@ -116,18 +117,20 @@ public class ExportConfigg {
             if(configAttributes.containsKey(INPUTSVG)){
                 String svg= (String) configAttributes.get(INPUTSVG).getData();
                 if(!svg.isEmpty()){
-                    svg = Utils.getFileContentAsString(Utils.getResourcePath(svg));
+                    svg = Utils.getFileContentAsString(Utils.resolvePath(svg));
+                    requestJSON.addProperty(INPUTSVG,Utils.getBase64EncodedString(svg));
                 }
-                requestJSON.addProperty(INPUTSVG,Utils.getBase64EncodedString(svg));
+
             }
 
             //set callback
             if(configAttributes.containsKey(CALLBACKS)){
                 String callbacks= (String) configAttributes.get(CALLBACKS).getData();
                 if(!callbacks.isEmpty()){
-                    callbacks = Utils.getFileContentAsString(Utils.getResourcePath(callbacks));
+                    callbacks = Utils.getFileContentAsString(Utils.resolvePath(callbacks));
+                    requestJSON.addProperty(CALLBACKS,Utils.getBase64EncodedString(callbacks));
                 }
-                requestJSON.addProperty(CALLBACKS,Utils.getBase64EncodedString(callbacks));
+
             }
 
             //set DASHBOARDLOGO
@@ -135,8 +138,8 @@ public class ExportConfigg {
                 String dashboardlogo= (String) configAttributes.get(DASHBOARDLOGO).getData();
                 if(!dashboardlogo.isEmpty()){
                     dashboardlogo = Utils.getFileContentAsString(Utils.getResourcePath(dashboardlogo));
+                    requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64EncodedString(dashboardlogo));
                 }
-                requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64EncodedString(dashboardlogo));
             }
 
             //set OUTPUTFILEDEFINITION
@@ -144,8 +147,9 @@ public class ExportConfigg {
                 String filedef= (String) configAttributes.get(OUTPUTFILEDEFINITION).getData();
                 if(!filedef.isEmpty()){
                     filedef = (Utils.resolvePath(filedef));
+                    requestJSON.addProperty(OUTPUTFILEDEFINITION,Utils.getBase64ForZip(filedef));
                 }
-                requestJSON.addProperty(OUTPUTFILEDEFINITION,Utils.getBase64ForZip(filedef));
+
             }
 
             //set template
@@ -214,10 +218,10 @@ public class ExportConfigg {
         this.requestJSON = configBuilder.requestJSON;
     }
 
-    public String getFormattedExportConfigs(){
-        return requestJSON.toString();
+    public String getFormattedExportConfigs(){ return requestJSON.toString();
     }
 
 
 
 }
+*/

@@ -10,27 +10,27 @@ public class Exporter implements ExportDataProcessor{
 
     private ExportDoneListener exportDoneListener;
     private ExportStateChangedListener exportStateChangedListener;
-    private ExportConfigg exportConfig;
+    private ExportConfig exportConfig;
     private String exportServerHost = Constants.DEFAULT_HOST;
     private int exportServerPort = Constants.DEFAULT_PORT;
     private Socket socket;
     private WebSocketManager socketManager;
 
-    public Exporter(ExportConfigg exportConfig) {
+    public Exporter(ExportConfig exportConfig) {
         this.exportConfig = exportConfig;
     }
 
-    public Exporter(ExportConfigg exportConfig, ExportDoneListener exportDoneListener) {
+    public Exporter(ExportConfig exportConfig, ExportDoneListener exportDoneListener) {
         this.exportConfig = exportConfig;
         this.exportDoneListener = exportDoneListener;
     }
 
-    public Exporter(ExportConfigg exportConfig, ExportStateChangedListener exportStateChangedListener) {
+    public Exporter(ExportConfig exportConfig, ExportStateChangedListener exportStateChangedListener) {
         this.exportConfig = exportConfig;
         this.exportStateChangedListener = exportStateChangedListener;
     }
 
-    public Exporter(ExportConfigg exportConfig, ExportDoneListener exportDoneListener, ExportStateChangedListener exportStateChangedListener) {
+    public Exporter(ExportConfig exportConfig, ExportDoneListener exportDoneListener, ExportStateChangedListener exportStateChangedListener) {
         this.exportConfig = exportConfig;
         this.exportDoneListener = exportDoneListener;
         this.exportStateChangedListener = exportStateChangedListener;
@@ -41,7 +41,7 @@ public class Exporter implements ExportDataProcessor{
         this.exportServerPort = exportServerPort;
     }
 
-    public ExportConfigg getExportConfig() {
+    public ExportConfig getExportConfig() {
         return this.exportConfig;
     }
 

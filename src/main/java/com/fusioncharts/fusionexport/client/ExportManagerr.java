@@ -1,8 +1,12 @@
+/*
 package com.fusioncharts.fusionexport.client;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class ExportManagerr {
 
-    private ExportConfigg config;
+    private ExportConfig config;
     private ExportDoneListener exportDoneListener = null;
     private ExportStateChangedListener exportStateChangedListener=null;
     private String host=null;
@@ -10,13 +14,13 @@ public class ExportManagerr {
 
     public static class Config{
 
-        private ExportConfigg chartConfig;
+        private ExportConfig chartConfig;
         private ExportDoneListener exportDoneListener = null;
         private ExportStateChangedListener exportStateChangedListener = null;
         private String host="";
         private int port = Integer.MIN_VALUE;
 
-        public Config(ExportConfigg config){
+        public Config(ExportConfig config){
             this.chartConfig = config;
         }
         public Config addHostAndPort(String host,int port){
@@ -65,4 +69,25 @@ public class ExportManagerr {
             exporter.start();
         }
     }
+
+    public static void  saveExportedFiles(String dirPath, ExportDoneData exportedOutput) throws IOException {
+        if(exportedOutput.data.length != 0) {
+            for (ExportData data : exportedOutput.data) {
+                String filePath = dirPath+"/"+data.realName;
+                Utils.getAndSaveDecodedFile(filePath,data.fileContent);
+            }
+        }
+    }
+    public static ArrayList<String>  getExportedFileNames(ExportDoneData exportedOutput) {
+        ArrayList<String> fileNames = new ArrayList<>();
+        if(exportedOutput.data.length != 0) {
+            for (ExportData data : exportedOutput.data) {
+                fileNames.add(data.realName);
+            }
+        }
+        return  fileNames;
+    }
+
+
 }
+*/
