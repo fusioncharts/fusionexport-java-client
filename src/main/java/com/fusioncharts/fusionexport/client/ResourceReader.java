@@ -92,7 +92,7 @@ public class ResourceReader {
         basePath = basePath !=null ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
 
         if(basePath==null){
-            //TODO throw Export Array
+            System.out.println("Keep all files in single path or provide a base path");
         }
 
         for(int i=0;i<allPaths.size();i++){
@@ -129,7 +129,7 @@ public class ResourceReader {
         fout.close();
 
         String base64Zip = Utils.getBase64ForZip(tempPath);
-        //new File(tempPath).delete();
+        new File(tempPath).delete();
         return base64Zip;
     }
 
