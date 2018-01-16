@@ -25,7 +25,8 @@ public class ExportChart {
                 .createRequest();
 
 
-        ExportManager manager = new ExportManager(config,new ExportDoneListener() {
+        ExportManager manager = new ExportManager(config);
+        manager.export(new ExportDoneListener() {
             @Override
             public void exportDone(ExportDoneData result, ExportException error) {
                 if (error != null) {
@@ -38,13 +39,13 @@ public class ExportChart {
                     }
                 }
             }
-        },new ExportStateChangedListener() {
-            @Override
-            public void exportStateChanged(ExportState state) {
-                System.out.println("STATE: " + state.reporter);
-            }
-        });
-        manager.export();
+        },
+                new ExportStateChangedListener() {
+                    @Override
+                    public void exportStateChanged(ExportState state) {
+                        System.out.println("STATE: " + state.reporter);
+                    }
+                });
 
 
         /*ExportConfigg exportConfigg = new ExportConfigg.ConfigBuilder()

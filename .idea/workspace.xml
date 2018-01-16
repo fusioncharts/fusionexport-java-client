@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8186d891-a10d-47d6-995c-645d29217dfe" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.0/fileHashes/fileHashes.lock" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/client.iml" afterPath="$PROJECT_DIR$/.idea/modules/client.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfigg.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManagerr.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ExportChart.java" afterPath="$PROJECT_DIR$/src/test/java/ExportChart.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -49,21 +42,56 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ResourceReader.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ResourceReader.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="131" column="8" lean-forward="true" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="8" />
+            <state relative-caret-position="405">
+              <caret line="112" column="110" lean-forward="false" selection-start-line="112" selection-start-column="110" selection-end-line="112" selection-end-column="110" />
+              <folding>
+                <element signature="method#parseResourceJSON#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#scanDirectory#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#getLongestCommonPrefix#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#prepareDataForZip#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#generateBase64ZIP#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#getRelativeTemplatePath#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#processForZip#0;class#ResourceReader#0" expanded="false" />
+                <element signature="method#addToZipFile#0;class#ResourceReader#0" expanded="false" />
+                <element signature="class#ResourceJSon#0;class#ResourceReader#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Exporter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExportChart.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ExportManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+              <folding>
+                <element signature="method#setHostAndPort#0;class#ExportManager#0" expanded="false" />
+                <element signature="method#exportChart#0;class#ExportManager#0" expanded="false" />
+                <element signature="method#saveExportedFiles#0;class#ExportManager#0" expanded="false" />
+                <element signature="method#getExportedFileNames#0;class#ExportManager#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExportChart.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/ExportChart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+            <state relative-caret-position="409">
+              <caret line="51" column="31" lean-forward="true" selection-start-line="51" selection-start-column="31" selection-end-line="51" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -362,6 +390,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" />
+        <option value="$PROJECT_DIR$/src/test/java/ExportChart.java" />
       </list>
     </option>
   </component>
@@ -372,9 +402,10 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="height" value="846" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -589,7 +620,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="846" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="846" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -601,8 +632,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32756326" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -630,11 +661,50 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/ExportChart.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        <state relative-caret-position="319">
+          <caret line="35" column="30" lean-forward="false" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="112" column="110" lean-forward="false" selection-start-line="112" selection-start-column="110" selection-end-line="112" selection-end-column="110" />
+          <folding>
+            <element signature="method#parseResourceJSON#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#scanDirectory#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#getLongestCommonPrefix#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#prepareDataForZip#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#generateBase64ZIP#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#getRelativeTemplatePath#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#processForZip#0;class#ResourceReader#0" expanded="false" />
+            <element signature="method#addToZipFile#0;class#ResourceReader#0" expanded="false" />
+            <element signature="class#ResourceJSon#0;class#ResourceReader#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="38" column="8" lean-forward="false" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
+          <folding>
+            <element signature="method#setHostAndPort#0;class#ExportManager#0" expanded="false" />
+            <element signature="method#exportChart#0;class#ExportManager#0" expanded="false" />
+            <element signature="method#saveExportedFiles#0;class#ExportManager#0" expanded="false" />
+            <element signature="method#getExportedFileNames#0;class#ExportManager#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -646,18 +716,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/ExportChart.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="35" column="30" lean-forward="false" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="131" column="8" lean-forward="true" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="8" />
+        <state relative-caret-position="409">
+          <caret line="51" column="31" lean-forward="true" selection-start-line="51" selection-start-column="31" selection-end-line="51" selection-end-column="31" />
           <folding />
         </state>
       </provider>

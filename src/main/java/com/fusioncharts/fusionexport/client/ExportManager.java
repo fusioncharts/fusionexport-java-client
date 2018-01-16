@@ -14,30 +14,33 @@ public class ExportManager {
     public ExportManager(ExportConfig config){
         this.chartConfig = config;
     }
+
     public void setHostAndPort(String host, int port){
         this.host = host;
         this.port = port;
-
     }
 
-    public ExportManager (ExportConfig config ,ExportDoneListener exportDoneListener){
+    public void export (){
         this.exportDoneListener = exportDoneListener;
-        this.chartConfig = config;
-
+        exportChart();
     }
-
-    public ExportManager (ExportConfig config,ExportStateChangedListener exportStateChangedListener){
-        this.exportStateChangedListener = exportStateChangedListener;
-        this.chartConfig = config;
-    }
-
-    public ExportManager (ExportConfig config,ExportDoneListener exportDoneListener,ExportStateChangedListener exportStateChangedListener){
-        this.exportStateChangedListener = exportStateChangedListener;
-        this.chartConfig = config;
+    public void export (ExportDoneListener exportDoneListener){
         this.exportDoneListener = exportDoneListener;
+        exportChart();
+        }
+
+    public void export(ExportStateChangedListener exportStateChangedListener){
+        this.exportStateChangedListener = exportStateChangedListener;
+        exportChart();
     }
 
-    public void export(){
+    public void export (ExportDoneListener exportDoneListener,ExportStateChangedListener exportStateChangedListener){
+        this.exportStateChangedListener = exportStateChangedListener;
+        this.exportDoneListener = exportDoneListener;
+        exportChart();
+    }
+
+    private void exportChart(){
         Exporter exporter=null;
         if(exportStateChangedListener ==null && exportDoneListener==null)
             exporter = new Exporter(chartConfig);
