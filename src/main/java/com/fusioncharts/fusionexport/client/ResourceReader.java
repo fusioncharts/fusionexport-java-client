@@ -2,6 +2,7 @@ package com.fusioncharts.fusionexport.client;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +102,12 @@ public class ResourceReader {
             }
         }
         for(int i=0;i<allPaths.size();i++){
-            allPaths2.add(allPaths.get(i).substring(basePath.length(),allPaths.get(i).length()));
+            if(allPaths.get(i).equalsIgnoreCase(basePath)){
+                allPaths2.add(basePath);
+            }
+            else {
+                allPaths2.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
+            }
         }
 
 
@@ -119,8 +125,14 @@ public class ResourceReader {
         {
             File f = Utils.getFile(allpath.get(i));
             if(!processedPaths.containsKey(allpath.get(i))) {
+
                 String relativePath = allpath2.get(i).substring(0,allpath2.get(i).length() - f.getName().length())+f.getName();
-                addToZipFile(f.toPath(),relativePath,zout);
+                if(relativePath.equalsIgnoreCase(basePath)){
+                    addToZipFile(f.toPath(),f.getName(),zout);
+                }
+                else {
+                    addToZipFile(f.toPath(), relativePath, zout);
+                }
                 processedPaths.put(allpath.get(i), true);
             }
             //Utils.writeTempFile(f);
@@ -134,7 +146,12 @@ public class ResourceReader {
     }
 
     public String getRelativeTemplatePath(String templatePath){
-        return relativeTemplatePath =templatePath.substring(basePath.length(),templatePath.length());
+
+        relativeTemplatePath =templatePath.substring(basePath.length(),templatePath.length());
+        if(relativeTemplatePath.length()==0){
+            relativeTemplatePath = Paths.get(templatePath).getFileName().toString();
+        }
+        return relativeTemplatePath;
     }
 
     public String processForZip() throws Exception {

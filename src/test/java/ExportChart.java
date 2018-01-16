@@ -11,11 +11,11 @@ public class ExportChart {
 
 
 
-        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/chart-config.json";
+        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static/chart-config.json";
         String svgFile = "static/sample.svg";
-        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/resources.json";
+        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static/resources.json";
         String templateFile =
-                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK/src/test/resources/static/html/template.html";
+                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static/html/template.html";
 
 
         ExportConfig config = new ExportConfig();
@@ -33,7 +33,7 @@ public class ExportChart {
                     System.out.println(error.getMessage());
                 } else {
                     try {
-                        ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/JavaSDKExport/FusionExportJavaSDK", result);
+                        ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client", result);
                     }catch (IOException e){
                         System.out.print("Path not valid");
                     }
