@@ -19,7 +19,7 @@ public class ExportConfig{
     private final String CHARTCONFIG = "chartConfig";
     private final String INPUTSVG = "inputSVG";
     private final String CALLBACKS = "callbacks";
-    private final String DASHBOARDLOGO = "dashboardlogo";
+    private final String DASHBOARDLOGO = "dashboardLogo";
     private final String OUTPUTFILEDEFINITION = "outputFileDefinition";
     private final String CLIENTNAME = "clientName";
     private final String TEMPLATE = "templateFilePath";
@@ -122,8 +122,8 @@ public class ExportConfig{
         if(configAttributes.containsKey(DASHBOARDLOGO)){
             String dashboardlogo= (String) configAttributes.get(DASHBOARDLOGO).getData();
             if(!dashboardlogo.isEmpty()){
-                dashboardlogo = Utils.getFileContentAsString(Utils.getResourcePath(dashboardlogo));
-                requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64EncodedString(dashboardlogo));
+                dashboardlogo = Utils.resolvePath(dashboardlogo);
+                requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64ForZip(dashboardlogo));
             }
         }
 
@@ -158,7 +158,7 @@ public class ExportConfig{
 
         for(String configName : configAttributes.keySet()){
             if(!requestJSON.has(configName)){
-                requestJSON.addProperty(configName,(String) configAttributes.get(configName).getData());
+                requestJSON.addProperty(configName,configAttributes.get(configName).getData().toString());
             }
         }
     }

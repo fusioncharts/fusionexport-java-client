@@ -39,7 +39,7 @@ public class ResourceReader {
 
         if(resourceJSon != null) {
             scanDirectory(resourceJSon);
-            basePath = resourceJSon.basePath;
+            basePath = resourceJSon.basePath !=null || !resourceJSon.basePath.isEmpty() ? resourceJSon.basePath : null;
         }
     }
 
@@ -90,28 +90,27 @@ public class ResourceReader {
                 allPaths.add(path);
             }
         }
-        basePath = basePath !=null ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
+        basePath = !basePath.isEmpty() ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
 
-        if(basePath==null){
-            System.out.println("Keep all files in single path or provide a base path");
+        if(!basePath.isEmpty()) {
+
+            for (int i = 0; i < allPaths.size(); i++) {
+                if (!Utils.pathWithinBasePath(allPaths.get(i), basePath)) {
+                    allPaths.remove(i);
+                }
+            }
+            for (int i = 0; i < allPaths.size(); i++) {
+                if (allPaths.get(i).equalsIgnoreCase(basePath)) {
+                    allPaths2.add(basePath);
+                } else {
+                    allPaths2.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
+                }
+            }
+            return generateBase64ZIP(allPaths,allPaths2);
         }
 
-        for(int i=0;i<allPaths.size();i++){
-            if(!Utils.pathWithinBasePath(allPaths.get(i),basePath)){
-                allPaths.remove(i);
-            }
-        }
-        for(int i=0;i<allPaths.size();i++){
-            if(allPaths.get(i).equalsIgnoreCase(basePath)){
-                allPaths2.add(basePath);
-            }
-            else {
-                allPaths2.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
-            }
-        }
+        return null;
 
-
-        return generateBase64ZIP(allPaths,allPaths2);
     }
 
 

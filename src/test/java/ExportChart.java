@@ -11,17 +11,20 @@ public class ExportChart {
 
 
 
-        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static/chart-config.json";
+        String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/multiple.json";
         String svgFile = "static/sample.svg";
-        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static/resources.json";
+        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/resource.json";
         String templateFile =
-                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static/html/template.html";
-
+                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/template.html";
+        String logo ="/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/kdhfhjf.jpg";
 
         ExportConfig config = new ExportConfig();
         config.set("chartConfig",chartConfigFile)
                 .set("templateFilePath",templateFile)
                 .set("resourceFilePath",resourcesFile)
+                .set("dashboardLogo",logo)
+                .set("dashboardHeading","")
+                .set("dashboardSubHeading","")
                 .createRequest();
 
 
