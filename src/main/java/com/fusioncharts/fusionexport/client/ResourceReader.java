@@ -27,19 +27,12 @@ public class ResourceReader {
 
     private void parseResourceJSON()throws Exception {
         ResourceJSon resourceJSon = null;
-        try {
-            Gson gson = new Gson();
-            String jsonContents = Utils.getFileContentAsString(resourcePath);
-            resourceJSon  = gson.fromJson(jsonContents,ResourceJSon.class);
-
-        }
-        catch(IOException e){
-            throw new Exception("Resource file not found");
-        }
-
+        Gson gson = new Gson();
+        String jsonContents = Utils.getFileContentAsString(resourcePath);
+        resourceJSon  = gson.fromJson(jsonContents,ResourceJSon.class);
         if(resourceJSon != null) {
-            scanDirectory(resourceJSon);
-            basePath = resourceJSon.basePath !=null || !resourceJSon.basePath.isEmpty() ? resourceJSon.basePath : null;
+        scanDirectory(resourceJSon);
+        basePath = resourceJSon.basePath !=null || !resourceJSon.basePath.isEmpty() ? resourceJSon.basePath : null;
         }
     }
 
@@ -81,7 +74,7 @@ public class ResourceReader {
         return s[0].substring(0, k);
     }
 
-    private String prepareDataForZip() throws IOException {
+    private String prepareDataForZip() throws ExportException {
         ArrayList<String> allPaths = new ArrayList<>();
         ArrayList<String> allPaths2 = new ArrayList<>();
         allPaths.addAll(extractedTemplatePath);
@@ -115,7 +108,8 @@ public class ResourceReader {
 
 
 
-    private String generateBase64ZIP(ArrayList<String> allpath,ArrayList<String> allpath2) throws IOException {
+    private String generateBase64ZIP(ArrayList<String> allpath,ArrayList<String> allpath2) throws ExportException {
+        try {
         Map<String,Boolean> processedPaths = new HashMap<>();
         String tempPath = "temp.zip";
         FileOutputStream fout = new FileOutputStream(tempPath);
@@ -138,10 +132,13 @@ public class ResourceReader {
         }
         zout.close();
         fout.close();
-
         String base64Zip = Utils.getBase64ForZip(tempPath);
         new File(tempPath).delete();
         return base64Zip;
+        }catch (Exception e){
+            throw new ExportException(e);
+        }
+
     }
 
     public String getRelativeTemplatePath(String templatePath){

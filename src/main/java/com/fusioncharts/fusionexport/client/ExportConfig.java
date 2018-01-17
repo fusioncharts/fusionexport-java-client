@@ -26,44 +26,68 @@ public class ExportConfig{
     private final String RESOURCES = "resourceFilePath";
     private final String CLIENTNAME_VALUE = "JAVA";
 
-    public ExportConfig() throws Exception {
+    public ExportConfig()throws Exception{
         configAttributes = new HashMap<>();
         requestJSON = new JsonObject();
         ConfigValidator.readMetadata();
     }
 
     public ExportConfig set(String configName, String value) throws ExportException {
-        if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("string")){
-            configAttributes.put(configName,new DataValue<String>(value));
-        }
-        else if(ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("BooleanConverter")){
-            set(configName,Boolean.parseBoolean(value));
-        }
-        else if(ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("NumberConverter")){
-            set(configName,Integer.parseInt(value));
-        }
-        else{
-            throw new ExportException("Type of"+configName+" is not valid");
+
+            try{
+                if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("string")) {
+                    configAttributes.put(configName, new DataValue<String>(value));
+                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("BooleanConverter")) {
+                    set(configName, Boolean.parseBoolean(value));
+                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("NumberConverter")) {
+                    set(configName, Integer.parseInt(value));
+                } else {
+                    throw new ExportException("Type of" + configName + " is not valid");
+                }
+            }catch (Exception e){
+                if(e.getMessage() == null){
+                    throw new ExportException("Config:"+configName+" not valid");
+                }
+                else {
+                    throw new ExportException(e);
+                }
+            }
+        return this;
+    }
+
+    public ExportConfig set(String configName, boolean value)throws ExportException{
+        try {
+            if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("boolean")) {
+                configAttributes.put(configName, new ExportConfig.DataValue<Boolean>(value));
+            } else {
+                throw new ExportException("Type of" + configName + " is not valid");
+            }
+        }catch (Exception e){
+            if(e.getMessage() == null){
+                throw new ExportException("Config:"+configName+" not valid");
+            }
+            else {
+                throw new ExportException(e);
+            }
         }
         return this;
     }
 
-    public ExportConfig set(String configName, boolean value) throws ExportException {
-        if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("boolean")){
-            configAttributes.put(configName,new ExportConfig.DataValue<Boolean>(value));
+    public ExportConfig set(String configName, Integer value)throws ExportException{
+        try {
+            if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("integer")) {
+                configAttributes.put(configName, new DataValue<Integer>(value));
+            } else {
+                throw new ExportException("Type of" + configName + " is not valid");
+            }
         }
-        else{
-            throw new ExportException("Type of"+configName+" is not valid");
-        }
-        return this;
-    }
-
-    public ExportConfig set(String configName, Integer value) throws ExportException {
-        if(ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("integer")){
-            configAttributes.put(configName,new DataValue<Integer>(value));
-        }
-        else{
-            throw new ExportException("Type of"+configName+" is not valid");
+        catch (Exception e){
+            if(e.getMessage() == null){
+                throw new ExportException("Config:"+configName+" not valid");
+            }
+            else {
+                throw new ExportException(e);
+            }
         }
         return this;
     }
@@ -171,9 +195,8 @@ public class ExportConfig{
         try{
             File file =Utils.getFile(templateAbsolutePath);
             doc = Jsoup.parse(file, "UTF-8");
-            //Utils.writeTempFile(file);
         }catch (IOException e){
-            //TODO generate ExportException
+            throw new ExportException(e);
         }
 
         Elements links = doc.select("link[href]");

@@ -61,19 +61,19 @@ public class Exporter implements ExportDataProcessor{
         return this.exportServerPort;
     }
 
-    public void start() { Exporter.this.handleSocketConnection(); }
+    public void start() throws ExportException { this.handleSocketConnection(); }
 
-    public void cancel() {
+    public void cancel() throws ExportException{
         try {
             if(this.socketManager != null) {
                 this.socketManager.close();
             }
         } catch(Exception exp) {
-            exp.printStackTrace();
+            throw new ExportException("Cannot close connection to "+getExportServerHost()+" "+getExportServerPort());
         }
     }
 
-    private void handleSocketConnection()
+    private void handleSocketConnection() throws  ExportException
     {
        try
        {
@@ -82,7 +82,7 @@ public class Exporter implements ExportDataProcessor{
             socketManager.sendMessage(writeBuffer);
             System.out.println("Done");
        }catch (Exception e){
-            e.printStackTrace();
+           throw new ExportException("Cannot establish connection to "+getExportServerHost()+" "+getExportServerPort());
         }
 
     }

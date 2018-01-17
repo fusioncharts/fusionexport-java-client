@@ -1,5 +1,7 @@
 package com.fusioncharts.fusionexport.client;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,15 +14,19 @@ public class Utils {
         return ClassLoader.getSystemClassLoader().getResource(resourceName).getPath();
     }
 
-    public static String getFileContentAsString(String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(path)));
+    public static String getFileContentAsString(String path) throws ExportException{
+        try {
+            return new String(Files.readAllBytes(Paths.get(path)));
+        }catch (Exception e){
+            throw new ExportException(e);
+        }
     }
 
     public static String getBase64EncodedString(String data){
         return Base64.getEncoder().encode(data.getBytes()).toString();
     }
 
-    public static String getBase64ForZip(String path){
+    public static String getBase64ForZip(String path) throws ExportException {
         File originalFile = new File(path);
         String encodedBase64 = null;
         try {
@@ -29,9 +35,9 @@ public class Utils {
             fileInputStreamReader.read(bytes);
             encodedBase64 = new String(Base64.getEncoder().encode(bytes));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new ExportException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ExportException(e);
         }
         return  encodedBase64;
     }
@@ -60,11 +66,6 @@ public class Utils {
         return file;
     }
 
-    public static void writeTempFile(File file) throws IOException {
-        FileWriter fw = new FileWriter(file);
-        fw.flush();
-        fw.close();
-    }
 
     public static boolean isValidPath(String path){
         return !path.trim().matches("^http(s)?:\\\\/");
@@ -73,18 +74,16 @@ public class Utils {
     public static boolean pathWithinBasePath(String path,String basePath){
         return Paths.get(path).startsWith(Paths.get(basePath).getParent());
     }
-    public static String getRelativePath(String filepath,String basePath){
-        return Paths.get(basePath).relativize(Paths.get(filepath)).toString();
-    }
-    public static boolean isAbsolutePath(String path){
-        return Paths.get(path).isAbsolute();
-    }
 
-    public static void getAndSaveDecodedFile(String path,String base64string) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(Utils.resolvePath(path));
-        byte[] result = Base64.getDecoder().decode(base64string);
-        fileOutputStream.write(result);
-        fileOutputStream.close();
+    public static void getAndSaveDecodedFile(String path,String base64string) throws ExportException {
+        try{
+            FileOutputStream fileOutputStream = new FileOutputStream(Utils.resolvePath(path));
+            byte[] result = Base64.getDecoder().decode(base64string);
+            fileOutputStream.write(result);
+            fileOutputStream.close();
+        }catch (IOException e){
+            throw new ExportException(e);
+        }
 
     }
 }

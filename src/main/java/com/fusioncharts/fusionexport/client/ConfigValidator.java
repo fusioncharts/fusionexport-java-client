@@ -24,8 +24,8 @@ public class ConfigValidator {
             jsontree = jsonParser.parse(jsonContents);
 
         }
-        catch(IOException e){
-            throw new Exception("Metadata file not found");
+        catch(Exception e){
+            throw new ExportException("Metadata file not found");
         }
         if(jsontree!=null){
             attributeMap = new HashMap<>();

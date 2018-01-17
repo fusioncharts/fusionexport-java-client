@@ -17,4 +17,8 @@ public class ExportException extends Exception {
     public ExportException(Throwable cause) {
         super(cause);
     }
+
+    public void printError(ExportException e){
+        e.printStackTrace();
+    }
 }
