@@ -16,7 +16,8 @@ public class ExportManager {
         try{
             this.chartConfig.createRequest();
         }catch(Exception e){
-            throw new ExportException("Error in Config"+"\n"+e.getMessage());
+
+            throw new ExportException("Error in Config"+"\n");
         }
     }
 

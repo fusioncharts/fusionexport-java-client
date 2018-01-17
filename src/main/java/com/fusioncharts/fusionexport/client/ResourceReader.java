@@ -34,7 +34,7 @@ public class ResourceReader {
         resourceJSon  = gson.fromJson(jsonContents,ResourceJSon.class);
         if(resourceJSon != null) {
         scanDirectory(resourceJSon);
-        basePath = resourceJSon.basePath !=null || !resourceJSon.basePath.isEmpty() ? resourceJSon.basePath : null;
+        basePath = resourceJSon.basePath !=null && !resourceJSon.basePath.isEmpty() ? resourceJSon.basePath : null;
         }
     }
 
@@ -85,7 +85,7 @@ public class ResourceReader {
                 allPaths.add(path);
             }
         }
-        basePath = !basePath.isEmpty() ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
+        basePath = basePath !=null && !basePath.isEmpty() ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
         if(!Utils.isAbsolute(basePath)) {
             try {
                 URI a = new URI(resourcePath);

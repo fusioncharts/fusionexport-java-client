@@ -1,5 +1,4 @@
 {
-    "basePath": "./../",
     "include": [
         "*.jpg",
         "*.json"

@@ -81,8 +81,10 @@ public class Utils {
 
     public static void getAndSaveDecodedFile(String path,String base64string) throws ExportException {
         try{
-            File file = new File(Utils.resolvePath(path));
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            Path pathToFile = Paths.get(path);
+            Files.createDirectories(pathToFile.getParent());
+            Files.createFile(pathToFile);
+            FileOutputStream fileOutputStream = new FileOutputStream(pathToFile.toString());
             byte[] result = Base64.getDecoder().decode(base64string);
             fileOutputStream.write(result);
             fileOutputStream.close();
