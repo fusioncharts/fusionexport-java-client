@@ -15,14 +15,13 @@ public class ExportChart {
         String svgFile = "static/sample.svg";
         String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/resource.json";
         String templateFile =
-                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExportt/fusionexport-java-client/src/test/resources/static2/resources/template.html";
+                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/template.html";
         String logo ="/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/sdffds.jpg";
 
         ExportConfig config = new ExportConfig();
         config.set("chartConfig",chartConfigFile)
                 .set("templateFilePath",templateFile)
                 .set("resourceFilePath",resourcesFile)
-                //.set("dashboardLogo",logo)
                 .set("dashboardHeading","Ujjal")
                 .set("dashboardSubheading","Dutta");
 

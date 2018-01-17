@@ -71,13 +71,18 @@ public class Utils {
         return !path.trim().matches("^http(s)?:\\\\/");
     }
 
+    public static boolean isAbsolute(String path){
+        return Paths.get(path).isAbsolute();
+    }
+
     public static boolean pathWithinBasePath(String path,String basePath){
         return Paths.get(path).startsWith(Paths.get(basePath).getParent());
     }
 
     public static void getAndSaveDecodedFile(String path,String base64string) throws ExportException {
         try{
-            FileOutputStream fileOutputStream = new FileOutputStream(Utils.resolvePath(path));
+            File file = new File(Utils.resolvePath(path));
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
             byte[] result = Base64.getDecoder().decode(base64string);
             fileOutputStream.write(result);
             fileOutputStream.close();

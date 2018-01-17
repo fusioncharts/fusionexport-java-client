@@ -1,6 +1,8 @@
 package com.fusioncharts.fusionexport.client;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -84,6 +86,15 @@ public class ResourceReader {
             }
         }
         basePath = !basePath.isEmpty() ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
+        if(!Utils.isAbsolute(basePath)) {
+            try {
+                URI a = new URI(resourcePath);
+                URI b = new URI(basePath);
+                basePath = a.resolve(b).toString();
+            }catch (Exception e){
+                throw new ExportException("Resource Path or BasePath is not valid");
+            }
+        }
 
         if(!basePath.isEmpty()) {
 
