@@ -13,9 +13,9 @@ public class ExportChart {
 
         String chartConfigFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/multiple.json";
         String svgFile = "static/sample.svg";
-        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/resource.json";
+        String resourcesFile = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/template-test/resources.json";
         String templateFile =
-                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/template.html";
+                "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/template-test/html/template.html";
         String logo ="/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/sdffds.jpg";
 
         ExportConfig config = new ExportConfig();
@@ -33,7 +33,7 @@ public class ExportChart {
                 if (error != null) {
                     System.out.println(error.getMessage());
                 } else {
-                    ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-php-client/example/kk", result);
+                    ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-php-client/example/ksjsj", result);
                 }
             }
         },

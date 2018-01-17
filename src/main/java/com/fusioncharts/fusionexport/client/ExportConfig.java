@@ -170,7 +170,7 @@ public class ExportConfig{
                 resourceFile = (String) configAttributes.get(RESOURCES).getData();
             }
             templateFileRef = getTemplate(templateFile);
-            ResourceReader resourceReader = new ResourceReader(resourceFile,templateFileRef);
+            ResourceReader resourceReader = new ResourceReader(resourceFile,templateFile,templateFileRef);
             String base64Zip = resourceReader.processForZip();
             String relativeTempPath = resourceReader.getRelativeTemplatePath(Utils.resolvePath(templateFile));
 

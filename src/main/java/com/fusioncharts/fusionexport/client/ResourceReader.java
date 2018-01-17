@@ -19,11 +19,13 @@ public class ResourceReader {
     private String resourcePath =null;
     private String basePath = null;
     private String relativeTemplatePath=null;
+    private String templatePath = null;
     String [] includedFilePath;
     ArrayList<String> extractedTemplatePath =null;
 
-    public ResourceReader(String path,ArrayList<String> extractedTemplatePath){
-        this.resourcePath = path;
+    public ResourceReader(String resourcePath,String templatePath ,ArrayList<String> extractedTemplatePath){
+        this.resourcePath = resourcePath;
+        this.templatePath = templatePath;
         this.extractedTemplatePath = extractedTemplatePath;
     }
 
@@ -97,20 +99,30 @@ public class ResourceReader {
         }
 
         if(!basePath.isEmpty()) {
+            ArrayList<String> temp = new ArrayList<>();
 
-            for (int i = 0; i < allPaths.size(); i++) {
-                if (!Utils.pathWithinBasePath(allPaths.get(i), basePath)) {
-                    allPaths.remove(i);
+            int listSize =allPaths.size();
+            for (int i = 0; i < listSize; i++) {
+                if (Utils.pathWithinBasePath(allPaths.get(i), basePath)) {
+                    temp.add(allPaths.get(i));
                 }
             }
             for (int i = 0; i < allPaths.size(); i++) {
                 if (allPaths.get(i).equalsIgnoreCase(basePath)) {
                     allPaths2.add(basePath);
                 } else {
-                    allPaths2.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
+                    if (Utils.pathWithinBasePath(allPaths.get(i), basePath))
+                        allPaths2.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
                 }
             }
-            return generateBase64ZIP(allPaths,allPaths2);
+            if(temp.isEmpty()) {
+                allPaths2.clear();
+                temp.add(this.templatePath);
+                relativeTemplatePath = Utils.getFile(this.templatePath).getName();
+                allPaths2.add(Utils.getFile(this.templatePath).getName());
+            }
+
+            return generateBase64ZIP(temp,allPaths2);
         }
 
         return null;
@@ -153,10 +165,11 @@ public class ResourceReader {
     }
 
     public String getRelativeTemplatePath(String templatePath){
-
-        relativeTemplatePath =templatePath.substring(basePath.length(),templatePath.length());
-        if(relativeTemplatePath.length()==0){
-            relativeTemplatePath = Paths.get(templatePath).getFileName().toString();
+        if(relativeTemplatePath == null){
+            relativeTemplatePath = templatePath.substring(basePath.length(), templatePath.length());
+            if (relativeTemplatePath.length() == 0) {
+                relativeTemplatePath = Paths.get(templatePath).getFileName().toString();
+            }
         }
         return relativeTemplatePath;
     }

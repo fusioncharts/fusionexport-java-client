@@ -76,14 +76,19 @@ public class Utils {
     }
 
     public static boolean pathWithinBasePath(String path,String basePath){
-        return Paths.get(path).startsWith(Paths.get(basePath).getParent());
+        if(Files.isDirectory(Paths.get(basePath)))
+            return Paths.get(path).startsWith(Paths.get(basePath));
+        else
+            return Paths.get(path).startsWith(Paths.get(basePath).getParent());
     }
 
     public static void getAndSaveDecodedFile(String path,String base64string) throws ExportException {
         try{
             Path pathToFile = Paths.get(path);
-            Files.createDirectories(pathToFile.getParent());
-            Files.createFile(pathToFile);
+            if(!Files.exists(pathToFile)) {
+                Files.createDirectories(pathToFile.getParent());
+                Files.createFile(pathToFile);
+            }
             FileOutputStream fileOutputStream = new FileOutputStream(pathToFile.toString());
             byte[] result = Base64.getDecoder().decode(base64string);
             fileOutputStream.write(result);
