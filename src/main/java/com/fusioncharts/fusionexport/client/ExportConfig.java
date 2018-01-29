@@ -25,6 +25,7 @@ public class ExportConfig{
     private final String TEMPLATE = "templateFilePath";
     private final String RESOURCES = "resourceFilePath";
     private final String CLIENTNAME_VALUE = "JAVA";
+    private final String PLATFORM = "platform";
 
     public ExportConfig()throws Exception{
         configAttributes = new HashMap<>();
@@ -112,6 +113,8 @@ public class ExportConfig{
 
         //set Client Name
         requestJSON.addProperty(CLIENTNAME,CLIENTNAME_VALUE);
+
+        requestJSON.addProperty(PLATFORM,System.getProperty("os.name"));
 
         //set Chart Config
         if(configAttributes.containsKey(CHARTCONFIG)){
