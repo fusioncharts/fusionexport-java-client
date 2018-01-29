@@ -80,7 +80,7 @@ public class ResourceReader {
 
     private String prepareDataForZip() throws ExportException {
         ArrayList<String> allPaths = new ArrayList<>();
-        ArrayList<String> allPaths2 = new ArrayList<>();
+        ArrayList<String> allRelativePaths = new ArrayList<>();
         allPaths.addAll(extractedTemplatePath);
         if(includedFilePath !=null) {
             for (String path : includedFilePath) {
@@ -109,20 +109,20 @@ public class ResourceReader {
             }
             for (int i = 0; i < allPaths.size(); i++) {
                 if (allPaths.get(i).equalsIgnoreCase(basePath)) {
-                    allPaths2.add(basePath);
+                    allRelativePaths.add(basePath);
                 } else {
                     if (Utils.pathWithinBasePath(allPaths.get(i), basePath))
-                        allPaths2.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
+                        allRelativePaths.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
                 }
             }
             if(temp.isEmpty()) {
-                allPaths2.clear();
+                allRelativePaths.clear();
                 temp.add(this.templatePath);
                 relativeTemplatePath = Utils.getFile(this.templatePath).getName();
-                allPaths2.add(Utils.getFile(this.templatePath).getName());
+                allRelativePaths.add(Utils.getFile(this.templatePath).getName());
             }
 
-            return generateBase64ZIP(temp,allPaths2);
+            return generateBase64ZIP(temp,allRelativePaths);
         }
 
         return null;
