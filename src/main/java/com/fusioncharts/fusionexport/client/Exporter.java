@@ -92,6 +92,7 @@ public class Exporter implements ExportDataProcessor{
             this.processExportStateChangedData(data);
         } else if(data.startsWith(Constants.EXPORT_DATA)) {
             this.processExportDoneData(data);
+            socketManager.onClose();
         }
     }
 

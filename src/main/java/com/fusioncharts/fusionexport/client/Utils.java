@@ -22,8 +22,8 @@ public class Utils {
         }
     }
 
-    public static String getBase64EncodedString(String data){
-        return Base64.getEncoder().encode(data.getBytes()).toString();
+    public static String  getBase64EncodedString(String data){
+        return Base64.getEncoder().encodeToString(data.getBytes());
     }
 
     public static String getBase64ForZip(String path) throws ExportException {

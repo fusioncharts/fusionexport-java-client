@@ -3,10 +3,10 @@ import com.fusioncharts.fusionexport.client.*;
 public class ExportChart {
     public static void main(String[] args) throws Exception {
 
-        String configPath = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/multiple.json";
+        String configPath = "fullPath/resources/static2/resources/multiple.json";
         ExportConfig config = new ExportConfig();
         config.set("chartConfig", configPath);
-        config.set("exportAsZip", "true");
+
 
         ExportManager manager = new ExportManager(config);
         manager.export(new ExportDoneListener() {
@@ -15,7 +15,7 @@ public class ExportChart {
                                if (error != null) {
                                    System.out.println(error.getMessage());
                                } else {
-                                   ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources", result);
+                                   ExportManager.saveExportedFiles("fullPath", result);
                                }
                            }
                        },

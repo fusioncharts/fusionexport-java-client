@@ -1,12 +1,21 @@
 import com.fusioncharts.fusionexport.client.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ExportChart {
     public static void main(String[] args) throws Exception {
 
-        String configPath = "/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources/static2/resources/multiple.json";
+        String chartConfig = "fullPath/resources/static/scrollchart.json";
+        String localJS = "fullPath/resources/static/expand_scroll.js";
+
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", configPath);
-        config.set("exportAsZip", "true");
+        config.set("chartConfig", chartConfig);
+        config.set("callbackFilePath", localJS);
+        config.set("asyncCapture", "true");
 
         ExportManager manager = new ExportManager(config);
         manager.export(new ExportDoneListener() {
@@ -15,7 +24,7 @@ public class ExportChart {
                                if (error != null) {
                                    System.out.println(error.getMessage());
                                } else {
-                                   ExportManager.saveExportedFiles("/Users/ujjaldutta/Documents/FusionChartsWorks/FusionExport/fusionexport-java-client/src/test/resources", result);
+                                   ExportManager.saveExportedFiles("fullpath", result);
                                }
                            }
                        },

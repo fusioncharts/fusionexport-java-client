@@ -24,7 +24,7 @@ public class ResourceReader {
     ArrayList<String> extractedTemplatePath =null;
 
     public ResourceReader(String resourcePath,String templatePath ,ArrayList<String> extractedTemplatePath){
-        this.resourcePath = resourcePath;
+        this.resourcePath = resourcePath == null ? "" : resourcePath;
         this.templatePath = templatePath;
         this.extractedTemplatePath = extractedTemplatePath;
     }

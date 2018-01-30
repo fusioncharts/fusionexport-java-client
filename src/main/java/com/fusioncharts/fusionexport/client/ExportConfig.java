@@ -18,7 +18,7 @@ public class ExportConfig{
     private JsonObject requestJSON = null;
     private final String CHARTCONFIG = "chartConfig";
     private final String INPUTSVG = "inputSVG";
-    private final String CALLBACKS = "callbacks";
+    private final String CALLBACKS = "callbackFilePath";
     private final String DASHBOARDLOGO = "dashboardLogo";
     private final String OUTPUTFILEDEFINITION = "outputFileDefinition";
     private final String CLIENTNAME = "clientName";
@@ -178,9 +178,7 @@ public class ExportConfig{
             String relativeTempPath = resourceReader.getRelativeTemplatePath(Utils.resolvePath(templateFile));
 
             requestJSON.addProperty(TEMPLATE,relativeTempPath);
-            if(!resourceFile.isEmpty())
-                requestJSON.addProperty(RESOURCES,base64Zip);
-
+            requestJSON.addProperty(RESOURCES,base64Zip);
         }
 
         for(String configName : configAttributes.keySet()){
