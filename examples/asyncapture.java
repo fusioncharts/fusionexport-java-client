@@ -1,10 +1,5 @@
-import com.fusioncharts.fusionexport.client.*;
+import com.fusioncharts.fusionexport.client.*; // import sdk
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExportChart {
     public static void main(String[] args) throws Exception {
@@ -12,12 +7,15 @@ public class ExportChart {
         String chartConfig = "fullPath/resources/static/scrollchart.json";
         String localJS = "fullPath/resources/static/expand_scroll.js";
 
+        // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
         config.set("chartConfig", chartConfig);
         config.set("callbackFilePath", localJS);
         config.set("asyncCapture", "true");
 
+        // Instantiate the ExportManager class
         ExportManager manager = new ExportManager(config);
+        // Call the export() method with the export config and the respective callbacks
         manager.export(new ExportDoneListener() {
                            @Override
                            public void exportDone(ExportDoneData result, ExportException error) {
