@@ -1,0 +1,9 @@
+{
+    "include": [
+        "*.jpg",
+        "*.json"
+    ],
+    "exclude": [
+        "resource.json"
+    ]
+}

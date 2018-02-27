@@ -18,7 +18,7 @@ Then, just add this SDK as a dependency to your `build.gradle` file:
 
 ```groovy
 dependencies {
-    compile "com.fusioncharts.fusionexport:fusionexport:1.0.0-beta"
+    compile "com.fusioncharts.fusionexport:fusionexport:1.0.0"
 }
 ```
 
@@ -30,7 +30,7 @@ To use this SDK with your maven project, add this dependency to your `pom.xml`:
 <dependency>
   <groupId>com.fusioncharts.fusionexport</groupId>
   <artifactId>fusionexport</artifactId>
-  <version>1.0.0-beta</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
@@ -77,52 +77,36 @@ The `chart-config.json` file looks as shown below:
 Now, import the SDK library into your project and write the export logic as follows:
 
 ```java
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import com.fusioncharts.fusionexport.client.*; // import sdk
 
-public class ExportChart implements ExportDoneListener, ExportStateChangedListener {
+public class ExportChart {
+    public static void main(String[] args) throws Exception {
 
-    public static void main(String[] args) {
+        String configPath = "fullpath/of/chart-config.json";
 
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", readFile("fullpath/of/chart-config-file.json"));
+        config.set("chartConfig", configPath);
 
         // Instantiate the ExportManager class
-        ExportManager em = new ExportManager();
+        ExportManager manager = new ExportManager(config);
         // Call the export() method with the export config and the respective callbacks
-        em.export(config, new ExportChart(), new ExportChart());
-    }
-
-    @Override // Called when export is done
-    public void exportDone(String result, ExportException error) {
-        if (error != null) {
-            System.out.println(error.getMessage());
-        } else {
-            System.out.println("DONE: " + result);
-        }
-    }
-
-    @Override // Called on each export state change
-    public void exportStateChanged(String state) {
-        System.out.println("STATE: " + state);
-    }
-
-    private static String readFile(String file) {
-        String fileContent = "";
-        try {
-            File f = new File(file);
-            FileInputStream inp = new FileInputStream(f);
-            byte[] bf = new byte[(int) f.length()];
-            inp.read(bf);
-            fileContent = new String(bf, "UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return fileContent;
+        manager.export(new ExportDoneListener() {
+                           @Override
+                           public void exportDone(ExportDoneData result, ExportException error) {
+                               if (error != null) {
+                                   System.out.println(error.getMessage());
+                               } else {
+                                   ExportManager.saveExportedFiles("fullPath", result);
+                               }
+                           }
+                       },
+                new ExportStateChangedListener() {
+                    @Override
+                    public void exportStateChanged(ExportState state) {
+                        System.out.println("STATE: " + state.reporter);
+                    }
+                });
     }
 }
 ```

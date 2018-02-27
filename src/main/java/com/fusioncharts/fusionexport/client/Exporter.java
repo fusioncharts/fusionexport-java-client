@@ -1,12 +1,12 @@
 package com.fusioncharts.fusionexport.client;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.google.gson.Gson;
+
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Exporter {
+public class Exporter implements ExportDataProcessor{
 
     private ExportDoneListener exportDoneListener;
     private ExportStateChangedListener exportStateChangedListener;
@@ -14,7 +14,7 @@ public class Exporter {
     private String exportServerHost = Constants.DEFAULT_HOST;
     private int exportServerPort = Constants.DEFAULT_PORT;
     private Socket socket;
-    private Thread socketConnectionThread;
+    private WebSocketManager socketManager;
 
     public Exporter(ExportConfig exportConfig) {
         this.exportConfig = exportConfig;
@@ -61,74 +61,48 @@ public class Exporter {
         return this.exportServerPort;
     }
 
-    public void start() {
-        this.socketConnectionThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Exporter.this.handleSocketConnection();
-            }
-        });
-        this.socketConnectionThread.start();
-    }
+    public void start() throws ExportException { this.handleSocketConnection(); }
 
-    public void cancel() {
+    public void cancel() throws ExportException{
         try {
-            if(this.socket != null) {
-                this.socket.close();
+            if(this.socketManager != null) {
+                this.socketManager.close();
             }
         } catch(Exception exp) {
-            exp.printStackTrace();
+            throw new ExportException("Cannot close connection to "+getExportServerHost()+" "+getExportServerPort());
         }
     }
 
-    private void handleSocketConnection() {
-        try {
-            this.socket = new Socket(this.exportServerHost, this.exportServerPort);
-            OutputStream os = this.socket.getOutputStream();
-            InputStream is = this.socket.getInputStream();
-
-            byte[] writeBuffer = this.getFormattedExportConfigs().getBytes("UTF-8");
-            os.write(writeBuffer, 0, writeBuffer.length);
-            os.flush();
-
-            byte[] readBuffer = new byte[1024 * 16];
-            String dataReceived = "";
-            int read = 0;
-            while((read = is.read(readBuffer, 0, readBuffer.length)) > -1) {
-                dataReceived += new String(readBuffer, 0, read, "UTF-8");
-                dataReceived = this.processDataReceived(dataReceived);
-            }
-        } catch (Exception exp) {
-            this.onExportDone(null, new ExportException(exp.getMessage()));
-        } finally {
-            if(this.socket != null) {
-                try {
-                    this.socket.close();
-                } catch (Exception exp) {
-                    exp.printStackTrace();
-                }
-            }
+    private void handleSocketConnection() throws  ExportException
+    {
+       try
+       {
+            this.socketManager = new WebSocketManager(this.exportServerHost, this.exportServerPort,this);
+            String writeBuffer = this.getFormattedExportConfigs();
+            socketManager.sendMessage(writeBuffer);
+            System.out.println("Done");
+       }catch (Exception e){
+           throw new ExportException("Cannot establish connection to "+getExportServerHost()+" "+getExportServerPort());
         }
+
     }
 
-    private String processDataReceived(String data) {
-        String[] parts = data.split(Pattern.quote(Constants.UNIQUE_BORDER), -1);
-        for(int i = 0; i<parts.length - 1; i++) {
-            String part = parts[i];
-            if(part.startsWith(Constants.EXPORT_EVENT)) {
-                this.processExportStateChangedData(part);
-            } else if(part.startsWith(Constants.EXPORT_DATA)) {
-                this.processExportDoneData(part);
-            }
+    public void processDataReceived(String data) {
+        if(data.startsWith(Constants.EXPORT_EVENT)) {
+            this.processExportStateChangedData(data);
+        } else if(data.startsWith(Constants.EXPORT_DATA)) {
+            this.processExportDoneData(data);
+            socketManager.onClose();
         }
-        return parts[parts.length - 1];
     }
 
     private void processExportStateChangedData(String data) {
         String state = data.substring(Constants.EXPORT_EVENT.length(), data.length());
         String exportError = this.checkExportError(state);
+        Gson gson = new Gson();
+        ExportState exportState = gson.fromJson(state,ExportState.class);
         if (exportError == null) {
-            this.onExportSateChanged(state);
+            this.onExportSateChanged(exportState);
         } else {
             this.onExportDone(null, new ExportException(exportError));
         }
@@ -136,7 +110,9 @@ public class Exporter {
 
     private void processExportDoneData(String data) {
         String exportResult = data.substring(Constants.EXPORT_DATA.length(), data.length());
-        this.onExportDone(exportResult, null);
+        Gson gson = new Gson();
+        ExportDoneData exportState = gson.fromJson(exportResult,ExportDoneData.class);
+        this.onExportDone(exportState, null);
     }
 
     private String checkExportError(String state) {
@@ -150,20 +126,20 @@ public class Exporter {
         }
     }
 
-    private void onExportSateChanged(String state) {
+    private void onExportSateChanged(ExportState state) {
         if (this.exportStateChangedListener != null) {
             this.exportStateChangedListener.exportStateChanged(state);
         }
     }
 
-    private void onExportDone(String result, ExportException error) {
+    private void onExportDone(ExportDoneData result, ExportException error) {
         if (this.exportDoneListener != null) {
             this.exportDoneListener.exportDone(result, error);
         }
     }
 
     private String getFormattedExportConfigs() {
-        return String.format("%s.%s<=:=>%s", "ExportManager", "export", this.exportConfig.getFormattedConfigs());
+        return String.format("%s.%s<=:=>%s", "ExportManager", "export", this.exportConfig.getFormattedExportConfigs());
     }
 
 }
