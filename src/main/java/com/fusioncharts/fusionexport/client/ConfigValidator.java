@@ -20,7 +20,7 @@ public class ConfigValidator {
         JsonParser jsonParser = new JsonParser();
         JsonElement jsontree = null;
         try {
-            String jsonContents = Utils.getFileContentAsString(Utils.getResourcePath(META_DATA_TYPINGS));
+            String jsonContents = Utils.getResourceContentAsString(META_DATA_TYPINGS);
             jsontree = jsonParser.parse(jsonContents);
 
         }

@@ -1,6 +1,6 @@
 package com.fusioncharts.fusionexport.client;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import com.sun.org.apache.bcel.internal.util.ClassLoader;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,8 +10,24 @@ import java.util.Base64;
 
 public class Utils {
 
-    public static String getResourcePath(String resourceName){
+    public static String getResourcePath(String resourceName) throws IOException {
         return ClassLoader.getSystemClassLoader().getResource(resourceName).getPath();
+    }
+
+    public  static String getResourceContentAsString(String resourceName) throws IOException {
+        InputStream is = Utils.class.getClassLoader().getResourceAsStream(resourceName);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        StringBuffer sb = new StringBuffer();
+        String line;
+        while((line = br.readLine()) != null) {
+            System.out.println(line);
+            sb.append(line);
+        }
+        br.close();
+        isr.close();
+        is.close();
+        return sb.toString();
     }
 
     public static String getFileContentAsString(String path) throws ExportException{
