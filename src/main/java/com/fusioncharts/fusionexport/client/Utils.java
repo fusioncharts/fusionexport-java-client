@@ -21,7 +21,6 @@ public class Utils {
         StringBuffer sb = new StringBuffer();
         String line;
         while((line = br.readLine()) != null) {
-            System.out.println(line);
             sb.append(line);
         }
         br.close();
