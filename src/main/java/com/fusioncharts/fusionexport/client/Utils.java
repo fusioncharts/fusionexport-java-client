@@ -67,6 +67,9 @@ public class Utils {
     }
 
     public static String resolvePath(String path,String basePath){
+        if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("file://")) {
+            return path;
+        }
         return Paths.get(basePath).getParent().resolve(path).normalize().toString();
     }
 
