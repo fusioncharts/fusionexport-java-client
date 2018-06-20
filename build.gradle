@@ -18,6 +18,8 @@ dependencies {
     compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
     // https://mvnrepository.com/artifact/org.apache.ant/ant
     compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
-
-
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.349'
+    // https://mvnrepository.com/artifact/commons-net/commons-net
+    compile group: 'commons-net', name: 'commons-net', version: '3.6'
 }
