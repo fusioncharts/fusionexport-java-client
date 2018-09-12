@@ -12,20 +12,26 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 
 public class ExportManager {
 
     private ExportConfig chartConfig;
-    private ExportDoneListener exportDoneListener = null;
-    private ExportStateChangedListener exportStateChangedListener = null;
     private String host = "";
     private int port = Integer.MIN_VALUE;
+    private String outDir="";
+    private boolean unzip = false;
 
-    public ExportManager(ExportConfig config) throws ExportException {
-        this.chartConfig = config;
+    public ExportManager() throws ExportException {
+
+    }
+
+    private void createRequest() throws ExportException {
         try {
             this.chartConfig.createRequest();
         } catch (Exception e) {
@@ -34,119 +40,68 @@ public class ExportManager {
         }
     }
 
-    public static void saveExportedFiles(String dirPath, ExportDoneData exportedOutput) {
-        try {
-            if (exportedOutput.data.length != 0) {
-                for (ExportData data : exportedOutput.data) {
-                    String filePath = dirPath + "/" + data.realName;
-                    Utils.getAndSaveDecodedFile(filePath, data.fileContent);
-                }
-            }
-        } catch (ExportException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static ArrayList<String> getExportedFileNames(ExportDoneData exportedOutput) {
-        ArrayList<String> fileNames = new ArrayList<>();
-        if (exportedOutput.data.length != 0) {
-            for (ExportData data : exportedOutput.data) {
-                fileNames.add(data.realName);
-            }
-        }
-        return fileNames;
-    }
-
-    private static String GetBucketRegion(String bucketName, String accessKey, String secretAccessKey) {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretAccessKey);
-        // create client with a default region. in our case it is "USEAST1"
-        AmazonS3 client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(Regions.US_EAST_2)
-                .build();
-
-        GetBucketLocationRequest request = new GetBucketLocationRequest(bucketName);
-        String region = client.getBucketLocation(request);
-        //Region.valueOf(region);
-        return region;
-    }
-
-    // Amazon S3 Upload
-    public static void amazon_s3_upload(ExportDoneData exportDoneData, String bucketName, String accessKey, String secretAccessKey) throws IOException {
-        String region;
-        try {
-            region = GetBucketRegion(bucketName, accessKey, secretAccessKey);
-        } catch (Exception ex) {
-            throw ex;
-        }
-
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretAccessKey);
-
-        AmazonS3 s3client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(region)
-                .build();
-
-        for (ExportData data : exportDoneData.data) {
-            byte[] bytes = Base64.getDecoder().decode(data.fileContent);
-            ByteArrayInputStream data_stream = new ByteArrayInputStream(bytes);
-            data_stream.close();
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(bytes.length);
-            //PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, data.realName,data_stream,objectMetadata);
-            s3client.putObject(bucketName, data.realName, data_stream, objectMetadata);
-        }
-    }
-
-    public static void UploadFileToFTPServer(ExportDoneData exportDoneData, String userName, String password, String host, String remoteDirectory) throws IOException {
-        UploadFileToFTPServer(exportDoneData, userName, password, host, 21, remoteDirectory);
-    }
-
-    public static void UploadFileToFTPServer(ExportDoneData exportDoneData, String userName, String password, String host, int port, String remoteDirectory) throws IOException {
-        if (port == 0) port = 21;
-
-        FTPClient ftpClient = new FTPClient();
-        ftpClient.connect(host, port);
-        ftpClient.login(userName, password);
-        ftpClient.enterLocalPassiveMode();
-        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-
-        // Adds trailing slash
-        remoteDirectory = remoteDirectory.endsWith("/") ? remoteDirectory : remoteDirectory + "/";
-
-        for (ExportData data : exportDoneData.data) {
-            byte[] bytes = Base64.getDecoder().decode(data.fileContent);
-            ByteArrayInputStream data_stream = new ByteArrayInputStream(bytes);
-            data_stream.close();
-            System.out.print("Uploading file to " + remoteDirectory + data.realName + "...");
-            boolean done = ftpClient.storeFile(remoteDirectory + data.realName, data_stream);
-            if (done) {
-                System.out.println("done.");
-            }
-        }
-    }
-
-    public void setHostAndPort(String host, int port) {
+       public void setHostAndPort(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
-    public void export() {
-        exportChart();
+    public String[] export(ExportConfig config , String outDir , boolean unzip) throws ExportException {
+        this.chartConfig = config;
+        this.outDir = outDir;
+        this.unzip = unzip;
+        String [] filepaths;
+        try {
+            createRequest();
+            filepaths = exportChart();
+        }
+        catch (ExportException e){
+            throw new ExportException(e);
+        }
+        finally {
+            try {
+                Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
+            }
+            catch (IOException e){
+                throw new ExportException(e.getMessage());
+            }
+        }
+        return filepaths;
     }
 
-    private void exportChart() {
+    private String[] exportChart() {
         Exporter exporter = new Exporter(chartConfig);
-
+        String[] filePaths = new String[0];
         if (exporter != null) {
             this.host = !this.host.isEmpty() ? this.host : Constants.DEFAULT_HOST;
             this.port = this.port != Integer.MIN_VALUE ? this.port : Constants.DEFAULT_PORT;
             exporter.setExportConnectionConfig(this.host, this.port);
             try {
-                exporter.start();
+                filePaths= saveResponse(exporter.start());
             } catch (ExportException e) {
                 System.out.println(e.getMessage());
             }
         }
+        return filePaths;
+    }
+
+    private String[] saveResponse(byte [] response) throws ExportException {
+        ArrayList<String> fileList = new ArrayList<>();
+        try {
+            if (!unzip) {
+                String path = outDir + File.separator + Constants.EXPORT_FILE_NAME;
+                Files.write(new File(path).toPath(), response);
+                fileList.add(outDir.concat(Constants.EXPORT_FILE_NAME));
+
+            } else {
+                fileList = Utils.unzip(new ByteArrayInputStream(response),outDir);
+            }
+
+        }
+        catch (ExportException e) {
+           throw e;
+        } catch (IOException e) {
+            throw new ExportException(e.getMessage());
+        }
+        return fileList.toArray(new String[0]);
     }
 }

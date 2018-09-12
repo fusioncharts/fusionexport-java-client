@@ -42,24 +42,27 @@ public class Exporter{
         return this.exportServerPort;
     }
 
-    public void start() throws ExportException { this.handleConnection(); }
+    public byte[] start() throws ExportException {
+        return handleConnection();
+    }
 
     public void cancel() throws ExportException{
 
     }
 
-    private void handleConnection() throws  ExportException
+    private byte[] handleConnection() throws  ExportException
     {
+        byte [] result;
        try
        {
            connectionManager = new HttpConnectionManager();
            updateRequestParams();
-           connectionManager.executeRequest(createURL());
-
-            System.out.println("Done");
+           result = connectionManager.executeRequest(createURL());
+           System.out.println("Done");
        }catch (Exception e){
            throw new ExportException("Cannot establish connection to "+getExportServerHost()+" "+getExportServerPort());
         }
+        return  result;
 
     }
 

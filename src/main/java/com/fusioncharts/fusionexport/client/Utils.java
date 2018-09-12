@@ -4,7 +4,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class Utils {
 
@@ -117,5 +120,37 @@ public class Utils {
 
     public static String getFileExtension(File file) {
         return file.getName().substring(file.getName().lastIndexOf('.'));
+    }
+
+    public static ArrayList<String> unzip(ByteArrayInputStream zipFileStream, String destDir) throws ExportException {
+        File dir = new File(destDir);
+        ArrayList<String> filePaths = new ArrayList<>();
+        if(!dir.exists()) dir.mkdirs();
+
+        byte[] buffer = new byte[1024];
+        try {
+            ZipInputStream zis = new ZipInputStream(zipFileStream);
+            ZipEntry ze = zis.getNextEntry();
+            while(ze != null){
+                String fileName = ze.getName();
+                File newFile = new File(destDir + File.separator + fileName);
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);
+                filePaths.add(newFile.getAbsolutePath());
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                zis.closeEntry();
+                ze = zis.getNextEntry();
+            }
+
+            zis.closeEntry();
+            zis.close();
+        } catch (IOException e) {
+           throw new ExportException(e);
+        }
+    return filePaths;
     }
 }

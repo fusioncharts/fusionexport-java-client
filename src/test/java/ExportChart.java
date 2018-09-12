@@ -22,8 +22,8 @@ public class ExportChart {
                 .set("dashboardLogo", "/Users/ujjal/Documents/fusioncharts/fusionexport/fusionexport-java-client/src/test/resources/static2/resources/logo.jpg")
                 .set("callbackFilePath", "/Users/ujjal/Documents/fusioncharts/fusionexport/fusionexport-java-client/src/test/resources/static2/resources/callback.js");
 
-        ExportManager manager = new ExportManager(config);
-        manager.export();
+        ExportManager manager = new ExportManager();
+        manager.export(config,"/Users/ujjal/Documents/fusioncharts/fusionexport/fusionexport-java-client/src/test",false);
 
     }
 }

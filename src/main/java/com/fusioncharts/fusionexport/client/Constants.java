@@ -20,4 +20,6 @@ class Constants {
     public static final String PAYLOAD = "payload";
     public static final String DEFAULT_CALLBACKFILE_NAME = "callbackFile.js";
     public static final String DEFAULT_OUTPUTDEF_NAME = "outputFileDefinition.js";
+    public static final String EXPORT_FILE_NAME = "export.zip";
+    public static final String TEMP_REQUEST_PAYLOAD = "temp.zip";
 }

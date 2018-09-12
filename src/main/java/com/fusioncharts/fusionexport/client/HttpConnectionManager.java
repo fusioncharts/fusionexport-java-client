@@ -40,20 +40,20 @@ public class HttpConnectionManager {
         return request;
     }
 
-    private CloseableHttpResponse getResponse(HttpPost request) throws ExportException {
+    private byte[] getResponse(HttpPost request) throws ExportException {
         CloseableHttpResponse response ;
         try
         {
           response  = client.execute(request);
           if(response.getStatusLine().getStatusCode() == 200){
               HttpEntity entity = response.getEntity();
-              String content = EntityUtils.toString(entity);
-            return response;
+             return EntityUtils.toByteArray(entity);
+
           }
           else {
               throw new ExportException("Error in connection with code"+response.getStatusLine().getStatusCode());
           }
-        }catch (IOException |ExportException e){
+        }catch (IOException | ExportException e){
             throw new ExportException(e);
         }
         finally {
@@ -65,7 +65,7 @@ public class HttpConnectionManager {
         }
     }
 
-    public CloseableHttpResponse executeRequest(String url) throws ExportException {
+    public byte[] executeRequest(String url) throws ExportException {
         return getResponse(generatePostRequest(url));
     }
 

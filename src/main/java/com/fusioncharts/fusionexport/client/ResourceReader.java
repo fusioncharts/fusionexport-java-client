@@ -136,7 +136,7 @@ public class ResourceReader {
     private String generateBase64ZIP(ArrayList<String> allpath,ArrayList<String> allpath2) throws ExportException {
         try {
             Map<String,Boolean> processedPaths = new HashMap<>();
-            String tempPath = "temp.zip";
+            String tempPath = Constants.TEMP_REQUEST_PAYLOAD;
             FileOutputStream fout = new FileOutputStream(tempPath);
             ZipOutputStream zout = new ZipOutputStream(fout);
             //put all non-template files
