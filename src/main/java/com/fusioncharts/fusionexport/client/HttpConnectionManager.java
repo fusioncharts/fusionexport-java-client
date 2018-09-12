@@ -7,6 +7,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +21,7 @@ public class HttpConnectionManager {
         builder = MultipartEntityBuilder.create();
     }
 
-    public HttpPost createPostReq(String url){
+    private HttpPost createPostReq(String url){
         return new HttpPost(url);
     }
 
@@ -32,18 +33,21 @@ public class HttpConnectionManager {
         builder.addBinaryBody(key, file, ContentType.create("application/zip"), Constants.DEFAULT_PAYLOAD_NAME);
     }
 
-    public HttpEntity generatePostRequest(String url){
-        HttpEntity request = builder.build();
-        createPostReq(url).setEntity(request);
+    private HttpPost generatePostRequest(String url){
+        HttpEntity requestParams = builder.build();
+        HttpPost request =  createPostReq(url);
+        request.setEntity(requestParams);
         return request;
     }
 
-    public CloseableHttpResponse getResponse(HttpPost request) throws ExportException {
+    private CloseableHttpResponse getResponse(HttpPost request) throws ExportException {
         CloseableHttpResponse response ;
         try
         {
           response  = client.execute(request);
           if(response.getStatusLine().getStatusCode() == 200){
+              HttpEntity entity = response.getEntity();
+              String content = EntityUtils.toString(entity);
             return response;
           }
           else {
@@ -59,6 +63,10 @@ public class HttpConnectionManager {
                 throw new ExportException(e.getMessage());
             }
         }
+    }
+
+    public CloseableHttpResponse executeRequest(String url) throws ExportException {
+        return getResponse(generatePostRequest(url));
     }
 
 }

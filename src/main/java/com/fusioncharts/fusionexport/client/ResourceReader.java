@@ -16,6 +16,7 @@ import com.google.gson.*;
 import org.apache.tools.ant.DirectoryScanner;
 
 public class ResourceReader {
+    private final Map<String,String> payloadFiles;
     private String resourcePath =null;
     private String basePath = null;
     private String relativeTemplatePath=null;
@@ -23,10 +24,11 @@ public class ResourceReader {
     String [] includedFilePath;
     ArrayList<String> extractedTemplatePath =null;
 
-    public ResourceReader(String resourcePath,String templatePath ,ArrayList<String> extractedTemplatePath){
+    public ResourceReader(String resourcePath,String templatePath ,ArrayList<String> extractedTemplatePath,Map<String,String> payloadFiles){
         this.resourcePath = resourcePath == null ? "" : resourcePath;
         this.templatePath = templatePath;
         this.extractedTemplatePath = extractedTemplatePath;
+        this.payloadFiles = payloadFiles;
     }
 
     private void parseResourceJSON()throws Exception {
@@ -133,31 +135,47 @@ public class ResourceReader {
 
     private String generateBase64ZIP(ArrayList<String> allpath,ArrayList<String> allpath2) throws ExportException {
         try {
-        Map<String,Boolean> processedPaths = new HashMap<>();
-        String tempPath = "temp.zip";
-        FileOutputStream fout = new FileOutputStream(tempPath);
-        ZipOutputStream zout = new ZipOutputStream(fout);
-        for(int i=0 ;i<allpath.size();i++)
-        {
-            File f = Utils.getFile(allpath.get(i));
-            if(!processedPaths.containsKey(allpath.get(i))) {
+            Map<String,Boolean> processedPaths = new HashMap<>();
+            String tempPath = "temp.zip";
+            FileOutputStream fout = new FileOutputStream(tempPath);
+            ZipOutputStream zout = new ZipOutputStream(fout);
+            //put all non-template files
 
-                String relativePath = allpath2.get(i).substring(0,allpath2.get(i).length() - f.getName().length())+f.getName();
-                if(relativePath.equalsIgnoreCase(basePath)){
-                    addToZipFile(f.toPath(),f.getName(),zout);
+            for (Map.Entry<String,String> fileEntry : payloadFiles.entrySet()){
+                String fileName = fileEntry.getKey();
+                File file = Utils.getFile(fileEntry.getValue());
+                if(fileName.equalsIgnoreCase(Constants.INPUTSVG)){
+                    fileName = Constants.INPUTSVG.concat(".svg");
+                }else if(fileName.equalsIgnoreCase(Constants.DASHBOARDLOGO)){
+                    fileName = Constants.DASHBOARDLOGO.concat(Utils.getFileExtension(file));
+                }else if(fileName.equalsIgnoreCase(Constants.CALLBACKS)){
+                    fileName = Constants.DEFAULT_CALLBACKFILE_NAME;
+                }else if(fileName.equalsIgnoreCase(Constants.OUTPUTFILEDEFINITION)){
+                    fileName = Constants.DEFAULT_OUTPUTDEF_NAME;
                 }
-                else {
-                    addToZipFile(f.toPath(), relativePath, zout);
-                }
-                processedPaths.put(allpath.get(i), true);
+                addToZipFile(file.toPath(),fileName, zout);
             }
-            //Utils.writeTempFile(f);
-        }
-        zout.close();
-        fout.close();
-        String base64Zip = Utils.getBase64ForZip(tempPath);
-        new File(tempPath).delete();
-        return base64Zip;
+            // put all template dependant files
+            for(int i=0 ;i<allpath.size();i++)
+            {
+                File f = Utils.getFile(allpath.get(i));
+                if(!processedPaths.containsKey(allpath.get(i))) {
+
+                    String relativePath = allpath2.get(i).substring(0, allpath2.get(i).length() - f.getName().length()) + f.getName();
+                    if (relativePath.equalsIgnoreCase(basePath)) {
+                        addToZipFile(f.toPath(), Constants.DEFAULT_TEMPLATE_FOLDER.concat(f.getName()), zout);
+                    } else {
+                        addToZipFile(f.toPath(), Constants.DEFAULT_TEMPLATE_FOLDER.concat(relativePath), zout);
+                    }
+                    processedPaths.put(allpath.get(i), true);
+                }
+            }
+            zout.close();
+            fout.close();
+
+            String payLoadZipPath = Utils.resolvePath(tempPath);
+            //new File(tempPath).delete();
+            return payLoadZipPath;
         }catch (Exception e){
             throw new ExportException(e);
         }

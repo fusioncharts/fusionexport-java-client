@@ -11,13 +11,12 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-//    compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
-//    compile group: 'org.glassfish.tyrus.bundles', name: 'tyrus-standalone-client', version: '1.13.1'
-    // https://mvnrepository.com/artifact/org.jsoup/jsoup
     compile 'com.google.code.gson:gson:2.8.2'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.7.2'
-    // https://mvnrepository.com/artifact/org.apache.ant/ant
     compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
     compile 'org.apache.httpcomponents:httpclient:4.5.6'
     compile 'org.apache.httpcomponents:httpmime:4.5.6'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.349'
+    // https://mvnrepository.com/artifact/commons-net/commons-net
+    compile group: 'commons-net', name: 'commons-net', version: '3.6'
 }

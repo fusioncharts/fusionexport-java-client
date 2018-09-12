@@ -1,7 +1,5 @@
 package com.fusioncharts.fusionexport.client;
 
-import com.sun.org.apache.bcel.internal.util.ClassLoader;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,5 +113,9 @@ public class Utils {
             throw new ExportException(e);
         }
 
+    }
+
+    public static String getFileExtension(File file) {
+        return file.getName().substring(file.getName().lastIndexOf('.'));
     }
 }

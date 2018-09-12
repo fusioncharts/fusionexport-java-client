@@ -132,36 +132,11 @@ public class ExportManager {
     }
 
     public void export() {
-        this.exportDoneListener = exportDoneListener;
-        exportChart();
-    }
-
-    public void export(ExportDoneListener exportDoneListener) {
-        this.exportDoneListener = exportDoneListener;
-        exportChart();
-    }
-
-    public void export(ExportStateChangedListener exportStateChangedListener) {
-        this.exportStateChangedListener = exportStateChangedListener;
-        exportChart();
-    }
-
-    public void export(ExportDoneListener exportDoneListener, ExportStateChangedListener exportStateChangedListener) {
-        this.exportStateChangedListener = exportStateChangedListener;
-        this.exportDoneListener = exportDoneListener;
         exportChart();
     }
 
     private void exportChart() {
-        Exporter exporter = null;
-        if (exportStateChangedListener == null && exportDoneListener == null)
-            exporter = new Exporter(chartConfig);
-        else if (exportStateChangedListener != null && exportDoneListener == null)
-            exporter = new Exporter(chartConfig, exportStateChangedListener);
-        else if (exportStateChangedListener == null && exportDoneListener != null)
-            exporter = new Exporter(chartConfig, exportDoneListener);
-        else
-            exporter = new Exporter(chartConfig, exportDoneListener, exportStateChangedListener);
+        Exporter exporter = new Exporter(chartConfig);
 
         if (exporter != null) {
             this.host = !this.host.isEmpty() ? this.host : Constants.DEFAULT_HOST;

@@ -2,39 +2,27 @@ package com.fusioncharts.fusionexport.client;
 
 import com.google.gson.Gson;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Exporter implements ExportDataProcessor{
+public class Exporter{
 
-    private ExportDoneListener exportDoneListener;
-    private ExportStateChangedListener exportStateChangedListener;
     private ExportConfig exportConfig;
     private String exportServerHost = Constants.DEFAULT_HOST;
     private int exportServerPort = Constants.DEFAULT_PORT;
-    private Socket socket;
-    private WebSocketManager socketManager;
+    private HttpConnectionManager connectionManager;
 
     public Exporter(ExportConfig exportConfig) {
         this.exportConfig = exportConfig;
     }
 
-    public Exporter(ExportConfig exportConfig, ExportDoneListener exportDoneListener) {
-        this.exportConfig = exportConfig;
-        this.exportDoneListener = exportDoneListener;
-    }
 
-    public Exporter(ExportConfig exportConfig, ExportStateChangedListener exportStateChangedListener) {
-        this.exportConfig = exportConfig;
-        this.exportStateChangedListener = exportStateChangedListener;
-    }
-
-    public Exporter(ExportConfig exportConfig, ExportDoneListener exportDoneListener, ExportStateChangedListener exportStateChangedListener) {
-        this.exportConfig = exportConfig;
-        this.exportDoneListener = exportDoneListener;
-        this.exportStateChangedListener = exportStateChangedListener;
-    }
 
     public void setExportConnectionConfig(String exportServerHost, int exportServerPort) {
         this.exportServerHost = exportServerHost;
@@ -45,13 +33,6 @@ public class Exporter implements ExportDataProcessor{
         return this.exportConfig;
     }
 
-    public ExportDoneListener getExportDoneListener() {
-        return this.exportDoneListener;
-    }
-
-    public ExportStateChangedListener getExportStateChangedListener() {
-        return this.exportStateChangedListener;
-    }
 
     public String getExportServerHost() {
         return this.exportServerHost;
@@ -61,25 +42,20 @@ public class Exporter implements ExportDataProcessor{
         return this.exportServerPort;
     }
 
-    public void start() throws ExportException { this.handleSocketConnection(); }
+    public void start() throws ExportException { this.handleConnection(); }
 
     public void cancel() throws ExportException{
-        try {
-            if(this.socketManager != null) {
-                this.socketManager.close();
-            }
-        } catch(Exception exp) {
-            throw new ExportException("Cannot close connection to "+getExportServerHost()+" "+getExportServerPort());
-        }
+
     }
 
-    private void handleSocketConnection() throws  ExportException
+    private void handleConnection() throws  ExportException
     {
        try
        {
-            this.socketManager = new WebSocketManager(this.exportServerHost, this.exportServerPort,this);
-            String writeBuffer = this.getFormattedExportConfigs();
-            socketManager.sendMessage(writeBuffer);
+           connectionManager = new HttpConnectionManager();
+           updateRequestParams();
+           connectionManager.executeRequest(createURL());
+
             System.out.println("Done");
        }catch (Exception e){
            throw new ExportException("Cannot establish connection to "+getExportServerHost()+" "+getExportServerPort());
@@ -87,32 +63,17 @@ public class Exporter implements ExportDataProcessor{
 
     }
 
-    public void processDataReceived(String data) {
-        if(data.startsWith(Constants.EXPORT_EVENT)) {
-            this.processExportStateChangedData(data);
-        } else if(data.startsWith(Constants.EXPORT_DATA)) {
-            this.processExportDoneData(data);
-            socketManager.onClose();
+    private String createURL() throws ExportException {
+        URL url ;
+        try {
+            url =  new URL(Constants.DEFAULT_PROTOCAL,
+                                Constants.DEFAULT_HOST,
+                                Constants.DEFAULT_PORT,
+                                Constants.DEFAULT_EXPORT_API);
+            return url.toString();
+        } catch (MalformedURLException e) {
+            throw new ExportException("URL params not correct");
         }
-    }
-
-    private void processExportStateChangedData(String data) {
-        String state = data.substring(Constants.EXPORT_EVENT.length(), data.length());
-        String exportError = this.checkExportError(state);
-        Gson gson = new Gson();
-        ExportState exportState = gson.fromJson(state,ExportState.class);
-        if (exportError == null) {
-            this.onExportSateChanged(exportState);
-        } else {
-            this.onExportDone(null, new ExportException(exportError));
-        }
-    }
-
-    private void processExportDoneData(String data) {
-        String exportResult = data.substring(Constants.EXPORT_DATA.length(), data.length());
-        Gson gson = new Gson();
-        ExportDoneData exportState = gson.fromJson(exportResult,ExportDoneData.class);
-        this.onExportDone(exportState, null);
     }
 
     private String checkExportError(String state) {
@@ -126,20 +87,19 @@ public class Exporter implements ExportDataProcessor{
         }
     }
 
-    private void onExportSateChanged(ExportState state) {
-        if (this.exportStateChangedListener != null) {
-            this.exportStateChangedListener.exportStateChanged(state);
+    private void updateRequestParams() throws ExportException {
+        Map<String,String > requestParams =  exportConfig.getRequestParams();
+        for(Map.Entry<String,String> param : requestParams.entrySet()){
+            if(param.getKey().equalsIgnoreCase(Constants.PAYLOAD)){
+                try {
+                    connectionManager.addZipFile(param.getKey(),new FileInputStream(param.getValue()));
+                } catch (FileNotFoundException e) {
+                   throw new ExportException("Payload Zip not found, Error: "+e);
+                }
+            }else{
+                connectionManager.addReqParam(param.getKey(),param.getValue());
+            }
         }
-    }
-
-    private void onExportDone(ExportDoneData result, ExportException error) {
-        if (this.exportDoneListener != null) {
-            this.exportDoneListener.exportDone(result, error);
-        }
-    }
-
-    private String getFormattedExportConfigs() {
-        return String.format("%s.%s<=:=>%s", "ExportManager", "export", this.exportConfig.getFormattedExportConfigs());
     }
 
 }
