@@ -24,7 +24,7 @@ public class ExportManager {
     private ExportConfig chartConfig;
     private String host = "";
     private int port = Integer.MIN_VALUE;
-    private String outDir="";
+    private String outDir = "";
     private boolean unzip = false;
 
     public ExportManager() throws ExportException {
@@ -40,28 +40,25 @@ public class ExportManager {
         }
     }
 
-       public void setHostAndPort(String host, int port) {
+    public void setHostAndPort(String host, int port) {
         this.host = host;
         this.port = port;
     }
 
-    public String[] export(ExportConfig config , String outDir , boolean unzip) throws ExportException {
+    public String[] export(ExportConfig config, String outDir, boolean unzip) throws ExportException {
         this.chartConfig = config;
         this.outDir = outDir;
         this.unzip = unzip;
-        String [] filepaths;
+        String[] filepaths;
         try {
             createRequest();
             filepaths = exportChart();
-        }
-        catch (ExportException e){
+        } catch (ExportException e) {
             throw new ExportException(e);
-        }
-        finally {
+        } finally {
             try {
                 Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 throw new ExportException(e.getMessage());
             }
         }
@@ -76,7 +73,7 @@ public class ExportManager {
             this.port = this.port != Integer.MIN_VALUE ? this.port : Constants.DEFAULT_PORT;
             exporter.setExportConnectionConfig(this.host, this.port);
             try {
-                filePaths= saveResponse(exporter.start());
+                filePaths = saveResponse(exporter.start());
             } catch (ExportException e) {
                 System.out.println(e.getMessage());
             }
@@ -84,7 +81,7 @@ public class ExportManager {
         return filePaths;
     }
 
-    private String[] saveResponse(byte [] response) throws ExportException {
+    private String[] saveResponse(byte[] response) throws ExportException {
         ArrayList<String> fileList = new ArrayList<>();
         try {
             if (!unzip) {
@@ -93,12 +90,11 @@ public class ExportManager {
                 fileList.add(outDir.concat(Constants.EXPORT_FILE_NAME));
 
             } else {
-                fileList = Utils.unzip(new ByteArrayInputStream(response),outDir);
+                fileList = Utils.unzip(new ByteArrayInputStream(response), outDir);
             }
 
-        }
-        catch (ExportException e) {
-           throw e;
+        } catch (ExportException e) {
+            throw e;
         } catch (IOException e) {
             throw new ExportException(e.getMessage());
         }

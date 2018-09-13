@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Exporter{
+public class Exporter {
 
     private ExportConfig exportConfig;
     private String exportServerHost = Constants.DEFAULT_HOST;
@@ -22,8 +22,6 @@ public class Exporter{
         this.exportConfig = exportConfig;
     }
 
-
-
     public void setExportConnectionConfig(String exportServerHost, int exportServerPort) {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
@@ -32,7 +30,6 @@ public class Exporter{
     public ExportConfig getExportConfig() {
         return this.exportConfig;
     }
-
 
     public String getExportServerHost() {
         return this.exportServerHost;
@@ -46,61 +43,44 @@ public class Exporter{
         return handleConnection();
     }
 
-    public void cancel() throws ExportException{
-
-    }
-
-    private byte[] handleConnection() throws  ExportException
-    {
-        byte [] result;
-       try
-       {
-           connectionManager = new HttpConnectionManager();
-           updateRequestParams();
-           result = connectionManager.executeRequest(createURL());
-           System.out.println("Done");
-       }catch (Exception e){
-           throw new ExportException("Cannot establish connection to "+getExportServerHost()+" "+getExportServerPort());
+    private byte[] handleConnection() throws ExportException {
+        byte[] result;
+        try {
+            connectionManager = new HttpConnectionManager();
+            updateRequestParams();
+            result = connectionManager.executeRequest(createURL());
+            System.out.println("Done");
+        } catch (ExportException e) {
+            throw new ExportException(e);
         }
-        return  result;
+        return result;
 
     }
 
     private String createURL() throws ExportException {
-        URL url ;
+        URL url;
         try {
-            url =  new URL(Constants.DEFAULT_PROTOCAL,
-                                Constants.DEFAULT_HOST,
-                                Constants.DEFAULT_PORT,
-                                Constants.DEFAULT_EXPORT_API);
+            url = new URL(Constants.DEFAULT_PROTOCAL,
+                    Constants.DEFAULT_HOST,
+                    Constants.DEFAULT_PORT,
+                    Constants.DEFAULT_EXPORT_API);
             return url.toString();
         } catch (MalformedURLException e) {
             throw new ExportException("URL params not correct");
         }
     }
 
-    private String checkExportError(String state) {
-        String errorPattern = "^\\{\\s*\"error\"\\s*:\\s*\"(.+)\"\\s*}$";
-        Pattern pattern = Pattern.compile(errorPattern);
-        Matcher matcher = pattern.matcher(state.trim());
-        if(matcher.matches()) {
-            return matcher.group(1);
-        } else {
-            return null;
-        }
-    }
-
     private void updateRequestParams() throws ExportException {
-        Map<String,String > requestParams =  exportConfig.getRequestParams();
-        for(Map.Entry<String,String> param : requestParams.entrySet()){
-            if(param.getKey().equalsIgnoreCase(Constants.PAYLOAD)){
+        Map<String, String> requestParams = exportConfig.getRequestParams();
+        for (Map.Entry<String, String> param : requestParams.entrySet()) {
+            if (param.getKey().equalsIgnoreCase(Constants.PAYLOAD)) {
                 try {
-                    connectionManager.addZipFile(param.getKey(),new FileInputStream(param.getValue()));
+                    connectionManager.addZipFile(param.getKey(), new FileInputStream(param.getValue()));
                 } catch (FileNotFoundException e) {
-                   throw new ExportException("Payload Zip not found, Error: "+e);
+                    throw new ExportException("Payload Zip not found, Error: " + e);
                 }
-            }else{
-                connectionManager.addReqParam(param.getKey(),param.getValue());
+            } else {
+                connectionManager.addReqParam(param.getKey(), param.getValue());
             }
         }
     }

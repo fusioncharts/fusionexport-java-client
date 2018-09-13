@@ -3,14 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="80436caa-b8b9-43a3-8cc4-6d0d43a94075" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDoneData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDoneListener.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportStateChangedListener.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ExportChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ExportChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/WebSocketManager.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -36,15 +39,17 @@
     <session id="-1224626645">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gradle" value="2" />
           <entry key="html" value="9" />
-          <entry key="java" value="40" />
+          <entry key="java" value="48" />
           <entry key="jpg" value="2" />
           <entry key="js" value="3" />
           <entry key="json" value="8" />
@@ -56,7 +61,7 @@
           <entry key="Groovy" value="2" />
           <entry key="HTML" value="9" />
           <entry key="Image" value="3" />
-          <entry key="JAVA" value="40" />
+          <entry key="JAVA" value="48" />
           <entry key="JSON" value="8" />
           <entry key="JavaScript" value="3" />
         </counts>
@@ -64,32 +69,30 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gradle" value="6" />
-          <entry key="java" value="3278" />
+          <entry key="java" value="3411" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="6" />
-          <entry key="JAVA" value="3278" />
+          <entry key="JAVA" value="3411" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="210" selection-start-line="210" selection-end-line="210" />
+            <state relative-caret-position="75">
+              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#set#0;class#ExportConfig#0" />
                 <element signature="method#set#1;class#ExportConfig#0" />
                 <element signature="method#set#2;class#ExportConfig#0" />
                 <element signature="class#DataValue#0;class#ExportConfig#0" />
-                <element signature="e#8416#8417#0" expanded="true" />
-                <element signature="e#8453#8454#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -98,8 +101,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Constants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="51" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="51" />
+            <state relative-caret-position="375">
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
             </state>
           </provider>
         </entry>
@@ -107,20 +110,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-14">
-              <caret line="122" column="5" selection-start-line="122" selection-start-column="5" selection-end-line="122" selection-end-column="5" />
+            <state relative-caret-position="645">
+              <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#getFile#0;class#Utils#0" />
+                <element signature="method#pathWithinBasePath#0;class#Utils#0" />
+                <element signature="method#unzip#0;class#Utils#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/ExportChart.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="22" column="106" lean-forward="true" selection-start-line="22" selection-start-column="106" selection-end-line="22" selection-end-column="106" />
+            <state relative-caret-position="390">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
             </state>
           </provider>
         </entry>
@@ -128,7 +134,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
+            <state relative-caret-position="2475">
               <caret line="178" column="29" selection-start-line="178" selection-start-column="29" selection-end-line="178" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -140,8 +146,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="55" column="9" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+            <state relative-caret-position="450">
+              <caret line="47" column="46" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="46" />
+              <folding>
+                <element signature="method#export#0;class#ExportManager#0" />
+                <element signature="method#exportChart#0;class#ExportManager#0" />
+                <element signature="method#saveResponse#0;class#ExportManager#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ConfigValidator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -149,23 +169,34 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="97" column="100" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="100" />
+            <state relative-caret-position="540">
+              <caret line="53" column="41" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
+              <folding>
+                <element signature="method#createURL#0;class#Exporter#0" />
+                <element signature="method#updateRequestParams#0;class#Exporter#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportException.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="31" column="57" selection-start-line="31" selection-start-column="53" selection-end-line="31" selection-end-column="57" />
+            <state relative-caret-position="59">
+              <caret line="58" selection-start-line="58" selection-end-line="58" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#764#765#0" expanded="true" />
-                <element signature="e#804#805#0" expanded="true" />
-                <element signature="e#860#861#0" expanded="true" />
-                <element signature="e#907#908#0" expanded="true" />
+                <element signature="e#653#654#0" expanded="true" />
+                <element signature="e#692#693#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -185,9 +216,9 @@
       <find>RESOURCES</find>
       <find>resourceFile</find>
       <find>requestJSON.addProperty</find>
-      <find>payloadEntries</find>
-      <find>private</find>
       <find>resource</find>
+      <find>private</find>
+      <find>payloadEntries</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -371,7 +402,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4609831479000" />
+        <entry key="$PROJECT_DIR$" value="4609833077000" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
         <entry key="$PROJECT_DIR$/build.gradle" value="1398675715" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="2995663815" />
@@ -489,14 +520,14 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDataProcessor.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfig.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" />
         <option value="$PROJECT_DIR$/src/test/java/ExportChart.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfig.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java" />
       </list>
     </option>
   </component>
@@ -516,6 +547,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -523,11 +555,6 @@
             <path>
               <item name="com.fusioncharts.fusionexport.client" type="b2602c69:ProjectViewProjectNode" />
               <item name="fusionexport-java-client" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="com.fusioncharts.fusionexport.client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="fusionexport-java-client" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="examples" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="com.fusioncharts.fusionexport.client" type="b2602c69:ProjectViewProjectNode" />
@@ -559,20 +586,20 @@
               <item name="com.fusioncharts.fusionexport.client" type="b2602c69:ProjectViewProjectNode" />
               <item name="fusionexport-java-client" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536766158597" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536835606946" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
@@ -612,30 +639,25 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1536586834315</updated>
-      <workItem from="1536586837259" duration="30912000" />
+      <workItem from="1536586837259" duration="32974000" />
+      <workItem from="1536836611605" duration="186000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30912000" />
+    <option name="totallyTimeSpent" value="33160000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Designer" />
-      <window_info id="Image Layers" />
-      <window_info id="UI Designer" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info id="Capture Tool" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22031474" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22317597" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Build" weight="0.27831325" />
-      <window_info anchor="bottom" id="Terminal" weight="0.32891566" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" weight="0.32891566" />
-      <window_info anchor="bottom" id="Messages" weight="0.32891566" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32891566" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32891566" />
@@ -643,17 +665,23 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Database" />
-      <window_info anchor="right" id="Maven Projects" />
-      <window_info anchor="right" id="Gradle" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Coverage" side_tool="true" weight="0.3297568" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.27831325" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32891566" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32891566" />
+      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="12" weight="0.32891566" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Coverage" order="4" side_tool="true" weight="0.3297568" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Maven Projects" order="6" />
+      <window_info anchor="right" id="Gradle" order="7" />
+      <window_info anchor="right" id="Database" order="8" />
+      <window_info anchor="right" id="Palette&#9;" order="9" />
+      <window_info anchor="right" id="Theme Preview" order="10" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -676,22 +704,10 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java</url>
-          <line>59</line>
-          <properties />
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java</url>
-          <line>87</line>
+          <line>84</line>
           <properties />
           <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java</url>
-          <line>60</line>
-          <properties />
-          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -751,48 +767,7 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDoneListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDoneData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/WebSocketManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="16" column="50" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ConfigValidator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDataProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDataProcessor.java" />
     <entry file="file://$PROJECT_DIR$/examples/dashboard_charts.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-112" />
@@ -901,63 +876,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportData.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDoneData.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportDoneListener.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportState.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportStateChangedListener.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/WebSocketManager.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="210" selection-start-line="210" selection-end-line="210" />
+        <state relative-caret-position="75">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#set#0;class#ExportConfig#0" />
             <element signature="method#set#1;class#ExportConfig#0" />
             <element signature="method#set#2;class#ExportConfig#0" />
             <element signature="class#DataValue#0;class#ExportConfig#0" />
-            <element signature="e#8416#8417#0" expanded="true" />
-            <element signature="e#8453#8454#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="31" column="57" selection-start-line="31" selection-start-column="53" selection-end-line="31" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#764#765#0" expanded="true" />
-            <element signature="e#804#805#0" expanded="true" />
-            <element signature="e#860#861#0" expanded="true" />
-            <element signature="e#907#908#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="97" column="100" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="100" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="51" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="51" />
+        <state relative-caret-position="375">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-14">
-          <caret line="122" column="5" selection-start-line="122" selection-start-column="5" selection-end-line="122" selection-end-column="5" />
+        <state relative-caret-position="645">
+          <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#getFile#0;class#Utils#0" />
+            <element signature="method#pathWithinBasePath#0;class#Utils#0" />
+            <element signature="method#unzip#0;class#Utils#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/ExportChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ResourceReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
+        <state relative-caret-position="2475">
           <caret line="178" column="29" selection-start-line="178" selection-start-column="29" selection-end-line="178" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -967,15 +935,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="55" column="9" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+        <state relative-caret-position="450">
+          <caret line="47" column="46" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="46" />
+          <folding>
+            <element signature="method#export#0;class#ExportManager#0" />
+            <element signature="method#exportChart#0;class#ExportManager#0" />
+            <element signature="method#saveResponse#0;class#ExportManager#0" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/ExportChart.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ConfigValidator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="22" column="106" lean-forward="true" selection-start-line="22" selection-start-column="106" selection-end-line="22" selection-end-column="106" />
+        <state relative-caret-position="60">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/Exporter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="53" column="41" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
+          <folding>
+            <element signature="method#createURL#0;class#Exporter#0" />
+            <element signature="method#updateRequestParams#0;class#Exporter#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/ExportException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/fusioncharts/fusionexport/client/HttpConnectionManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="59">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#653#654#0" expanded="true" />
+            <element signature="e#692#693#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

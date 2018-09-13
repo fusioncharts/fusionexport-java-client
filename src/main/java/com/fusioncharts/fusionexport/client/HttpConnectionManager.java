@@ -17,8 +17,16 @@ public class HttpConnectionManager {
     private MultipartEntityBuilder builder;
 
     public HttpConnectionManager() {
-        client = HttpClients.createDefault();
-        builder = MultipartEntityBuilder.create();
+        initConnectionManager();
+    }
+
+    private void initConnectionManager(){
+        if(client == null) {
+            client = HttpClients.createDefault();
+        }
+        if(builder == null) {
+            builder = MultipartEntityBuilder.create();
+        }
     }
 
     private HttpPost createPostReq(String url){
@@ -59,6 +67,8 @@ public class HttpConnectionManager {
         finally {
             try {
                 client.close();
+                client = null;
+                builder = null;
             } catch (IOException e) {
                 throw new ExportException(e.getMessage());
             }
@@ -66,6 +76,7 @@ public class HttpConnectionManager {
     }
 
     public byte[] executeRequest(String url) throws ExportException {
+        initConnectionManager();
         return getResponse(generatePostRequest(url));
     }
 
