@@ -13,4 +13,3 @@ public class ExportChart {
         em.export(config,"output_file_path",false);
     }
 }
-

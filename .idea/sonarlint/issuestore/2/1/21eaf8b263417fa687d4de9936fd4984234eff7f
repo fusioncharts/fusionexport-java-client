@@ -1,0 +1,17 @@
+
+Tsquid:UselessImportCheck
+"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ
+‚"squid:ClassVariableVisibilityCheckà"TMake basePath a static final constant or non-public and provide accessors if needed.(ŸÝÑ
+isquid:S3776S"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(°Ì›ˆ
+csquid:CommentedOutCodeLine±"<This block of commented-out lines of code should be removed.(âØ®œ
+squid:S1319â"rThe type of the "exclude" object should be an interface such as "List" rather than the implementation "ArrayList".(ÕÓ»ÿøÿÿÿÿ
+‡"squid:ClassVariableVisibilityCheckâ"SMake exclude a static final constant or non-public and provide accessors if needed.(ÕÓ»ÿøÿÿÿÿ
+squid:S1319á"rThe type of the "include" object should be an interface such as "List" rather than the implementation "ArrayList".(¹»Ó¨ýÿÿÿÿ
+esquid:S2095"MUse try-with-resources or close this "ZipOutputStream" in a "finally" clause.(£ãÁç
+‡"squid:ClassVariableVisibilityChecká"SMake include a static final constant or non-public and provide accessors if needed.(¹»Ó¨ýÿÿÿÿ
+squid:S1319"€The type of the "extractedTemplatePath" object should be an interface such as "List" rather than the implementation "ArrayList".( æ‘ûüÿÿÿÿ
+~squid:S1488°"fImmediately return this expression instead of assigning it to the temporary variable "payLoadZipPath".(‚Ëå
+Dsquid:S1481Ò",Remove this unused "written" local variable.(–Î„®
+Gsquid:S00108Ù")Either remove or fill this block of code.(©œ¡ÿÿÿÿÿ
+csquid:S00112""FDefine and throw a dedicated exception instead of using a generic one.(Ùõ²†øÿÿÿÿ
+asquid:UselessImportCheck"8Remove this unused import 'java.net.URISyntaxException'.(Ä®íÿÿÿÿÿ

@@ -83,51 +83,56 @@ public class ResourceReader {
     private String prepareDataForZip() throws ExportException {
         ArrayList<String> allPaths = new ArrayList<>();
         ArrayList<String> allRelativePaths = new ArrayList<>();
-        allPaths.addAll(extractedTemplatePath);
+        ArrayList<String> temppaths = new ArrayList<>();
+        if(extractedTemplatePath != null) {
+            allPaths.addAll(extractedTemplatePath);
+        }
         if(includedFilePath !=null) {
             for (String path : includedFilePath) {
                 allPaths.add(path);
             }
         }
-        basePath = basePath !=null && !basePath.isEmpty() ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
-        if(!Utils.isAbsolute(basePath)) {
-            try {
-                URI a = new URI(resourcePath);
-                URI b = new URI(basePath);
-                basePath = a.resolve(b).toString();
-            }catch (Exception e){
-                throw new ExportException("Resource Path or BasePath is not valid");
+        if(!allPaths.isEmpty()) {
+            basePath = basePath != null && !basePath.isEmpty() ? basePath : getLongestCommonPrefix(allPaths.toArray(new String[0]));
+            if (!Utils.isAbsolute(basePath)) {
+                try {
+                    URI a = new URI(resourcePath);
+                    URI b = new URI(basePath);
+                    basePath = a.resolve(b).toString();
+                } catch (Exception e) {
+                    throw new ExportException("Resource Path or BasePath is not valid");
+                }
+            }
+
+            if (!basePath.isEmpty()) {
+
+
+                int listSize = allPaths.size();
+                for (int i = 0; i < listSize; i++) {
+                    if (Utils.pathWithinBasePath(allPaths.get(i), basePath)) {
+                        temppaths.add(allPaths.get(i));
+                    }
+                }
+                for (int i = 0; i < allPaths.size(); i++) {
+                    if (allPaths.get(i).equalsIgnoreCase(basePath)) {
+                        allRelativePaths.add(basePath);
+                    } else {
+                        if (Utils.pathWithinBasePath(allPaths.get(i), basePath))
+                            allRelativePaths.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
+                    }
+                }
+                if (temppaths.isEmpty()) {
+                    allRelativePaths.clear();
+                    temppaths.add(this.templatePath);
+                    relativeTemplatePath = Utils.getFile(this.templatePath).getName();
+                    allRelativePaths.add(Utils.getFile(this.templatePath).getName());
+                }
+
+
             }
         }
 
-        if(!basePath.isEmpty()) {
-            ArrayList<String> temp = new ArrayList<>();
-
-            int listSize =allPaths.size();
-            for (int i = 0; i < listSize; i++) {
-                if (Utils.pathWithinBasePath(allPaths.get(i), basePath)) {
-                    temp.add(allPaths.get(i));
-                }
-            }
-            for (int i = 0; i < allPaths.size(); i++) {
-                if (allPaths.get(i).equalsIgnoreCase(basePath)) {
-                    allRelativePaths.add(basePath);
-                } else {
-                    if (Utils.pathWithinBasePath(allPaths.get(i), basePath))
-                        allRelativePaths.add(allPaths.get(i).substring(basePath.length(), allPaths.get(i).length()));
-                }
-            }
-            if(temp.isEmpty()) {
-                allRelativePaths.clear();
-                temp.add(this.templatePath);
-                relativeTemplatePath = Utils.getFile(this.templatePath).getName();
-                allRelativePaths.add(Utils.getFile(this.templatePath).getName());
-            }
-
-            return generateBase64ZIP(temp,allRelativePaths);
-        }
-
-        return null;
+        return generateBase64ZIP(temppaths, allRelativePaths);
 
     }
 

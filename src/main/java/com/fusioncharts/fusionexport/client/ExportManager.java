@@ -48,7 +48,7 @@ public class ExportManager {
             try {
                 Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
             } catch (IOException e) {
-                throw new ExportException(e.getMessage());
+                throw new ExportException(e);
             }
         }
         return filepaths;

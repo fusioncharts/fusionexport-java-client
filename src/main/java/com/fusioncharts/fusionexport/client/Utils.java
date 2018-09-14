@@ -61,7 +61,7 @@ public class Utils {
 
 
     public static boolean isValidPath(String path){
-        return !path.trim().matches("^http(s)?:\\\\/");
+        return !path.trim().matches("^http(s)?:\\/\\/.*");
     }
 
     public static boolean isAbsolute(String path){

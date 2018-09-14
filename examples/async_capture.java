@@ -6,11 +6,10 @@ public class ExportChart {
         ExportManager em = new ExportManager();
         ExportConfig config = new ExportConfig();
 
-        config.set("templateFilePath", "filePath_of_template_d3.html");
-        config.set("type", "jpg");
+        config.set("chartConfig", "filePath_Of_Config_Json");
+        config.set("callbackFilePath","filePath_Of_callbackJS");
         config.set("asyncCapture", true);
 
         em.export(config,"output_file_path",false);
     }
 }
-
