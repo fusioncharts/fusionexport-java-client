@@ -5,12 +5,8 @@ public class ExportChart {
 
         ExportManager em = new ExportManager();
         ExportConfig config = new ExportConfig();
-
-        config.set("templateFilePath", "filePath_of_template_d3.html");
-        config.set("type", "jpg");
-        config.set("asyncCapture", true);
-
-        em.export(config,"output_file_path",false);
+        config.set("inputSVG", "/Users/ujjal/Documents/fusioncharts/fusionexport/fusionexport-java-client/examples/resources/vector.svg");
+        em.export(config,"/Users/ujjal/Documents/fusioncharts/fusionexport/fusionexport-java-client/src/test/resources",false);
     }
 }
 
