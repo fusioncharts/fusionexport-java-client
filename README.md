@@ -93,6 +93,10 @@ public class ExportChart {
 }
 ```
 
+## Example Usage
+In the repository you can find a example folder which contains a considerable number of examples and its resources.
+To test just copy the example code into `ExportChart.java` and give the correct path for the resources needed.
+ 
 ## API Reference
 
 You can find the full reference [here](https://www.fusioncharts.com/dev/exporting-charts/using-fusionexport/sdk-api-reference/java.html)

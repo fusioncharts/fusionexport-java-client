@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="80436caa-b8b9-43a3-8cc4-6d0d43a94075" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/examples/dash_board_export.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/dashboard_export_callback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/dashboard_export_logo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/multiple_zip.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/quality.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/single_export_pdf.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/svg_export.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ExportChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ExportChart.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -78,6 +68,7 @@
         <counts>
           <entry key="gradle" value="42" />
           <entry key="java" value="3976" />
+          <entry key="md" value="367" />
           <entry key="snippet" value="3" />
         </counts>
       </usages-collector>
@@ -85,6 +76,7 @@
         <counts>
           <entry key="Groovy" value="42" />
           <entry key="JAVA" value="3976" />
+          <entry key="Markdown" value="367" />
           <entry key="Scratch" value="3" />
         </counts>
       </usages-collector>
@@ -114,8 +106,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="199">
-                <caret line="85" column="31" selection-start-line="85" selection-start-column="31" selection-end-line="85" selection-end-column="31" />
+              <first_editor relative-caret-position="428">
+                <caret line="97" column="79" selection-start-line="97" selection-start-column="68" selection-end-line="97" selection-end-column="79" />
               </first_editor>
               <second_editor />
             </state>
@@ -609,7 +601,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537076891685" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537077539252" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="settings.editor.selected.configurable" value="SonarLintApp" />
   </component>
@@ -653,12 +645,12 @@
       <workItem from="1536836611605" duration="2422000" />
       <workItem from="1536841494884" duration="164000" />
       <workItem from="1536842168420" duration="1394000" />
-      <workItem from="1536918643096" duration="8494000" />
+      <workItem from="1536918643096" duration="9002000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45448000" />
+    <option name="totallyTimeSpent" value="45956000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -673,7 +665,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49910232" visible="true" weight="0.0" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49910232" visible="true" weight="0.0" />
       <window_info id="Structure" order="1" sideWeight="0.50089765" side_tool="true" weight="0.23175965" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -682,13 +674,13 @@
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32891566" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3385542" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3385542" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.27821782" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32891566" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.27831325" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32871288" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32771084" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32857144" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
@@ -1124,8 +1116,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="199">
-            <caret line="85" column="31" selection-start-line="85" selection-start-column="31" selection-end-line="85" selection-end-column="31" />
+          <first_editor relative-caret-position="428">
+            <caret line="97" column="79" selection-start-line="97" selection-start-column="68" selection-end-line="97" selection-end-column="79" />
           </first_editor>
           <second_editor />
         </state>
