@@ -1,5 +1,5 @@
 group 'com.fusioncharts.fusionexport.client'
-version '1.0.0-rc'
+version '1.0.0'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -13,7 +13,7 @@ repositories {
 
 jar {
     baseName = 'com.fusioncharts.fusionexport.client'
-    version =  '0.1.0'
+    version =  '1.0.0'
 }
 
 task fatJar(type: Jar) {
@@ -34,7 +34,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5.6'
     compile 'org.apache.httpcomponents:httpmime:4.5.6'
 }
-
+/*
 task genPom {
     doLast {
         pom {
@@ -50,3 +50,4 @@ task genPom {
         }.writeTo("$buildDir/pom.xml")
     }
 }
+*/
