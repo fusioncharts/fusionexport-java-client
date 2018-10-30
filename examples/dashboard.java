@@ -10,6 +10,7 @@ public class ExportChart {
         ExportConfig config = new ExportConfig();
         config.set("chartConfig", configPath);
         config.set("templateFilePath", templatePath);
+        config.set("type", "pdf");
 
         // Instantiate the ExportManager class
         ExportManager manager = new ExportManager(config);
