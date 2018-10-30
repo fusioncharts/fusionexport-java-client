@@ -36,6 +36,9 @@ To use this SDK with your maven project, add this dependency to your `pom.xml`:
 
 ## Getting Started
 
+### Prerequisite
+Ensure that you have FusionExport Service up and running.
+
 After adding the dependency, create a new file named `chart-config.json` containing all 
 the chart configurations that are to be exported. Before exporting your chart, make sure
 the export server is running.
@@ -77,41 +80,23 @@ The `chart-config.json` file looks as shown below:
 Now, import the SDK library into your project and write the export logic as follows:
 
 ```java
-import com.fusioncharts.fusionexport.client.*; // import sdk
+import com.fusioncharts.fusionexport.client.*;
 
 public class ExportChart {
     public static void main(String[] args) throws Exception {
 
-        String configPath = "fullpath/of/chart-config.json";
-
-        // Instantiate the ExportConfig class and add the required configurations
+        ExportManager em = new ExportManager();
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", configPath);
-
-        // Instantiate the ExportManager class
-        ExportManager manager = new ExportManager(config);
-        // Call the export() method with the export config and the respective callbacks
-        manager.export(new ExportDoneListener() {
-                           @Override
-                           public void exportDone(ExportDoneData result, ExportException error) {
-                               if (error != null) {
-                                   System.out.println(error.getMessage());
-                               } else {
-                                   ExportManager.saveExportedFiles("fullPath", result);
-                               }
-                           }
-                       },
-                new ExportStateChangedListener() {
-                    @Override
-                    public void exportStateChanged(ExportState state) {
-                        System.out.println("STATE: " + state.reporter);
-                    }
-                });
+        config.set("chartConfig", "fullPath_of_chart_config.json");
+        em.export(config,"outPath",false);
     }
 }
 ```
-Finally, run your Java app, and the exported chart is received via the `ExportDone` event.
 
+## Example Usage
+In the repository you can find a example folder which contains a considerable number of examples and its resources.
+To test just copy the example code into `ExportChart.java` and give the correct path for the resources needed.
+ 
 ## API Reference
 
 You can find the full reference [here](https://www.fusioncharts.com/dev/exporting-charts/using-fusionexport/sdk-api-reference/java.html)

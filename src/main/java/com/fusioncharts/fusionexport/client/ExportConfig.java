@@ -1,7 +1,6 @@
 
 package com.fusioncharts.fusionexport.client;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,24 +11,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static com.fusioncharts.fusionexport.client.Constants.*;
+
 public class ExportConfig{
 
     private Map<String,DataValue> configAttributes = null;
-    private JsonObject requestJSON = null;
-    private final String CHARTCONFIG = "chartConfig";
-    private final String INPUTSVG = "inputSVG";
-    private final String CALLBACKS = "callbackFilePath";
-    private final String DASHBOARDLOGO = "dashboardLogo";
-    private final String OUTPUTFILEDEFINITION = "outputFileDefinition";
-    private final String CLIENTNAME = "clientName";
-    private final String TEMPLATE = "templateFilePath";
-    private final String RESOURCES = "resourceFilePath";
-    private final String CLIENTNAME_VALUE = "JAVA";
-    private final String PLATFORM = "platform";
+    private Map<String,String> payloadEntries = null;
+    private ArrayList<String> templateFileRef = null;
+    private Map<String,String> requestParams = null;
+
 
     public ExportConfig()throws Exception{
         configAttributes = new HashMap<>();
-        requestJSON = new JsonObject();
+        requestParams = new HashMap<>();
+        payloadEntries = new HashMap<>();
         ConfigValidator.readMetadata();
     }
 
@@ -112,9 +107,9 @@ public class ExportConfig{
     public void createRequest() throws Exception {
 
         //set Client Name
-        requestJSON.addProperty(CLIENTNAME,CLIENTNAME_VALUE);
+        requestParams.put(CLIENTNAME,CLIENTNAME_VALUE);
 
-        requestJSON.addProperty(PLATFORM,System.getProperty("os.name"));
+        requestParams.put(PLATFORM,System.getProperty("os.name"));
 
         //set Chart Config
         if(configAttributes.containsKey(CHARTCONFIG)){
@@ -122,15 +117,16 @@ public class ExportConfig{
             if(!chartConfig.isEmpty() && chartConfig.contains(".json")){
                 chartConfig = new JsonParser().parse(Utils.getFileContentAsString(Utils.resolvePath(chartConfig))).toString();
             }
-            requestJSON.addProperty(CHARTCONFIG,chartConfig);
+            requestParams.put(CHARTCONFIG,chartConfig);
         }
 
         //set SVG Config
         if(configAttributes.containsKey(INPUTSVG)){
             String svg= (String) configAttributes.get(INPUTSVG).getData();
             if(!svg.isEmpty()){
-                svg = Utils.getFileContentAsString(Utils.resolvePath(svg));
-                requestJSON.addProperty(INPUTSVG,Utils.getBase64EncodedString(svg));
+                payloadEntries.put(INPUTSVG,Utils.resolvePath(svg));
+                requestParams.put(INPUTSVG,INPUTSVG.concat(".svg"));
+
             }
 
         }
@@ -139,8 +135,9 @@ public class ExportConfig{
         if(configAttributes.containsKey(CALLBACKS)){
             String callbacks= (String) configAttributes.get(CALLBACKS).getData();
             if(!callbacks.isEmpty()){
-                callbacks = Utils.getFileContentAsString(Utils.resolvePath(callbacks));
-                requestJSON.addProperty(CALLBACKS,Utils.getBase64EncodedString(callbacks));
+                payloadEntries.put(CALLBACKS,Utils.resolvePath(callbacks));
+                requestParams.put(CALLBACKS,DEFAULT_CALLBACKFILE_NAME);
+
             }
 
         }
@@ -149,8 +146,9 @@ public class ExportConfig{
         if(configAttributes.containsKey(DASHBOARDLOGO)){
             String dashboardlogo= (String) configAttributes.get(DASHBOARDLOGO).getData();
             if(!dashboardlogo.isEmpty()){
-                dashboardlogo = Utils.resolvePath(dashboardlogo);
-                requestJSON.addProperty(DASHBOARDLOGO,Utils.getBase64ForZip(dashboardlogo));
+                payloadEntries.put(DASHBOARDLOGO,Utils.resolvePath(dashboardlogo));
+                dashboardlogo = Utils.getFileExtension(Utils.getFile(Utils.resolvePath(dashboardlogo)));
+                requestParams.put(DASHBOARDLOGO,DASHBOARDLOGO.concat(dashboardlogo));
             }
         }
 
@@ -159,33 +157,40 @@ public class ExportConfig{
             String filedef= (String) configAttributes.get(OUTPUTFILEDEFINITION).getData();
             if(!filedef.isEmpty()){
                 filedef = (Utils.resolvePath(filedef));
-                requestJSON.addProperty(OUTPUTFILEDEFINITION,Utils.getBase64ForZip(filedef));
+                requestParams.put(OUTPUTFILEDEFINITION,DEFAULT_OUTPUTDEF_NAME);
+                payloadEntries.put(OUTPUTFILEDEFINITION,filedef);
             }
 
         }
 
         //set template
+        String templateFile = null;
+        String resourceFile =null;
         if(configAttributes.containsKey(TEMPLATE)){
-            String templateFile = (String) configAttributes.get(TEMPLATE).getData();
-            String resourceFile =null;
-            ArrayList<String> templateFileRef = null;
+            templateFile = (String) configAttributes.get(TEMPLATE).getData();
+            resourceFile =null;
+
             if(configAttributes.containsKey(RESOURCES) && !configAttributes.get(RESOURCES).toString().isEmpty()){
                 resourceFile = (String) configAttributes.get(RESOURCES).getData();
             }
             templateFileRef = getTemplate(templateFile);
-            ResourceReader resourceReader = new ResourceReader(resourceFile,templateFile,templateFileRef);
-            String base64Zip = resourceReader.processForZip();
-            String relativeTempPath = resourceReader.getRelativeTemplatePath(Utils.resolvePath(templateFile));
-
-            requestJSON.addProperty(TEMPLATE,relativeTempPath);
-            requestJSON.addProperty(RESOURCES,base64Zip);
         }
 
         for(String configName : configAttributes.keySet()){
-            if(!requestJSON.has(configName)){
-                requestJSON.addProperty(configName,configAttributes.get(configName).getData().toString());
+            if(!(requestParams.containsKey(configName) || RESOURCES.equalsIgnoreCase(configName))){
+                requestParams.put(configName,configAttributes.get(configName).getData().toString());
             }
         }
+
+        //prepare payload
+        ResourceReader resourceReader = new ResourceReader(resourceFile,templateFile,templateFileRef,payloadEntries);
+        String payloadZipPath = resourceReader.processForZip();
+        if(configAttributes.containsKey(TEMPLATE)){
+            String relativeTempPath = resourceReader.getRelativeTemplatePath(Utils.resolvePath(templateFile));
+            requestParams.put(TEMPLATE,Constants.DEFAULT_TEMPLATE_FOLDER.concat(relativeTempPath));
+        }
+        requestParams.put(PAYLOAD,payloadZipPath);
+
     }
 
     private ArrayList<String> getTemplate(String path) throws Exception {
@@ -221,7 +226,8 @@ public class ExportConfig{
 
     }
 
-    public String getFormattedExportConfigs(){ return requestJSON.toString();
+    public Map getRequestParams(){
+        return requestParams;
     }
 
 }
