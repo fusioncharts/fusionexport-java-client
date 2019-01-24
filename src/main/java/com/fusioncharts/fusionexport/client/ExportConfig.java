@@ -1,5 +1,8 @@
 
 package com.fusioncharts.fusionexport.client;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import com.google.gson.JsonParser;
 import org.jsoup.Jsoup;
@@ -9,9 +12,11 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 import static com.fusioncharts.fusionexport.client.Constants.*;
+
 
 public class ExportConfig{
 
@@ -168,6 +173,16 @@ public class ExportConfig{
         String resourceFile =null;
         if(configAttributes.containsKey(TEMPLATE)){
             templateFile = (String) configAttributes.get(TEMPLATE).getData();
+            
+            // Checks if the content is raw html or it's just file name 
+            if (templateFile.startsWith("<")) {
+            	File tempFile = File.createTempFile("fc-export", ".tmp");
+            	PrintWriter out = new PrintWriter(tempFile.getAbsolutePath());
+            	out.println(templateFile);
+            	out.close();
+            	templateFile = tempFile.getAbsolutePath();
+            }
+            
             resourceFile =null;
 
             if(configAttributes.containsKey(RESOURCES) && !configAttributes.get(RESOURCES).toString().isEmpty()){

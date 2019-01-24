@@ -34,6 +34,16 @@ public class ExportManager {
         this.port = port;
     }
 
+    public String[] convertResultToBase64String(String[] result) throws IOException {
+    	ArrayList<String> fileList = new ArrayList<>();
+    	
+    	for(String file : result) {
+    		fileList.add(Utils.fileToBase64(file));
+    	}
+    	
+    	return fileList.toArray(new String[0]);
+    }
+    
     public String[] export(ExportConfig config, String outDir, boolean unzip) throws ExportException {
         this.chartConfig = config;
         this.outDir = outDir;

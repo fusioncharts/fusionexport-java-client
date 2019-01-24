@@ -1,11 +1,14 @@
 package com.fusioncharts.fusionexport.client;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class Utils {
 
@@ -110,4 +113,12 @@ public class Utils {
         }
     return filePaths;
     }
+    
+    public static String fileToBase64(String fileName) throws IOException {
+    	byte[] fileContents = Files.readAllBytes(new File(fileName).toPath());
+        //File file = new File(fileName);
+        byte[] encoded = Base64.encodeBase64(fileContents);
+        return new String(encoded, StandardCharsets.US_ASCII);
+    }
+    
 }
