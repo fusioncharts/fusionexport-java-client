@@ -92,7 +92,30 @@ public class ExportConfig{
         }
         return this;
     }
+    
+    public Object get(String configName){
+    	if (configAttributes.containsKey(configName)) {
+    		return configAttributes.get(configName).data;
+    	} 
+    	return null;
+    }
 
+    public Boolean has(String configName){
+    	return configAttributes.containsKey(configName);
+    }
+
+    public Boolean remove(String configName){
+    	if (configAttributes.containsKey(configName)) {
+    		configAttributes.remove(configName);
+    		return true;
+    	} 
+    	return false;
+    }
+
+    public void clear(){
+    	configAttributes.clear();
+    }
+    
     class DataValue<T>{
         T data;
 
