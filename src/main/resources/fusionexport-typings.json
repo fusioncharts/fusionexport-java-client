@@ -12,10 +12,12 @@
     "type": "string"
   },
   "templateWidth": {
-    "type": "string"
+    "type": "integer",
+    "converter": "NumberConverter"
   },
   "templateHeight": {
-    "type": "string"
+    "type": "integer",
+    "converter": "NumberConverter"
   },
   "callbackFilePath": {
     "type": "integer"
