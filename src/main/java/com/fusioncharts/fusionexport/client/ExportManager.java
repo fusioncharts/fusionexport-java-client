@@ -86,7 +86,7 @@ public class ExportManager {
             if (!unzip) {
                 String path = outDir + File.separator + Constants.EXPORT_FILE_NAME;
                 Files.write(new File(path).toPath(), response);
-                fileList.add(outDir.concat(Constants.EXPORT_FILE_NAME));
+                fileList.add(path);
 
             } else {
                 fileList = Utils.unzip(new ByteArrayInputStream(response), outDir);

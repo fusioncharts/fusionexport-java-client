@@ -49,7 +49,6 @@ public class Exporter {
             connectionManager = new HttpConnectionManager();
             updateRequestParams();
             result = connectionManager.executeRequest(createURL());
-            System.out.println("Done");
         } catch (ExportException e) {
             throw new ExportException(e);
         }
