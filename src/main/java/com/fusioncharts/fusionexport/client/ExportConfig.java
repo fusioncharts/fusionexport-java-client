@@ -47,7 +47,7 @@ public class ExportConfig{
             	
             	ArrayList<String> supportedTypes =  ConfigValidator.getConfigMetaDataSupportedTypes(configName);
             	
-            	if (supportedTypes.size() > 1 || supportedTypes.contains("enum")) {
+            	if (supportedTypes.size() > 1 || supportedTypes.contains("enum") || supportedTypes.contains("file")) {
             		String converterName = ConfigValidator.getConfigMetaDataConvertor(configName).toLowerCase();
             		/*
             		if (converterName.equalsIgnoreCase("booleanconverter")) {
@@ -71,31 +71,19 @@ public class ExportConfig{
 	            		case "chartconfigconverter":
 	            			chartConfigConverter(configName, value);
 	            			break;
+	            		case "fileconverter":
+	            			fileConverter(configName, value);
+	            			break;
 	            		case "enumconverter":
 	            			ArrayList<String> dataset = ConfigValidator.getConfigMetaDataDataSet(configName);
 	            			enumConverter(configName, value, dataset);
 	            			break;
             		}
             	} else {
+            		showTemplateWarning(configName);
             		configAttributes.put(configName, new DataValue<String>(value.toString()));
             	}
             	
-            	/*
-	                if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("string")) {
-	                    configAttributes.put(configName, new DataValue<String>(value));
-	                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("BooleanConverter")) {
-	                    set(configName, Boolean.parseBoolean(value));
-	                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("NumberConverter")) {
-	                    set(configName, Integer.parseInt(value));
-	                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("ChartConfigConverter")) {
-	                	String configValue = chartConfigConverter();
-	                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("EnumConverter")) {
-	                	String configValue = enumConverter();
-	                }
-	                else {
-	                    throw new ExportException("Type of" + configName + " is not valid");
-	                }
-	               */
             }catch (Exception e){
                 if(e.getMessage() == null){
                     throw new ExportException("Config:"+configName+" not valid");
@@ -107,45 +95,6 @@ public class ExportConfig{
         return this;
     }
 
-    /*
-    private ExportConfig set(String configName, boolean value)throws ExportException{
-        try {
-            if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("boolean")) {
-                configAttributes.put(configName, new ExportConfig.DataValue<Boolean>(value));
-            } else {
-                throw new ExportException("Type of" + configName + " is not valid");
-            }
-        }catch (Exception e){
-            if(e.getMessage() == null){
-                throw new ExportException("Config:"+configName+" not valid");
-            }
-            else {
-                throw new ExportException(e);
-            }
-        }
-        return this;
-    }
-
-    /
-    private ExportConfig set(String configName, Integer value)throws ExportException{
-        try {
-            if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("integer")) {
-                configAttributes.put(configName, new DataValue<Integer>(value));
-            } else {
-                throw new ExportException("Type of" + configName + " is not valid");
-            }
-        }
-        catch (Exception e){
-            if(e.getMessage() == null){
-                throw new ExportException("Config:"+configName+" not valid");
-            }
-            else {
-                throw new ExportException(e);
-            }
-        }
-        return this;
-    }
-*/
     public void booleanConverter(String configName, Object configValue) throws ExportException {
     	if (configValue.getClass().getSimpleName().equals(Boolean.class.getSimpleName())) {
     		configAttributes.put(configName, new ExportConfig.DataValue<Boolean>((Boolean)configValue));
@@ -190,6 +139,23 @@ public class ExportConfig{
         }
         
         configAttributes.put(configName, new ExportConfig.DataValue<String>(valueStr));
+    }
+    
+    public void fileConverter(String configName, Object configValue) throws ExportException, IOException {
+    	
+    	if (!configValue.getClass().getSimpleName().equals(String.class.getSimpleName())) {
+    		throw new ExportException(configName + ": Data should be a String");
+    	}    	
+    	
+        String valueStr = configValue.toString();
+
+        if (Files.notExists(Paths.get(valueStr)))
+        {
+        	throw new ExportException(configName + ": File not found. Please provide an appropriate path.");
+        }
+
+        showTemplateWarning(configName);
+		configAttributes.put(configName, new DataValue<String>(configValue.toString()));
     }
     
     public void enumConverter(String configName, Object configValue, ArrayList<String> dataset) throws ExportException {
@@ -240,6 +206,14 @@ public class ExportConfig{
 
     public void clear(){
     	configAttributes.clear();
+    }
+    
+    private void showTemplateWarning(String configName) {
+		if (configName.equals("template") || configName.equals("templateFilePath")) {
+			if (configAttributes.containsKey("templateFilePath") || configAttributes.containsKey("template")) {
+				System.out.println("WARNING: Both 'templateFilePath' and 'template' is provided. 'templateFilePath' will be ignored.");
+			}
+		} 
     }
     
     class DataValue<T>{
