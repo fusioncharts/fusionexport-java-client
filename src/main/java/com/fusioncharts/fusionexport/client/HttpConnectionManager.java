@@ -3,11 +3,16 @@ package com.fusioncharts.fusionexport.client;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +20,8 @@ import java.io.InputStream;
 public class HttpConnectionManager {
     private CloseableHttpClient client;
     private MultipartEntityBuilder builder;
-
+    private String url;
+    
     public HttpConnectionManager() {
         initConnectionManager();
     }
@@ -30,7 +36,8 @@ public class HttpConnectionManager {
     }
 
     private HttpPost createPostReq(String url){
-        return new HttpPost(url);
+    	this.url = url;
+    	return new HttpPost(url);
     }
 
     public void addReqParam(String key, String value){
@@ -59,9 +66,16 @@ public class HttpConnectionManager {
 
           }
           else {
-              throw new ExportException("Error in connection with code"+response.getStatusLine().getStatusCode());
+        	  String responseString = new BasicResponseHandler().handleEntity(response.getEntity());
+        	  String msg = new JsonParser().parse(responseString).getAsJsonObject().get("error").toString();
+        	  
+              throw new ExportException("Server Error - " + msg);
           }
-        }catch (IOException | ExportException e){
+        }
+        catch (HttpHostConnectException e) {
+        	throw new ExportException("Connection Refused: Unable to connect to FusionExport server. Make sure that your server is running on " + this.url);
+        }
+        catch (IOException | ExportException e){
             throw new ExportException(e);
         }
         finally {
@@ -76,7 +90,8 @@ public class HttpConnectionManager {
     }
 
     public byte[] executeRequest(String url) throws ExportException {
-        initConnectionManager();
+    	this.url = url;
+    	initConnectionManager();
         return getResponse(generatePostRequest(url));
     }
 
