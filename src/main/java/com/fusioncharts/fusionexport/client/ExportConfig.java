@@ -1,10 +1,14 @@
 
 package com.fusioncharts.fusionexport.client;
+import java.awt.font.NumericShaper;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.google.gson.JsonParser;
+
+import org.apache.tools.ant.util.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +16,11 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static com.fusioncharts.fusionexport.client.Constants.*;
@@ -33,18 +41,49 @@ public class ExportConfig{
         ConfigValidator.readMetadata();
     }
 
-    public ExportConfig set(String configName, String value) throws ExportException {
+    public ExportConfig set(String configName, Object value) throws ExportException {
 
             try{
-                if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("string")) {
-                    configAttributes.put(configName, new DataValue<String>(value));
-                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("BooleanConverter")) {
-                    set(configName, Boolean.parseBoolean(value));
-                } else if (ConfigValidator.getConfigMetaDataConvertor(configName).equalsIgnoreCase("NumberConverter")) {
-                    set(configName, Integer.parseInt(value));
-                } else {
-                    throw new ExportException("Type of" + configName + " is not valid");
-                }
+            	
+            	ArrayList<String> supportedTypes =  ConfigValidator.getConfigMetaDataSupportedTypes(configName);
+            	
+            	if (supportedTypes.size() > 1 || supportedTypes.contains("enum") || supportedTypes.contains("file")) {
+            		String converterName = ConfigValidator.getConfigMetaDataConvertor(configName).toLowerCase();
+            		/*
+            		if (converterName.equalsIgnoreCase("booleanconverter")) {
+            			booleanConverter(configName, value);            			
+            		} else if (converterName.equalsIgnoreCase("numberconverter")) {
+            			numberConverter(configName, value);
+            		} else if (converterName.equalsIgnoreCase("chartconfigconverter")) {
+            			chartConfigConverter(configName, value);
+            		} else if (converterName.equalsIgnoreCase("enumconverter")) {
+            			ArrayList<String> dataset = ConfigValidator.getConfigMetaDataDataSet(configName);
+            			enumConverter(configName, value, dataset);
+            		}
+            		*/
+            		switch (converterName) {
+	            		case "booleanconverter":
+	            			booleanConverter(configName, value);
+	            			break;
+	            		case "numberconverter":
+	            			numberConverter(configName, value);
+	            			break;
+	            		case "chartconfigconverter":
+	            			chartConfigConverter(configName, value);
+	            			break;
+	            		case "fileconverter":
+	            			fileConverter(configName, value);
+	            			break;
+	            		case "enumconverter":
+	            			ArrayList<String> dataset = ConfigValidator.getConfigMetaDataDataSet(configName);
+	            			enumConverter(configName, value, dataset);
+	            			break;
+            		}
+            	} else {
+            		showTemplateWarning(configName);
+            		configAttributes.put(configName, new DataValue<String>(value.toString()));
+            	}
+            	
             }catch (Exception e){
                 if(e.getMessage() == null){
                     throw new ExportException("Config:"+configName+" not valid");
@@ -56,42 +95,95 @@ public class ExportConfig{
         return this;
     }
 
-    public ExportConfig set(String configName, boolean value)throws ExportException{
-        try {
-            if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("boolean")) {
-                configAttributes.put(configName, new ExportConfig.DataValue<Boolean>(value));
-            } else {
-                throw new ExportException("Type of" + configName + " is not valid");
-            }
-        }catch (Exception e){
-            if(e.getMessage() == null){
-                throw new ExportException("Config:"+configName+" not valid");
-            }
-            else {
-                throw new ExportException(e);
-            }
-        }
-        return this;
+    public void booleanConverter(String configName, Object configValue) throws ExportException {
+    	if (configValue.getClass().getSimpleName().equals(Boolean.class.getSimpleName())) {
+    		configAttributes.put(configName, new ExportConfig.DataValue<Boolean>((Boolean)configValue));
+    	} else if (configValue.getClass().getSimpleName().equals(String.class.getSimpleName())) {
+    		configAttributes.put(configName, new ExportConfig.DataValue<Boolean>(Boolean.parseBoolean(configValue.toString())));
+    	} else {
+    		throw new ExportException(configName + ": Data should be a String or Boolean");
+    	}
     }
 
-    public ExportConfig set(String configName, Integer value)throws ExportException{
-        try {
-            if (ConfigValidator.getConfigMetaDataType(configName).equalsIgnoreCase("integer")) {
-                configAttributes.put(configName, new DataValue<Integer>(value));
-            } else {
-                throw new ExportException("Type of" + configName + " is not valid");
-            }
-        }
-        catch (Exception e){
-            if(e.getMessage() == null){
-                throw new ExportException("Config:"+configName+" not valid");
-            }
-            else {
-                throw new ExportException(e);
-            }
-        }
-        return this;
+    public void numberConverter(String configName, Object configValue) throws ExportException {
+    	if (configValue.getClass().getSimpleName().equals(Integer.class.getSimpleName())) {
+    		configAttributes.put(configName, new ExportConfig.DataValue<Integer>((Integer)configValue));
+    	} else if (configValue.getClass().getSimpleName().equals(String.class.getSimpleName())) {
+    		configAttributes.put(configName, new ExportConfig.DataValue<Integer>(Integer.parseInt(configValue.toString())));
+    	} else {
+    		throw new ExportException(configName + ": Data should be a String or Integer");
+    	}
     }
+
+    public void chartConfigConverter(String configName, Object configValue) throws ExportException, IOException {
+    	
+    	if (!configValue.getClass().getSimpleName().equals(String.class.getSimpleName())) {
+    		throw new ExportException(configName + ": Data should be a String");
+    	}    	
+    	
+        String valueStr = configValue.toString();
+
+        if (valueStr.toLowerCase().endsWith(".json"))
+        {
+            if (Files.notExists(Paths.get(valueStr)))
+            {
+            	throw new ExportException(configName + ": File not found. Please provide an appropriate path.");
+            }
+            // Read the file content and convert to string
+            valueStr = new String(Files.readAllBytes(Paths.get(valueStr)));
+        }
+        
+        if (!isValidJson(valueStr))
+        {
+            throw new ExportException(configName + ": JSON structure is invalid. Please check your JSON data.");
+        }
+        
+        configAttributes.put(configName, new ExportConfig.DataValue<String>(valueStr));
+    }
+    
+    public void fileConverter(String configName, Object configValue) throws ExportException, IOException {
+    	
+    	if (!configValue.getClass().getSimpleName().equals(String.class.getSimpleName())) {
+    		throw new ExportException(configName + ": Data should be a String");
+    	}    	
+    	
+        String valueStr = configValue.toString();
+
+        if (Files.notExists(Paths.get(valueStr)))
+        {
+        	throw new ExportException(configName + ": File not found. Please provide an appropriate path.");
+        }
+
+        showTemplateWarning(configName);
+		configAttributes.put(configName, new DataValue<String>(configValue.toString()));
+    }
+    
+    public void enumConverter(String configName, Object configValue, ArrayList<String> dataset) throws ExportException {
+    	
+    	if (!configValue.getClass().getSimpleName().equals(String.class.getSimpleName())) {
+    		throw new ExportException(configName + ": Data should be a String");
+    	}    	
+    	
+    	String valueStr = configValue.toString();
+    	Boolean dataExists = false;
+    	
+    	for (String ds : dataset) {
+    		if (ds.toLowerCase().equals(valueStr.toLowerCase())) {
+    			dataExists = true;
+    			break;
+    		}
+    	}
+
+        if (!dataExists)
+        {
+            String supportParams = String.join(", ", dataset);
+            String errMsg = String.format("Invalid argument value in parameter '%s'\nSupported parameters are: %s", configName.toString(), supportParams);
+            throw new ExportException(errMsg);
+        }
+        
+        configAttributes.put(configName, new ExportConfig.DataValue<String>(valueStr));
+    }
+
     
     public Object get(String configName){
     	if (configAttributes.containsKey(configName)) {
@@ -116,6 +208,14 @@ public class ExportConfig{
     	configAttributes.clear();
     }
     
+    private void showTemplateWarning(String configName) {
+		if (configName.equals("template") || configName.equals("templateFilePath")) {
+			if (configAttributes.containsKey("templateFilePath") || configAttributes.containsKey("template")) {
+				System.out.println("WARNING: Both 'templateFilePath' and 'template' is provided. 'templateFilePath' will be ignored.");
+			}
+		} 
+    }
+    
     class DataValue<T>{
         T data;
 
@@ -131,7 +231,30 @@ public class ExportConfig{
             return data;
         }
     }
+    
+    private static Boolean isValidJson(String jsonString)
+    {
+        jsonString = jsonString.trim();
+        if ((jsonString.startsWith("{") && jsonString.endsWith("}")) || //For object
+            (jsonString.startsWith("[") && jsonString.endsWith("]"))) //For array
+        {
+            try
+            {
+                new JsonParser().parse(jsonString);
+                return true;
+            }
+            catch(Exception ex) 
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
 
+    
     public void createRequest() throws Exception {
 
         //set Client Name

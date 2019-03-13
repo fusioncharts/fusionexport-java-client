@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public class ExportManager {
 
     private ExportConfig chartConfig;
-    private String host = "";
+    private String host= "";
     private int port = Integer.MIN_VALUE;
+    private String protocol = "";
     private String outDir = "";
     private boolean unzip = false;
 
@@ -29,7 +30,8 @@ public class ExportManager {
         }
     }
 
-    public void setHostAndPort(String host, int port) {
+    public void setHostAndPort(String protocol, String host, int port) {
+        this.protocol = protocol;
         this.host = host;
         this.port = port;
     }
@@ -70,7 +72,8 @@ public class ExportManager {
         if (exporter != null) {
             this.host = !this.host.isEmpty() ? this.host : Constants.DEFAULT_HOST;
             this.port = this.port != Integer.MIN_VALUE ? this.port : Constants.DEFAULT_PORT;
-            exporter.setExportConnectionConfig(this.host, this.port);
+            this.protocol = !this.protocol.isEmpty() ? this.protocol : Constants.DEFAULT_PROTOCOL;
+            exporter.setExportConnectionConfig(this.protocol, this.host, this.port);
             try {
                 filePaths = saveResponse(exporter.start());
             } catch (ExportException e) {
@@ -86,7 +89,7 @@ public class ExportManager {
             if (!unzip) {
                 String path = outDir + File.separator + Constants.EXPORT_FILE_NAME;
                 Files.write(new File(path).toPath(), response);
-                fileList.add(outDir.concat(Constants.EXPORT_FILE_NAME));
+                fileList.add(path);
 
             } else {
                 fileList = Utils.unzip(new ByteArrayInputStream(response), outDir);
