@@ -16,11 +16,36 @@ import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 public class HttpConnectionManager {
     private CloseableHttpClient client;
     private MultipartEntityBuilder builder;
     private String url;
+    
+    private String exportServerHost;
+    private int exportServerPort;
+    private String exportServerProtocol;
+    
+    public void setExportConnectionConfig(String exportProtocol, String exportServerHost, int exportServerPort) {
+        this.exportServerHost = exportServerHost;
+        this.exportServerPort = exportServerPort;
+        this.exportServerProtocol = exportProtocol;
+    }
+
+    public String getExportServerProtocol() {
+        return this.exportServerProtocol;
+    }
+    
+    public String getExportServerHost() {
+        return this.exportServerHost;
+    }
+
+    public int getExportServerPort() {
+        return this.exportServerPort;
+    }
     
     public HttpConnectionManager() {
         initConnectionManager();
@@ -35,11 +60,25 @@ public class HttpConnectionManager {
         }
     }
 
-    private HttpPost createPostReq(String url){
-    	this.url = url;
+    private HttpPost createPostReq() throws ExportException{
+    	this.url = createURL();
     	return new HttpPost(url);
     }
 
+    private String createURL() throws ExportException {
+        URL url;
+        try {
+	        	url = new URL(getExportServerProtocol(),
+	                    getExportServerHost(),
+	                    getExportServerPort(),
+	                    Constants.DEFAULT_EXPORT_API);
+	            return url.toString();
+            
+        } catch (MalformedURLException e) {
+            throw new ExportException("URL params not correct");
+        }
+    }
+    
     public void addReqParam(String key, String value){
         builder.addTextBody(key, value);
     }
@@ -48,9 +87,9 @@ public class HttpConnectionManager {
         builder.addBinaryBody(key, file, ContentType.create("application/zip"), Constants.DEFAULT_PAYLOAD_NAME);
     }
 
-    private HttpPost generatePostRequest(String url){
+    private HttpPost generatePostRequest() throws ExportException{
         HttpEntity requestParams = builder.build();
-        HttpPost request =  createPostReq(url);
+        HttpPost request =  createPostReq();
         request.setEntity(requestParams);
         return request;
     }
@@ -72,8 +111,8 @@ public class HttpConnectionManager {
               throw new ExportException("Server Error - " + msg);
           }
         }
-        catch (HttpHostConnectException e) {
-        	throw new ExportException("Connection Refused: Unable to connect to FusionExport server. Make sure that your server is running on " + this.url);
+        catch (HttpHostConnectException | UnknownHostException e) {
+        	throw new ExportException("Connection Refused: Unable to connect to FusionExport server. Make sure that your server is running on "+ this.getExportServerProtocol() + "://" + this.getExportServerHost() + ":" + this.getExportServerPort());
         }
         catch (IOException | ExportException e){
             throw new ExportException(e);
@@ -89,10 +128,10 @@ public class HttpConnectionManager {
         }
     }
 
-    public byte[] executeRequest(String url) throws ExportException {
-    	this.url = url;
+    public byte[] executeRequest() throws ExportException {
+    	this.url = createURL();
     	initConnectionManager();
-        return getResponse(generatePostRequest(url));
+        return getResponse(generatePostRequest());
     }
 
 }

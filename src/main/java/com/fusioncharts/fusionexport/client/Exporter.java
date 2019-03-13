@@ -14,23 +14,30 @@ import java.util.regex.Pattern;
 public class Exporter {
 
     private ExportConfig exportConfig;
-    private String exportServerHost = Constants.DEFAULT_HOST;
-    private int exportServerPort = Constants.DEFAULT_PORT;
+    private String exportServerHost;
+    private int exportServerPort;
+    private String exportServerProtocol;
+    
     private HttpConnectionManager connectionManager;
 
     public Exporter(ExportConfig exportConfig) {
         this.exportConfig = exportConfig;
     }
 
-    public void setExportConnectionConfig(String exportServerHost, int exportServerPort) {
+    public void setExportConnectionConfig(String exportProtocol, String exportServerHost, int exportServerPort) {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
+        this.exportServerProtocol = exportProtocol;
     }
 
     public ExportConfig getExportConfig() {
         return this.exportConfig;
     }
 
+    public String getExportServerProtocol() {
+        return this.exportServerProtocol;
+    }
+    
     public String getExportServerHost() {
         return this.exportServerHost;
     }
@@ -47,26 +54,14 @@ public class Exporter {
         byte[] result;
         try {
             connectionManager = new HttpConnectionManager();
+            connectionManager.setExportConnectionConfig(getExportServerProtocol(), getExportServerHost(), getExportServerPort());
             updateRequestParams();
-            result = connectionManager.executeRequest(createURL());
+            result = connectionManager.executeRequest();
         } catch (ExportException e) {
             throw new ExportException(e);
         }
         return result;
 
-    }
-
-    private String createURL() throws ExportException {
-        URL url;
-        try {
-            url = new URL(Constants.DEFAULT_PROTOCAL,
-                    Constants.DEFAULT_HOST,
-                    Constants.DEFAULT_PORT,
-                    Constants.DEFAULT_EXPORT_API);
-            return url.toString();
-        } catch (MalformedURLException e) {
-            throw new ExportException("URL params not correct");
-        }
     }
 
     private void updateRequestParams() throws ExportException {

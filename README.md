@@ -37,47 +37,10 @@ To use this SDK with your maven project, add this dependency to your `pom.xml`:
 ## Getting Started
 
 ### Prerequisite
-Ensure that you have FusionExport Service up and running.
+Ensure that you have FusionExport Service up and running, import the SDK library into your project and write the export logic as follows.
 
-After adding the dependency, create a new file named `chart-config.json` containing all 
-the chart configurations that are to be exported. Before exporting your chart, make sure
-the export server is running.
+Start with a simple chart export. For exporting a single chart just pass the chart configuration as you would have passed it to the FusionCharts constructor.
 
-The `chart-config.json` file looks as shown below:
-
-```json
-[
-  {
-    "type": "column2d",
-    "renderAt": "chart-container",
-    "width": "600",
-    "height": "200",
-    "dataFormat": "json",
-    "dataSource": {
-      "chart": {
-        "caption": "Number of visitors last week",
-        "subCaption": "Bakersfield Central vs Los Angeles Topanga"
-      },
-      "data": [
-        {
-          "label": "Mon",
-          "value": "15123"
-        },
-        {
-          "label": "Tue",
-          "value": "14233"
-        },
-        {
-          "label": "Wed",
-          "value": "25507"
-        }
-      ]
-    }
-  }
-]
-```
-
-Now, import the SDK library into your project and write the export logic as follows:
 
 ```java
 import com.fusioncharts.fusionexport.client.*;
@@ -85,10 +48,49 @@ import com.fusioncharts.fusionexport.client.*;
 public class ExportChart {
     public static void main(String[] args) throws Exception {
 
+        StringBuilder chartConf = new StringBuilder();
+        chartConf.append("[");
+        chartConf.append("  {");
+        chartConf.append("    \"type\": \"column2d\",");
+        chartConf.append("    \"renderAt\": \"chart-container\",");
+        chartConf.append("    \"width\": \"600\",");
+        chartConf.append("    \"height\": \"200\",");
+        chartConf.append("    \"dataFormat\": \"json\",");
+        chartConf.append("    \"dataSource\": {");
+        chartConf.append("      \"chart\": {");
+        chartConf.append("        \"caption\": \"Number of visitors last week\",");
+        chartConf.append("        \"subCaption\": \"Bakersfield Central vs Los Angeles Topanga\"");
+        chartConf.append("      },");
+        chartConf.append("      \"data\": [");
+        chartConf.append("        {");
+        chartConf.append("          \"label\": \"Mon\",");
+        chartConf.append("          \"value\": \"15123\"");
+        chartConf.append("        },");
+        chartConf.append("        {");
+        chartConf.append("          \"label\": \"Tue\",");
+        chartConf.append("          \"value\": \"14233\"");
+        chartConf.append("        },");
+        chartConf.append("        {");
+        chartConf.append("          \"label\": \"Wed\",");
+        chartConf.append("          \"value\": \"25507\"");
+        chartConf.append("        }");
+        chartConf.append("      ]");
+        chartConf.append("    }");
+        chartConf.append("  }");
+        chartConf.append("]");		
+		
+        // Instantiate the ExportManager class
         ExportManager em = new ExportManager();
+        // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", "fullPath_of_chart_config.json");
-        em.export(config,"outPath",false);
+        config.set("chartConfig", chartConf.toString());
+        config.set("type", "png");
+		
+        String[] files = em.export(config, ".", true);
+        
+        for(String f : files) {
+        	System.out.println(f);
+        }
     }
 }
 ```

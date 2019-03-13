@@ -3,7 +3,7 @@ package com.fusioncharts.fusionexport.client;
 class Constants {
     public static final String DEFAULT_HOST = "localhost";
     public static final int DEFAULT_PORT = 1337;
-    public static final String DEFAULT_PROTOCAL = "http";
+    public static final String DEFAULT_PROTOCOL = "http";
     public static final String DEFAULT_PAYLOAD_NAME = "payload.zip";
     public static final String DEFAULT_EXPORT_API = "/api/v2.0/export";
     public static final String DEFAULT_TEMPLATE_FOLDER = "template/";
