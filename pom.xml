@@ -88,7 +88,7 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -128,5 +128,5 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>	
+	</dependencies>
 </project>

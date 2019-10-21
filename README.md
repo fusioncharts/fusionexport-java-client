@@ -18,7 +18,7 @@ Then, just add this SDK as a dependency to your `build.gradle` file:
 
 ```groovy
 dependencies {
-    compile "com.fusioncharts.fusionexport:fusionexport:1.0.0"
+    compile "com.fusioncharts.fusionexport:fusionexport:1.2.0"
 }
 ```
 
@@ -30,7 +30,7 @@ To use this SDK with your maven project, add this dependency to your `pom.xml`:
 <dependency>
   <groupId>com.fusioncharts.fusionexport</groupId>
   <artifactId>fusionexport</artifactId>
-  <version>1.0.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -77,17 +77,17 @@ public class ExportChart {
         chartConf.append("      ]");
         chartConf.append("    }");
         chartConf.append("  }");
-        chartConf.append("]");		
-		
+        chartConf.append("]");
+
         // Instantiate the ExportManager class
         ExportManager em = new ExportManager();
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
         config.set("chartConfig", chartConf.toString());
         config.set("type", "png");
-		
+
         String[] files = em.export(config, ".", true);
-        
+
         for(String f : files) {
         	System.out.println(f);
         }
@@ -98,7 +98,7 @@ public class ExportChart {
 ## Example Usage
 In the repository you can find a example folder which contains a considerable number of examples and its resources.
 To test just copy the example code into `ExportChart.java` and give the correct path for the resources needed.
- 
+
 ## API Reference
 
 You can find the full reference [here](https://www.fusioncharts.com/dev/exporting-charts/using-fusionexport/sdk-api-reference/java.html)

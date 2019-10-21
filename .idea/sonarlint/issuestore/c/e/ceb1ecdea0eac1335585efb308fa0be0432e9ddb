@@ -1,8 +1,0 @@
-
-hsquid:S3776k"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ÔêÊt
-dsquid:S1192)"HDefine a constant instead of duplicating this literal "Type of" 3 times.(Ì†¯àÿÿÿÿÿ
-dsquid:S1192-"HDefine a constant instead of duplicating this literal "Config:" 3 times.(¨¦ë„üÿÿÿÿ
-jsquid:S1192)"NDefine a constant instead of duplicating this literal " is not valid" 3 times.(Ì†¯àÿÿÿÿÿ
-Ksquid:S2864³"4Iterate over the "entrySet" instead of the "keySet".(€‡ó*
-dsquid:S00112Ä"FDefine and throw a dedicated exception instead of using a generic one.(‰¬·şÿÿÿÿ
-gsquid:S1192-"KDefine a constant instead of duplicating this literal " not valid" 3 times.(¨¦ë„üÿÿÿÿ
