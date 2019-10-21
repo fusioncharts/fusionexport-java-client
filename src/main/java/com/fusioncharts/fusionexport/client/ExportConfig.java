@@ -8,7 +8,9 @@ import java.io.PrintWriter;
 
 import com.google.gson.JsonParser;
 
+import org.apache.http.util.TextUtils;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.tools.ant.util.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -176,7 +178,7 @@ public class ExportConfig{
 
         if (!dataExists)
         {
-            String supportParams = String.join(", ", dataset);
+            String supportParams = org.apache.commons.lang3.StringUtils.join(", ", dataset);
             String errMsg = String.format("Invalid argument value in parameter '%s'\nSupported parameters are: %s", configName.toString(), supportParams);
             throw new ExportException(errMsg);
         }

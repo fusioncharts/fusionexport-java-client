@@ -35,11 +35,15 @@ public class ExportChart {
 		chartConf.append("]");		
 		
 		
+		//System.out.println(chartConf.toString());
+		
+		//return;
         // Instantiate the ExportManager class
 		ExportManager em = new ExportManager();
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", chartConf.toString());
+        //config.set("chartConfig", "chart-config.json");
+        config.set("chartConfig",chartConf.toString());
         config.set("type", "png");
 		
         String[] files = em.export(config,".",true);
