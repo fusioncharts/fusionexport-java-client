@@ -1,13 +1,11 @@
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 import com.fusioncharts.fusionexport.client.*; // import sdk
 
-public class ExportChart {
+public class ExportAsStream {
     public static void main(String[] args) throws Exception {
 	
 		StringBuilder chartConf = new StringBuilder();
@@ -47,16 +45,16 @@ public class ExportChart {
         ExportConfig config = new ExportConfig();
         //config.set("chartConfig", "chart-config.json");
         config.set("chartConfig",chartConf.toString());
-        config.set("type", "pdf");
+        config.set("type", "png");
 		
-        String[] files = em.export(config, ".", true);
-        
-        /*
         HashMap<String, ByteArrayOutputStream> files = em.exportAsStream(config);        
+        
         for (String key : files.keySet()) {
+        	// key contains the file name
             String fileName = key;
+            // value has the exported binary data for that particular key/file
             ByteArrayOutputStream baos = files.get(key);
-            
+
             File newFile = new File("./" + fileName);
     		new File(newFile.getParent()).mkdirs();
     		FileOutputStream fos = new FileOutputStream(newFile);
@@ -64,7 +62,6 @@ public class ExportChart {
     		fos.flush();
     		fos.close();
         }
-        */
 		
         System.out.println("Done");
     }

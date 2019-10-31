@@ -1,11 +1,15 @@
 package com.fusioncharts.fusionexport.client;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 
 
 public class ExportManager {
@@ -53,7 +57,7 @@ public class ExportManager {
         String[] filepaths;
         try {
             createRequest();
-            filepaths = exportChart();
+            filepaths = (String[])exportChart(false);
         } catch (ExportException e) {
             throw new ExportException(e);
         } finally {
@@ -66,21 +70,51 @@ public class ExportManager {
         return filepaths;
     }
 
-    private String[] exportChart() {
+    @SuppressWarnings("unchecked")
+	public HashMap<String, ByteArrayOutputStream> exportAsStream(ExportConfig config) throws ExportException {
+        this.chartConfig = config;
+        //this.outDir = outDir;
+        //this.unzip = unzip;
+        HashMap<String, ByteArrayOutputStream> streams = null;
+        
+        try {
+            createRequest();
+            streams = (HashMap<String, ByteArrayOutputStream>)exportChart(true);
+        } catch (ExportException e) {
+            throw new ExportException(e);
+        } finally {
+            try {
+                Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
+            } catch (IOException e) {
+                throw new ExportException(e);
+            }
+        }
+        return streams;
+    }
+    
+    
+    private Object exportChart(boolean exportAsStream) {
         Exporter exporter = new Exporter(chartConfig);
-        String[] filePaths = new String[0];
+        //String[] filePaths = new String[0];
+        Object returnObject = null;
         if (exporter != null) {
             this.host = !this.host.isEmpty() ? this.host : Constants.DEFAULT_HOST;
             this.port = this.port != Integer.MIN_VALUE ? this.port : Constants.DEFAULT_PORT;
             this.protocol = !this.protocol.isEmpty() ? this.protocol : Constants.DEFAULT_PROTOCOL;
             exporter.setExportConnectionConfig(this.protocol, this.host, this.port);
             try {
-                filePaths = saveResponse(exporter.start());
+            	if (!exportAsStream) {
+            		returnObject = saveResponse(exporter.start());
+            	} else {
+            		returnObject = Utils.unzipToStream(exporter.start());
+            	}
+            	
+            	
             } catch (ExportException e) {
                 System.out.println(e.getMessage());
             }
         }
-        return filePaths;
+        return returnObject;
     }
 
     private String[] saveResponse(byte[] response) throws ExportException {
