@@ -10,18 +10,17 @@
 
 	<groupId>com.fusioncharts.fusionexport</groupId>
 	<artifactId>fusionexport</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.2</version>
 
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-	<!--	<repository>
+		<repository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
-	-->
 	</distributionManagement>
 	<build>
 		<plugins>
@@ -84,11 +83,11 @@
 				<version>3.7.0</version>
 				<configuration>
 					<fork>true</fork>
-					<executable>C:\Program Files\Java\jdk1.8.0_191\bin\javac.exe</executable>
+					<executable>C:\Program Files\Java\jdk1.8.0_231\bin\javac.exe</executable>
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 	<dependencies>
@@ -128,5 +127,11 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.9</version>
+		</dependency>
+	</dependencies>	
 </project>

@@ -1,5 +1,5 @@
 group 'com.fusioncharts.fusionexport.client'
-version '1.2.0'
+version '1.2.2'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -13,7 +13,7 @@ repositories {
 
 jar {
     baseName = 'com.fusioncharts.fusionexport.client'
-    version =  '1.2.0'
+    version =  '1.2.2'
 }
 
 task fatJar(type: Jar) {
@@ -33,10 +33,10 @@ dependencies {
     compile group: 'org.apache.ant', name: 'ant', version: '1.8.2'
     compile 'org.apache.httpcomponents:httpclient:4.5.6'
     compile 'org.apache.httpcomponents:httpmime:4.5.6'
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 	compile group: 'javax.mail', name: 'mail', version: '1.4.5'
 	compile group: 'javax.activation', name: 'activation', version: '1.1.1'	
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 }
 /*
 task genPom {
