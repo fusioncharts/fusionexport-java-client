@@ -3,6 +3,7 @@ package com.fusioncharts.fusionexport.client;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -27,16 +28,20 @@ public class HttpConnectionManager {
     
     private String exportServerHost;
     private int exportServerPort;
+    private boolean exportServerIsSecure;
     private String exportServerProtocol;
     
-    public void setExportConnectionConfig(String exportProtocol, String exportServerHost, int exportServerPort) {
+    public void setExportConnectionConfig(String exportServerHost, int exportServerPort, boolean exportServerIsSecure) {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
-        this.exportServerProtocol = exportProtocol;
+        this.exportServerIsSecure = exportServerIsSecure;
     }
 
     public String getExportServerProtocol() {
         return this.exportServerProtocol;
+    }
+    public void setExportServerProtocol(String exportServerProtocol) {
+        this.exportServerProtocol = exportServerProtocol;
     }
     
     public String getExportServerHost() {
@@ -60,20 +65,23 @@ public class HttpConnectionManager {
         }
     }
 
+    private HttpGet createGetReq() throws ExportException{
+        this.url = createURL(true);
+        return new HttpGet(url);
+    }
+
     private HttpPost createPostReq() throws ExportException{
-    	this.url = createURL();
+    	this.url = createURL(false);
     	return new HttpPost(url);
     }
 
-    private String createURL() throws ExportException {
+    private String createURL(boolean getReq) throws ExportException {
         URL url;
         try {
-	        	url = new URL(getExportServerProtocol(),
-	                    getExportServerHost(),
-	                    getExportServerPort(),
-	                    Constants.DEFAULT_EXPORT_API);
+	        	url = getReq ? new URL(getExportServerProtocol(), getExportServerHost(),
+                        getExportServerPort()) : new URL(getExportServerProtocol(), getExportServerHost(),
+	                    getExportServerPort(), Constants.DEFAULT_EXPORT_API);
 	            return url.toString();
-            
         } catch (MalformedURLException e) {
             throw new ExportException("URL params not correct");
         }
@@ -129,7 +137,6 @@ public class HttpConnectionManager {
     }
 
     public byte[] executeRequest() throws ExportException {
-    	this.url = createURL();
     	initConnectionManager();
         return getResponse(generatePostRequest());
     }
