@@ -17,7 +17,7 @@ public class ExportManager {
     private ExportConfig chartConfig;
     private String host= "";
     private int port = Integer.MIN_VALUE;
-    private String protocol = "";
+    private boolean isSecure = Constants.IS_SECURE;
     private String outDir = "";
     private boolean unzip = false;
 
@@ -34,10 +34,10 @@ public class ExportManager {
         }
     }
 
-    public void setHostAndPort(String protocol, String host, int port) {
-        this.protocol = protocol;
+    public void setHostAndPort(String host, int port, boolean isSecure) {
         this.host = host;
         this.port = port;
+        this.isSecure = isSecure;
     }
 
     public String[] convertResultToBase64String(String[] result) throws IOException {
@@ -100,8 +100,7 @@ public class ExportManager {
         if (exporter != null) {
             this.host = !this.host.isEmpty() ? this.host : Constants.DEFAULT_HOST;
             this.port = this.port != Integer.MIN_VALUE ? this.port : Constants.DEFAULT_PORT;
-            this.protocol = !this.protocol.isEmpty() ? this.protocol : Constants.DEFAULT_PROTOCOL;
-            exporter.setExportConnectionConfig(this.protocol, this.host, this.port);
+            exporter.setExportConnectionConfig(this.host, this.port, this.isSecure);
             try {
             	if (!exportAsStream) {
             		returnObject = saveResponse(exporter.start());

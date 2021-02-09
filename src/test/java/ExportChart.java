@@ -43,6 +43,7 @@ public class ExportChart {
 		
         // Instantiate the ExportManager class
 		ExportManager em = new ExportManager();
+//		em.setHostAndPort("127.0.0.1", 1337, true);
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
         //config.set("chartConfig", "chart-config.json");
