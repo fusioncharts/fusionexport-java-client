@@ -5,11 +5,14 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.JsonElement;
@@ -20,6 +23,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HttpConnectionManager {
     private CloseableHttpClient client;
@@ -35,6 +40,8 @@ public class HttpConnectionManager {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
         this.exportServerIsSecure = exportServerIsSecure;
+        if (exportServerIsSecure) setExportServerProtocol(Constants.SECURED_PROTOCOL);
+        else setExportServerProtocol(Constants.UNSECURED_PROTOCOL);
     }
 
     public String getExportServerProtocol() {
@@ -58,7 +65,15 @@ public class HttpConnectionManager {
 
     private void initConnectionManager(){
         if(client == null) {
-            client = HttpClients.createDefault();
+            try {
+                client = HttpClients.custom()
+                        .setSSLContext(new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
+                        .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                        .build();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(builder == null) {
             builder = MultipartEntityBuilder.create();
@@ -66,21 +81,21 @@ public class HttpConnectionManager {
     }
 
     private HttpGet createGetReq() throws ExportException{
-        this.url = createURL(true);
+        this.url = createURL();
         return new HttpGet(url);
     }
 
     private HttpPost createPostReq() throws ExportException{
-    	this.url = createURL(false);
+    	this.url = createURL();
     	return new HttpPost(url);
     }
 
-    private String createURL(boolean getReq) throws ExportException {
+    private String createURL() throws ExportException {
         URL url;
+
         try {
-	        	url = getReq ? new URL(getExportServerProtocol(), getExportServerHost(),
-                        getExportServerPort()) : new URL(getExportServerProtocol(), getExportServerHost(),
-	                    getExportServerPort(), Constants.DEFAULT_EXPORT_API);
+                url = new URL(getExportServerProtocol(), getExportServerHost(),
+                    getExportServerPort(), Constants.DEFAULT_EXPORT_API);
 	            return url.toString();
         } catch (MalformedURLException e) {
             throw new ExportException("URL params not correct");
@@ -97,8 +112,25 @@ public class HttpConnectionManager {
 
     private HttpPost generatePostRequest() throws ExportException{
         HttpEntity requestParams = builder.build();
-        HttpPost request =  createPostReq();
+        HttpPost request;
+        if(getExportServerProtocol() == Constants.SECURED_PROTOCOL){
+            HttpGet getReq = createGetReq();
+            try {
+                client.execute(getReq);
+            }
+            catch (Exception e) {
+                String msg = "HTTPS server not found, overriding requests to an HTTP server";
+
+                Logger logger = Logger.getLogger(HttpConnectionManager.class.getName());
+                logger.setLevel(Level.WARNING);
+                logger.warning(msg);
+
+                setExportServerProtocol(Constants.UNSECURED_PROTOCOL);
+            }
+        }
+        request =  createPostReq();
         request.setEntity(requestParams);
+
         return request;
     }
 
@@ -115,7 +147,7 @@ public class HttpConnectionManager {
           else {
         	  String responseString = new BasicResponseHandler().handleEntity(response.getEntity());
         	  String msg = new JsonParser().parse(responseString).getAsJsonObject().get("error").toString();
-        	  
+
               throw new ExportException("Server Error - " + msg);
           }
         }
