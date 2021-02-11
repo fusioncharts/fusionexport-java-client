@@ -263,7 +263,7 @@ public class ExportConfig {
         //set Chart Config
         if (configAttributes.containsKey(CHARTCONFIG)) {
             String chartConfig = (String) configAttributes.get(CHARTCONFIG).getData();
-            if (!chartConfig.isEmpty() && chartConfig.contains(".json")) {
+            if(!chartConfig.isEmpty() && chartConfig.endsWith(".json")){
                 chartConfig = new JsonParser().parse(Utils.getFileContentAsString(Utils.resolvePath(chartConfig))).toString();
             }
             requestParams.put(CHARTCONFIG, chartConfig);
