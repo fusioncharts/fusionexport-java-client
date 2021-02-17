@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.fusioncharts.fusionexport.client.Constants.*;
+import com.fusioncharts.fusionexport.client.Minifier;
 
 
 public class ExportConfig {
@@ -251,9 +252,8 @@ public class ExportConfig {
             return false;
         }
     }
-
-
-    public void createRequest() throws Exception {
+    
+    public void createRequest(Boolean minifyFiles) throws Exception {
 
         //set Client Name
         requestParams.put(CLIENTNAME, CLIENTNAME_VALUE);
@@ -314,9 +314,11 @@ public class ExportConfig {
 
         //set template
         String templateFile = null;
-        String resourceFile = null;
-        if (configAttributes.containsKey(TEMPLATE)) {
+        String tempTemplate = null;
+        String resourceFile =null;
+        if(configAttributes.containsKey(TEMPLATE)){
             templateFile = (String) configAttributes.get(TEMPLATE).getData();
+            tempTemplate = templateFile;
 
             // Checks if the content is raw html or it's just file name 
             if (templateFile.startsWith("<")) {
@@ -327,13 +329,18 @@ public class ExportConfig {
                 templateFile = tempFile.getAbsolutePath();
             }
 
+            //If minifyResources option is enabled
+            if (minifyFiles) {
+                templateFile = Minifier.minify("html", templateFile);
+            }
+
             resourceFile = null;
 
             if (configAttributes.containsKey(RESOURCES) && !configAttributes.get(RESOURCES).toString().isEmpty()) {
                 resourceFile = (String) configAttributes.get(RESOURCES).getData();
             }
-            System.out.println("test test");
-            templateFileRef = getTemplate(templateFile);
+
+            templateFileRef = getTemplate(templateFile, tempTemplate, minifyFiles);
         }
 
         for (String configName : configAttributes.keySet()) {
@@ -350,13 +357,21 @@ public class ExportConfig {
             requestParams.put(TEMPLATE, Constants.DEFAULT_TEMPLATE_FOLDER.concat(relativeTempPath));
         }
         requestParams.put(PAYLOAD, payloadZipPath);
+        if (minifyFiles) {
+            for (String tempPath : templateFileRef) {
+                if (tempPath.contains(".min.fusionexport.")) {
+                    File tempFile = new File(tempPath);
+                    tempFile.delete();
+                }
+            }
+        }
 
     }
 
-    private ArrayList<String> getTemplate(String path) throws Exception {
+    private ArrayList<String> getTemplate(String minifiedPath, String originalPath, Boolean minifyFiles) throws Exception {
         ArrayList<String> extractedPaths = new ArrayList<>();
-        String templateAbsolutePath = Utils.resolvePath(path);
-        extractedPaths.add(templateAbsolutePath);
+        String templateAbsolutePath = Utils.resolvePath(originalPath);
+        extractedPaths.add(minifiedPath);
         Document doc = null;
         try {
             File file = Utils.getFile(templateAbsolutePath);
@@ -383,7 +398,7 @@ public class ExportConfig {
             String attrPath = elm.attr("href");
             if (Utils.isValidPath(attrPath)) {
                 String hrefAbsolutePath = Utils.resolvePath(attrPath, templateAbsolutePath);
-                extractedPaths.add(hrefAbsolutePath);
+                extractedPaths.add((minifyFiles && Minifier.validToMinify(hrefAbsolutePath)) ?Minifier.minify("resource", hrefAbsolutePath) :hrefAbsolutePath );
 
                 String fileName = new File(hrefAbsolutePath).getName();
                 int dotIndex = fileName.lastIndexOf('.');
@@ -409,8 +424,9 @@ public class ExportConfig {
 
         for (Element elm : media) {
             String attrPath = elm.attr("src");
-            if (Utils.isValidPath(attrPath)) {
-                extractedPaths.add(Utils.resolvePath(attrPath, templateAbsolutePath));
+            if(Utils.isValidPath(attrPath)) {
+                String resolvedPath = Utils.resolvePath(attrPath,templateAbsolutePath);
+                extractedPaths.add((minifyFiles && Minifier.validToMinify(resolvedPath)) ?Minifier.minify("resource", resolvedPath) :resolvedPath );
             }
         }
         return extractedPaths;

@@ -19,15 +19,20 @@ public class ExportManager {
     private int port = Integer.MIN_VALUE;
     private boolean isSecure = Constants.IS_SECURE;
     private String outDir = "";
-    private boolean unzip = false;
+    private Boolean unzip = false;
+    private boolean minifyFiles = false;
+
+    public ExportManager(Boolean minifyFiles) throws ExportException {
+        this.minifyFiles = minifyFiles;
+    }
 
     public ExportManager() throws ExportException {
-
+        this(false);
     }
 
     private void createRequest() throws ExportException {
         try {
-            this.chartConfig.createRequest();
+            this.chartConfig.createRequest(this.minifyFiles);
         } catch (Exception e) {
 
             throw new ExportException("Error in Config" + "\n");
