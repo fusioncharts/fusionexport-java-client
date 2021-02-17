@@ -66,6 +66,7 @@ public class ExportManager {
         } catch (ExportException e) {
             throw new ExportException(e);
         } finally {
+            if (this.minifyFiles) this.chartConfig.deleteTempFiles();
             try {
                 Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
             } catch (IOException e) {

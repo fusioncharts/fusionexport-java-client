@@ -357,14 +357,6 @@ public class ExportConfig {
             requestParams.put(TEMPLATE, Constants.DEFAULT_TEMPLATE_FOLDER.concat(relativeTempPath));
         }
         requestParams.put(PAYLOAD, payloadZipPath);
-        if (minifyFiles) {
-            for (String tempPath : templateFileRef) {
-                if (tempPath.contains(".min.fusionexport.")) {
-                    File tempFile = new File(tempPath);
-                    tempFile.delete();
-                }
-            }
-        }
 
     }
 
@@ -431,6 +423,15 @@ public class ExportConfig {
         }
         return extractedPaths;
 
+    }
+
+    public void deleteTempFiles () {
+        for (String tempPath : templateFileRef) {
+            if (tempPath.contains(".min.fusionexport.")) {
+                File tempFile = new File(tempPath);
+                tempFile.delete();
+            }
+        }
     }
 
     public Map getRequestParams() {
