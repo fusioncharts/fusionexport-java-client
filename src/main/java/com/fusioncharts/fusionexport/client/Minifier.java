@@ -84,7 +84,7 @@ public class Minifier {
 	            	minified = Minifier.getNewName(elm.attr(attr));
 	            } else {
 	            	String parent = Utils.getDirectory(elm.attr(attr));
-	            	minified = Utils.resolvePath(basePath+"/"+(parent!=null && !parent.equals(".") ?parent :"")+Minifier.getNewFilename(elm.attr(attr)));
+	            	minified = Utils.resolvePath(basePath+"/"+(parent!=null && !parent.equals(".") ?parent+"/" :"")+Minifier.getNewFilename(elm.attr(attr)));
 	            }
 	            elm.attr(attr, minified);
 	        }
