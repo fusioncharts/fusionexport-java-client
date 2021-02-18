@@ -53,7 +53,11 @@ public class ExportManager {
     	
     	return fileList.toArray(new String[0]);
     }
-    
+
+    public String[] export(ExportConfig config, String outDir, boolean unzip) throws ExportException {
+        return export(config,outDir,unzip,false);
+    }
+
     public String[] export(ExportConfig config, String outDir, boolean unzip,boolean exportBulk) throws ExportException {
         this.chartConfig = config;
         this.outDir = outDir;
