@@ -20,10 +20,10 @@ public class ExportManager {
     private boolean isSecure = Constants.IS_SECURE;
     private String outDir = "";
     private Boolean unzip = false;
-    private boolean minifyFiles = false;
+    private boolean minifyResources = false;
 
-    public ExportManager(Boolean minifyFiles) throws ExportException {
-        this.minifyFiles = minifyFiles;
+    public ExportManager(Boolean minifyResources) throws ExportException {
+        this.minifyResources = minifyResources;
     }
 
     public ExportManager() throws ExportException {
@@ -32,7 +32,7 @@ public class ExportManager {
 
     private void createRequest() throws ExportException {
         try {
-            this.chartConfig.createRequest(this.minifyFiles);
+            this.chartConfig.createRequest(this.minifyResources);
         } catch (Exception e) {
 
             throw new ExportException("Error in Config" + "\n");
@@ -66,7 +66,7 @@ public class ExportManager {
         } catch (ExportException e) {
             throw new ExportException(e);
         } finally {
-            if (this.minifyFiles) this.chartConfig.deleteTempFiles();
+            if (this.minifyResources) this.chartConfig.deleteTempFiles();
             try {
                 Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
             } catch (IOException e) {

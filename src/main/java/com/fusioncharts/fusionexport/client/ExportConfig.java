@@ -253,7 +253,7 @@ public class ExportConfig {
         }
     }
     
-    public void createRequest(Boolean minifyFiles) throws Exception {
+    public void createRequest(Boolean minifyResources) throws Exception {
 
         //set Client Name
         requestParams.put(CLIENTNAME, CLIENTNAME_VALUE);
@@ -330,7 +330,7 @@ public class ExportConfig {
             }
 
             //If minifyResources option is enabled
-            if (minifyFiles) {
+            if (minifyResources) {
                 templateFile = Minifier.minify("html", templateFile);
             }
 
@@ -340,7 +340,7 @@ public class ExportConfig {
                 resourceFile = (String) configAttributes.get(RESOURCES).getData();
             }
 
-            templateFileRef = getTemplate(templateFile, tempTemplate, minifyFiles);
+            templateFileRef = getTemplate(templateFile, tempTemplate, minifyResources);
         }
 
         for (String configName : configAttributes.keySet()) {
@@ -360,7 +360,7 @@ public class ExportConfig {
 
     }
 
-    private ArrayList<String> getTemplate(String minifiedPath, String originalPath, Boolean minifyFiles) throws Exception {
+    private ArrayList<String> getTemplate(String minifiedPath, String originalPath, Boolean minifyResources) throws Exception {
         ArrayList<String> extractedPaths = new ArrayList<>();
         String templateAbsolutePath = Utils.resolvePath(originalPath);
         extractedPaths.add(minifiedPath);
@@ -390,7 +390,7 @@ public class ExportConfig {
             String attrPath = elm.attr("href");
             if (Utils.isValidPath(attrPath)) {
                 String hrefAbsolutePath = Utils.resolvePath(attrPath, templateAbsolutePath);
-                extractedPaths.add((minifyFiles && Minifier.validToMinify(hrefAbsolutePath)) ?Minifier.minify("resource", hrefAbsolutePath) :hrefAbsolutePath );
+                extractedPaths.add((minifyResources && Minifier.validToMinify(hrefAbsolutePath)) ?Minifier.minify("resource", hrefAbsolutePath) :hrefAbsolutePath );
 
                 String fileName = new File(hrefAbsolutePath).getName();
                 int dotIndex = fileName.lastIndexOf('.');
@@ -418,7 +418,7 @@ public class ExportConfig {
             String attrPath = elm.attr("src");
             if(Utils.isValidPath(attrPath)) {
                 String resolvedPath = Utils.resolvePath(attrPath,templateAbsolutePath);
-                extractedPaths.add((minifyFiles && Minifier.validToMinify(resolvedPath)) ?Minifier.minify("resource", resolvedPath) :resolvedPath );
+                extractedPaths.add((minifyResources && Minifier.validToMinify(resolvedPath)) ?Minifier.minify("resource", resolvedPath) :resolvedPath );
             }
         }
         return extractedPaths;
