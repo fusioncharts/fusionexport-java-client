@@ -253,13 +253,19 @@ public class ExportConfig {
         }
     }
     
-    public void createRequest(Boolean minifyResources) throws Exception {
+    public void createRequest(boolean exportBulk, Boolean minifyResources) throws Exception {
 
         //set Client Name
         requestParams.put(CLIENTNAME, CLIENTNAME_VALUE);
 
         requestParams.put(PLATFORM, System.getProperty("os.name"));
-
+        if (exportBulk)
+        {
+            requestParams.put("exportBulk","true");
+        }
+        else {
+            requestParams.put("exportBulk","false");
+        }
         //set Chart Config
         if (configAttributes.containsKey(CHARTCONFIG)) {
             String chartConfig = (String) configAttributes.get(CHARTCONFIG).getData();
