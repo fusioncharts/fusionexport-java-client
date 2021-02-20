@@ -1,6 +1,5 @@
 package com.fusioncharts.fusionexport.client;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 
@@ -19,15 +17,21 @@ public class ExportManager {
     private int port = Integer.MIN_VALUE;
     private boolean isSecure = Constants.IS_SECURE;
     private String outDir = "";
-    private boolean unzip = false;
+    private Boolean unzip = true;
+    private boolean minifyResources = false;
+    private boolean exportBulk = false;
 
-    public ExportManager() throws ExportException {
-
+    public ExportManager(Boolean minifyResources) throws ExportException {
+        this.minifyResources = minifyResources;
     }
 
-    private void createRequest() throws ExportException {
+    public ExportManager() throws ExportException {
+        this(false);
+    }
+
+    private void createRequest(boolean exportBulk) throws ExportException {
         try {
-            this.chartConfig.createRequest();
+            this.chartConfig.createRequest(exportBulk,this.minifyResources);
         } catch (Exception e) {
 
             throw new ExportException("Error in Config" + "\n");
@@ -49,18 +53,23 @@ public class ExportManager {
     	
     	return fileList.toArray(new String[0]);
     }
-    
+
     public String[] export(ExportConfig config, String outDir, boolean unzip) throws ExportException {
+        return export(config,outDir,unzip,false);
+    }
+
+    public String[] export(ExportConfig config, String outDir, boolean unzip,boolean exportBulk) throws ExportException {
         this.chartConfig = config;
         this.outDir = outDir;
         this.unzip = unzip;
         String[] filepaths;
         try {
-            createRequest();
+            createRequest(exportBulk);
             filepaths = (String[])exportChart(false);
         } catch (ExportException e) {
             throw new ExportException(e);
         } finally {
+            if (this.minifyResources) this.chartConfig.deleteTempFiles();
             try {
                 Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
             } catch (IOException e) {
@@ -78,7 +87,7 @@ public class ExportManager {
         HashMap<String, ByteArrayOutputStream> streams = null;
         
         try {
-            createRequest();
+            createRequest(exportBulk);
             streams = (HashMap<String, ByteArrayOutputStream>)exportChart(true);
         } catch (ExportException e) {
             throw new ExportException(e);
