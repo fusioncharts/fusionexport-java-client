@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.util.Dictionary;
 import java.util.HashMap;
 
-import com.fusioncharts.fusionexport.client.*; // import sdk
+import com.fusioncharts.fusionexport.client.*; // import sdk;
 
 public class ExportChart {
     public static void main(String[] args) throws Exception {
@@ -43,6 +43,7 @@ public class ExportChart {
 		
         // Instantiate the ExportManager class
 		ExportManager em = new ExportManager();
+		em.setHostAndPort("localhost", 1337, true);
 //		em.setHostAndPort("127.0.0.1", 1337, true);
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
