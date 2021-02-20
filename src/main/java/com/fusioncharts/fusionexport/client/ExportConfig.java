@@ -333,11 +333,13 @@ public class ExportConfig {
                 out.println(templateFile);
                 out.close();
                 templateFile = tempFile.getAbsolutePath();
+            } else {
+                templateFile = Paths.get(templateFile).toAbsolutePath().toString();
             }
 
             //If minifyResources option is enabled
             if (minifyResources) {
-                templateFile = Minifier.minify("html", templateFile);
+                templateFile = Minifier.minify(templateFile.startsWith("<") ?"raw" :"html", templateFile);
             }
 
             resourceFile = null;
