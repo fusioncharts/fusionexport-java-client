@@ -8,12 +8,6 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-application {
-    mainClass = 'com.example.RunAll'    
-}
-
-
 repositories {
     mavenCentral()
 }
@@ -21,6 +15,15 @@ repositories {
 jar {
     baseName = 'com.fusioncharts.fusionexport.client'
     version =  '1.2.2'
+    exclude ("com/example/**")
+    exclude ("examples/**")
+}
+
+task examples (type: JavaExec) {
+    group = "Execution"
+    description = "Run all the examples"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.example.RunAll'
 }
 
 task fatJar(type: Jar) {
