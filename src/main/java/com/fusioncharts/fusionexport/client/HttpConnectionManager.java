@@ -1,6 +1,7 @@
 package com.fusioncharts.fusionexport.client;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpGet;
@@ -155,6 +156,9 @@ public class HttpConnectionManager {
         	throw new ExportException("Connection Refused: Unable to connect to FusionExport server. Make sure that your server is running on "+ this.getExportServerProtocol() + "://" + this.getExportServerHost() + ":" + this.getExportServerPort());
         }
         catch (IOException | ExportException e){
+           if(e.getClass() == ClientProtocolException.class){
+               throw new ExportException("Connection Refused: Unable to connect to FusionExport server. Make sure that your server is running on "+ this.getExportServerProtocol() + "://" + this.getExportServerHost() + ":" + this.getExportServerPort());
+           }
             throw new ExportException(e);
         }
         finally {
@@ -163,6 +167,7 @@ public class HttpConnectionManager {
                 client = null;
                 builder = null;
             } catch (IOException e) {
+
                 throw new ExportException(e.getMessage());
             }
         }
