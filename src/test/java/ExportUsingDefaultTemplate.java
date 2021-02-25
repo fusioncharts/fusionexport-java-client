@@ -13,7 +13,7 @@ public class ExportUsingDefaultTemplate {
         config.set("header", "My Header");
         config.set("subheader", "My Subheader");
 
-        String[] files = em.export(config, ".", true);
+        String[] files = em.export(config, ".", true, true);
 
         System.out.println("Done");
     }

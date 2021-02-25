@@ -264,7 +264,7 @@ public class ExportConfig {
             requestParams.put("exportBulk","true");
         }
         else {
-            requestParams.put("exportBulk","false");
+            requestParams.put("exportBulk","");
         }
         //set Chart Config
         if (configAttributes.containsKey(CHARTCONFIG)) {
