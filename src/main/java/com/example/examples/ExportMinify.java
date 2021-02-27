@@ -11,7 +11,7 @@ public class ExportMinify {
 
     public static void main(String[] args) throws Exception {
     	//Add true as first parameter to ExportManager if you want to minify your files
-        ExportManager em = new ExportManager(true);
+        ExportManager em = new ExportManager();
         ExportConfig config = new ExportConfig();
 
         config.set("templateFilePath", Resource.resolveResource(HOME_DIR+"dashboard-template-minify.html"));

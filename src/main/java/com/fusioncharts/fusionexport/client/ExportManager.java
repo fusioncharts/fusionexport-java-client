@@ -21,12 +21,8 @@ public class ExportManager {
     private boolean minifyResources = false;
     private boolean exportBulk = false;
 
-    public ExportManager(Boolean minifyResources) throws ExportException {
-        this.minifyResources = minifyResources;
-    }
-
     public ExportManager() throws ExportException {
-        this(false);
+
     }
 
     private void createRequest(boolean exportBulk) throws ExportException {
@@ -38,10 +34,24 @@ public class ExportManager {
         }
     }
 
+    public void setHostAndPort(String host, int port) {
+        this.host = host;
+        this.port = port;
+        this.isSecure = false;
+    }
+
     public void setHostAndPort(String host, int port, boolean isSecure) {
         this.host = host;
         this.port = port;
         this.isSecure = isSecure;
+    }
+
+    public void setIsSecure(boolean isSecure) {
+        this.isSecure = isSecure;
+    }
+
+    public void setMinifyResources(boolean minifyResources) {
+        this.minifyResources = minifyResources;
     }
 
     public String[] convertResultToBase64String(String[] result) throws IOException {

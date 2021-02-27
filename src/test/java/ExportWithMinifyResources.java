@@ -8,6 +8,7 @@ public class ExportWithMinifyResources {
         ExportManager em = new ExportManager();
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
+        em.setMinifyResources(true);
         config.set("chartConfig", "src/test/resources/static2/resources/chart-config-file-for-big.json");
         config.set("templateFilePath", "src/test/resources/static2/resources/dashboard-big-template.html");
         //Optional
