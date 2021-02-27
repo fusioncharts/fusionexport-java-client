@@ -65,7 +65,7 @@ public class ExportManager {
     }
 
     public String[] export(ExportConfig config, String outDir, boolean unzip) throws ExportException {
-        return export(config,outDir,unzip,false);
+        return export(config,outDir,unzip,true);
     }
 
     public String[] export(ExportConfig config, String outDir, boolean unzip,boolean exportBulk) throws ExportException {
