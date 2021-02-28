@@ -40,10 +40,10 @@ public class HttpConnectionManager {
     public void setExportConnectionConfig(String exportProtocol, String exportServerHost, int exportServerPort) {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
-        this.exportServerIsSecure = !this.protocol.isEmpty() && protocol == Constants.SECURED_PROTOCOL? true : false;
+        this.exportServerIsSecure = !exportProtocol.isEmpty() && exportProtocol == Constants.SECURED_PROTOCOL? true : false;
         if (this.exportServerIsSecure)
             setExportServerProtocol(Constants.SECURED_PROTOCOL);
-        else 
+        else
             setExportServerProtocol(Constants.UNSECURED_PROTOCOL);
     }
 
