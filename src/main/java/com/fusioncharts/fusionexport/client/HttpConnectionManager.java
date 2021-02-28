@@ -36,13 +36,25 @@ public class HttpConnectionManager {
     private int exportServerPort;
     private boolean exportServerIsSecure;
     private String exportServerProtocol;
-    
+
+    public void setExportConnectionConfig(String exportProtocol, String exportServerHost, int exportServerPort) {
+        this.exportServerHost = exportServerHost;
+        this.exportServerPort = exportServerPort;
+        this.exportServerIsSecure = !this.protocol.isEmpty() && protocol == Constants.SECURED_PROTOCOL? true : false;
+        if (this.exportServerIsSecure)
+            setExportServerProtocol(Constants.SECURED_PROTOCOL);
+        else 
+            setExportServerProtocol(Constants.UNSECURED_PROTOCOL);
+    }
+
     public void setExportConnectionConfig(String exportServerHost, int exportServerPort, boolean exportServerIsSecure) {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
         this.exportServerIsSecure = exportServerIsSecure;
-        if (exportServerIsSecure) setExportServerProtocol(Constants.SECURED_PROTOCOL);
-        else setExportServerProtocol(Constants.UNSECURED_PROTOCOL);
+        if (exportServerIsSecure)
+            setExportServerProtocol(Constants.SECURED_PROTOCOL);
+        else
+            setExportServerProtocol(Constants.UNSECURED_PROTOCOL);
     }
 
     public String getExportServerProtocol() {

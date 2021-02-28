@@ -34,10 +34,10 @@ public class ExportManager {
         }
     }
 
-    public void setHostAndPort(String host, int port) {
+    public void setHostAndPort(String protocol, String host, int port) {
+        this.isSecure = !this.protocol.isEmpty() && protocol == Constants.SECURED_PROTOCOL? true : false;
         this.host = host;
         this.port = port;
-        this.isSecure = false;
     }
 
     public void setHostAndPort(String host, int port, boolean isSecure) {
