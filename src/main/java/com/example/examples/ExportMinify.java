@@ -13,7 +13,7 @@ public class ExportMinify {
     	//Add true as first parameter to ExportManager if you want to minify your files
         ExportManager em = new ExportManager();
         ExportConfig config = new ExportConfig();
-
+        em.setMinifyResources(true);
         config.set("templateFilePath", Resource.resolveResource(HOME_DIR+"dashboard-template-minify.html"));
         config.set("chartConfig", Resource.resolveResource(HOME_DIR+"chart-config-file.json"));
 
