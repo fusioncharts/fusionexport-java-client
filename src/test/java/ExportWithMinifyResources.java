@@ -9,11 +9,8 @@ public class ExportWithMinifyResources {
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
         em.setMinifyResources(true);
-        config.set("chartConfig", "src/test/resources/static2/resources/chart-config-file-for-big.json");
-        config.set("templateFilePath", "src/test/resources/static2/resources/dashboard-big-template.html");
-        //Optional
-        config.set("type", "pdf");
-        config.set("quality", "best");
+        config.set("chartConfig", "src/test/resources/static2/resources/chart-config-file.json");
+        config.set("templateFilePath", "src/test/resources/static2/resources/dashboard-template-minify.html");
 
         String[] files = em.export(config, ".", true);
 
