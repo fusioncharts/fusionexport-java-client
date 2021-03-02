@@ -8,9 +8,9 @@ public class defaulttemplate {
         ExportManager em = new ExportManager();
         // Instantiate the ExportConfig class and add the required configurations
         ExportConfig config = new ExportConfig();
-        config.set("chartConfig", "src/test/java/test/multiple-chart-config-file.json");
-        config.set("header", "src/test/java/test/dashboard-template.html");
-        config.set("subheader","-template.html");
+        config.set("chartConfig", "./resources/static2/resources/default_template.json");
+        config.set("header", "FusionCharts Header");
+        config.set("subheader","FusionCharts SubHeader");
 //        config.set("chartConfig",chartConf.toString());
 //        config.set("type", "pdf");
 
