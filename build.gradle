@@ -19,13 +19,6 @@ jar {
     exclude ("examples/**")
 }
 
-task examples (type: JavaExec) {
-    group = "Execution"
-    description = "Run all the examples"
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.example.RunAll'
-}
-
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'FusionExport Java Client',
