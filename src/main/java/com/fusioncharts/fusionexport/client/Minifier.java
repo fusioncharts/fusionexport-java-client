@@ -93,15 +93,9 @@ public class Minifier {
 
 	public static String readFile (String path) {
 		String temp = "";
-		try {
-	      File file = new File(path);
-	      Scanner myReader = new Scanner(file);
-	      while (myReader.hasNextLine()) {
-	        String data = myReader.nextLine();
-	        temp += data;
-	      }
-	      myReader.close();
-	    } catch (FileNotFoundException e) {
+	    try {
+	    	temp = Utils.getFileContentAsString(path);
+	    } catch (ExportException e) {
 	      System.out.println("An error occurred.");
 	      e.printStackTrace();
 	    }
