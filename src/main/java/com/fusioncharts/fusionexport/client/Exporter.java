@@ -16,28 +16,24 @@ public class Exporter {
     private ExportConfig exportConfig;
     private String exportServerHost;
     private int exportServerPort;
-    private String exportServerProtocol;
-    
+    private boolean exportServerIsSecure;
+
     private HttpConnectionManager connectionManager;
 
     public Exporter(ExportConfig exportConfig) {
         this.exportConfig = exportConfig;
     }
 
-    public void setExportConnectionConfig(String exportProtocol, String exportServerHost, int exportServerPort) {
+    public void setExportConnectionConfig(String exportServerHost, int exportServerPort, boolean exportServerIsSecure) {
         this.exportServerHost = exportServerHost;
         this.exportServerPort = exportServerPort;
-        this.exportServerProtocol = exportProtocol;
+        this.exportServerIsSecure = exportServerIsSecure;
     }
 
     public ExportConfig getExportConfig() {
         return this.exportConfig;
     }
 
-    public String getExportServerProtocol() {
-        return this.exportServerProtocol;
-    }
-    
     public String getExportServerHost() {
         return this.exportServerHost;
     }
@@ -45,6 +41,8 @@ public class Exporter {
     public int getExportServerPort() {
         return this.exportServerPort;
     }
+
+    public boolean getExportServerIsSecure() { return this.exportServerIsSecure; }
 
     public byte[] start() throws ExportException {
         return handleConnection();
@@ -54,7 +52,7 @@ public class Exporter {
         byte[] result;
         try {
             connectionManager = new HttpConnectionManager();
-            connectionManager.setExportConnectionConfig(getExportServerProtocol(), getExportServerHost(), getExportServerPort());
+            connectionManager.setExportConnectionConfig(getExportServerHost(), getExportServerPort(), getExportServerIsSecure());
             updateRequestParams();
             result = connectionManager.executeRequest();
         } catch (ExportException e) {

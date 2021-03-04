@@ -1,6 +1,5 @@
 package com.fusioncharts.fusionexport.client;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 
@@ -17,17 +15,19 @@ public class ExportManager {
     private ExportConfig chartConfig;
     private String host= "";
     private int port = Integer.MIN_VALUE;
-    private String protocol = "";
+    private boolean isSecure = Constants.IS_SECURE;
     private String outDir = "";
-    private boolean unzip = false;
+    private Boolean unzip = true;
+    private boolean minifyResources = false;
+    private boolean exportBulk = false;
 
     public ExportManager() throws ExportException {
 
     }
 
-    private void createRequest() throws ExportException {
+    private void createRequest(boolean exportBulk) throws ExportException {
         try {
-            this.chartConfig.createRequest();
+            this.chartConfig.createRequest(exportBulk,this.minifyResources);
         } catch (Exception e) {
 
             throw new ExportException("Error in Config" + "\n");
@@ -35,9 +35,23 @@ public class ExportManager {
     }
 
     public void setHostAndPort(String protocol, String host, int port) {
-        this.protocol = protocol;
+        this.isSecure = !protocol.isEmpty() && protocol == Constants.SECURED_PROTOCOL? true : false;
         this.host = host;
         this.port = port;
+    }
+
+    public void setHostAndPort(String host, int port, boolean isSecure) {
+        this.host = host;
+        this.port = port;
+        this.isSecure = isSecure;
+    }
+
+    public void setIsSecure(boolean isSecure) {
+        this.isSecure = isSecure;
+    }
+
+    public void setMinifyResources(boolean minifyResources) {
+        this.minifyResources = minifyResources;
     }
 
     public String[] convertResultToBase64String(String[] result) throws IOException {
@@ -49,18 +63,23 @@ public class ExportManager {
     	
     	return fileList.toArray(new String[0]);
     }
-    
+
     public String[] export(ExportConfig config, String outDir, boolean unzip) throws ExportException {
+        return export(config,outDir,unzip,true);
+    }
+
+    public String[] export(ExportConfig config, String outDir, boolean unzip,boolean exportBulk) throws ExportException {
         this.chartConfig = config;
         this.outDir = outDir;
         this.unzip = unzip;
         String[] filepaths;
         try {
-            createRequest();
+            createRequest(exportBulk);
             filepaths = (String[])exportChart(false);
         } catch (ExportException e) {
             throw new ExportException(e);
         } finally {
+            if (this.minifyResources) this.chartConfig.deleteTempFiles();
             try {
                 Files.delete(Paths.get(Constants.TEMP_REQUEST_PAYLOAD));
             } catch (IOException e) {
@@ -78,7 +97,7 @@ public class ExportManager {
         HashMap<String, ByteArrayOutputStream> streams = null;
         
         try {
-            createRequest();
+            createRequest(exportBulk);
             streams = (HashMap<String, ByteArrayOutputStream>)exportChart(true);
         } catch (ExportException e) {
             throw new ExportException(e);
@@ -100,8 +119,7 @@ public class ExportManager {
         if (exporter != null) {
             this.host = !this.host.isEmpty() ? this.host : Constants.DEFAULT_HOST;
             this.port = this.port != Integer.MIN_VALUE ? this.port : Constants.DEFAULT_PORT;
-            this.protocol = !this.protocol.isEmpty() ? this.protocol : Constants.DEFAULT_PROTOCOL;
-            exporter.setExportConnectionConfig(this.protocol, this.host, this.port);
+            exporter.setExportConnectionConfig(this.host, this.port, this.isSecure);
             try {
             	if (!exportAsStream) {
             		returnObject = saveResponse(exporter.start());

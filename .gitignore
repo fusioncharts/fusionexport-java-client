@@ -12,6 +12,7 @@ target
 .classpath
 bin
 out
+examples_result/
 
 /doc
 .idea/.name
