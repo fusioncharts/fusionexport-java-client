@@ -30,7 +30,7 @@ To use this SDK with your maven project, add this dependency to your `pom.xml`:
 <dependency>
   <groupId>com.fusioncharts.fusionexport</groupId>
   <artifactId>fusionexport</artifactId>
-  <version>1.2.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
