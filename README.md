@@ -18,7 +18,7 @@ Then, just add this SDK as a dependency to your `build.gradle` file:
 
 ```groovy
 dependencies {
-    compile "com.fusioncharts.fusionexport:fusionexport:1.2.0"
+    compile "com.fusioncharts.fusionexport:fusionexport:2.0.0"
 }
 ```
 
