@@ -18,6 +18,12 @@
     "supportedTypes": [ "file" ],
     "converter": "FileConverter"
   },
+  "header": {
+    "supportedTypes": ["string"]
+  },
+  "subheader": {
+    "supportedTypes": ["string"]
+  },
   "templateWidth": {
     "type": "integer",
     "supportedTypes": [ "string", "integer" ],
