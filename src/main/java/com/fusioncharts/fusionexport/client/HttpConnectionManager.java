@@ -1,10 +1,11 @@
 package com.fusioncharts.fusionexport.client;
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustAllStrategy;
@@ -16,14 +17,12 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,7 +115,7 @@ public class HttpConnectionManager {
     }
     
     public void addReqParam(String key, String value){
-        builder.addTextBody(key, value);
+        builder.addTextBody(key, value, ContentType.create("text/plain", Charset.defaultCharset()));
     }
 
     public  void addZipFile(String key , InputStream file){
